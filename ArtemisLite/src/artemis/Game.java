@@ -20,6 +20,7 @@ public class Game {
 	public static void main(String[] args) {
 		
 		playTheGame();
+		System.out.println("Richards branch test message");
 
 	}
 
