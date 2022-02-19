@@ -11,6 +11,7 @@ import java.util.Random;
  */
 public class Dice {
 
+	//pushingtest
 	private int numSides;
 
 	/**
