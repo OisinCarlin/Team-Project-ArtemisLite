@@ -179,6 +179,7 @@ public class Player {
 			element.increaseDevelopmentLevel();
 			System.out.println(element.getCurrentLevel().toString());
 			System.out.println("You've developed it!");
+			element.displayDevelopmentUpgradeInfo();
 		} else {
 			System.out.println("Not enough resources to develop or max development reached");
 		}
@@ -212,7 +213,7 @@ public class Player {
 				} else {
 					System.out.println("Incorrect input try again");
 				}
-				} while (!userInput.equalsIgnoreCase("Y") || !userInput.equalsIgnoreCase("N"));
+				} while (!userInput.equalsIgnoreCase("Y") && !userInput.equalsIgnoreCase("N"));
 			}
 		}
 	}
@@ -446,7 +447,7 @@ public class Player {
 	}
 
 	/**
-	 * Sorts an ArrayList of elements by squareName
+	 * Sorts an ArrayList of elements by systemName
 	 * 
 	 * @param elements
 	 */
@@ -455,7 +456,7 @@ public class Player {
 			Collections.sort(elements, new Comparator<Element>() {
 				@Override
 				public int compare(final Element object1, final Element object2) {
-					return object1.getSquareName().compareTo(object2.getSquareName());
+					return object1.getSystemName().compareTo(object2.getSystemName());
 				}
 			});
 		}
