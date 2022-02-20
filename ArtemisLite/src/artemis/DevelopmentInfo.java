@@ -10,6 +10,11 @@ package artemis;
 public class DevelopmentInfo {
 	
 	public static final int DEVELOPMENT_PRICE = 100;
+	public static final double NO_DEV_MULTIPLIER = 1;
+	public static final double MINOR1_DEV_MULTIPLIER = 1.2;
+	public static final double MINOR2_DEV_MULTIPLIER = 1.5;
+	public static final double MINOR3_DEV_MULTIPLIER = 1.8;
+	public static final double MAJOR_DEV_MULTIPLIER = 2.5;
 
 	private DevelopmentLevel level;
 	private String developmentLevelName;
@@ -92,15 +97,15 @@ public class DevelopmentInfo {
 	 */
 	public void setRentMultiplier() {
 		if (this.level == DevelopmentLevel.NONE) {
-			this.rentMultiplier = 1;
+			this.rentMultiplier = NO_DEV_MULTIPLIER;
 		} else if (this.level == DevelopmentLevel.MINOR1) {
-			this.rentMultiplier = 1.2;
+			this.rentMultiplier = MINOR1_DEV_MULTIPLIER;
 		} else if (this.level == DevelopmentLevel.MINOR2) {
-			this.rentMultiplier = 1.4;
+			this.rentMultiplier = MINOR2_DEV_MULTIPLIER;
 		} else if (this.level == DevelopmentLevel.MINOR3) {
-			this.rentMultiplier = 1.6;
+			this.rentMultiplier = MINOR3_DEV_MULTIPLIER;
 		} else if (this.level == DevelopmentLevel.MAJOR) {
-			this.rentMultiplier = 2.5;
+			this.rentMultiplier = MAJOR_DEV_MULTIPLIER;
 		}
 	}
 

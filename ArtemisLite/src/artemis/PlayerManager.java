@@ -21,8 +21,8 @@ public class PlayerManager {
 	/**
 	 * 
 	 */
-	public PlayerManager() {
-		this.setPlayers();
+	public PlayerManager(ArrayList<Square> boardLayout) {
+		this.setPlayers(boardLayout);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class PlayerManager {
 	/**
 	 * @param players the players to set
 	 */
-	public void setPlayers() {
+	public void setPlayers(ArrayList<Square> boardLayout) {
 		ArrayList<Player> players = new ArrayList<>();
 		Player player;
 		String playerName = "";
@@ -49,13 +49,13 @@ public class PlayerManager {
 				playerName = sc.nextLine();
 				if (playerName.length() >= 1) {
 					if (players.isEmpty()) {
-						player = new Player(playerName, null);
+						player = new Player(playerName, boardLayout);
 						players.add(player);
 						playerAdded = true;
 					} else {
 						for (int looper = 0; looper < players.size(); looper++) {
 							if (!players.get(looper).getPlayerName().equalsIgnoreCase(playerName)) {
-								player = new Player(playerName, null);
+								player = new Player(playerName, boardLayout);
 								players.add(player);
 								playerAdded = true;
 								break;
