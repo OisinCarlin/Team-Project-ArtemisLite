@@ -9,6 +9,8 @@ package artemis;
  */
 public class Start extends Square {
 	
+	private static final int RESOURCES_TO_ADD = 200;
+	
 	private int resourcesToAdd;
 
 	/**
@@ -23,9 +25,9 @@ public class Start extends Square {
 	/**
 	 * @param resourcesToAdd
 	 */
-	public Start(String squareName, int resourcesToAdd) {
+	public Start(String squareName) {
 		super(squareName);
-		this.resourcesToAdd = resourcesToAdd;
+		this.resourcesToAdd = RESOURCES_TO_ADD;
 	}
 
 
@@ -40,8 +42,8 @@ public class Start extends Square {
 	/**
 	 * @param resourcesToAdd the resourcesToAdd to set
 	 */
-	public void setResourcesToAdd(int resourcesToAdd) {
-		this.resourcesToAdd = resourcesToAdd;
+	public void setResourcesToAdd() {
+		this.resourcesToAdd = RESOURCES_TO_ADD;
 	}
 
 

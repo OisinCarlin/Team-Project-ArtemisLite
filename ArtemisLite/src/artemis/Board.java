@@ -13,6 +13,9 @@ public class Board {
 	
 	// all the values for element names/descriptions, development level names/descriptions can be set below
 	
+	public static final String START_SQUARE_NAME = "Start";
+	public static final String EMPTY_SQUARE_NAME = "Empty Square";
+	
 	public static final DevelopmentLevel NONE = DevelopmentLevel.NONE;
 	public static final DevelopmentLevel MINOR1 = DevelopmentLevel.MINOR1;
 	public static final DevelopmentLevel MINOR2 = DevelopmentLevel.MINOR2;
@@ -241,8 +244,8 @@ public class Board {
 	 * @param gameLayout the gameLayout to set
 	 */
 	public void setGameLayout() {
-		Start start = new Start("Start", 200);
-		EmptySquare emptySquare = new EmptySquare("empty square");
+		Start start = new Start(START_SQUARE_NAME);
+		EmptySquare emptySquare = new EmptySquare(EMPTY_SQUARE_NAME);
 		
 		Element element1 = new Element(ELEMENT1_NAME, ELEMENT1_SYSTEM, ELEMENT1_PRICE, ELEMENT1_RENT_PRICE, ELEMENT1_NODEV, ELEMENT1_MINOR1, ELEMENT1_MINOR2, ELEMENT1_MINOR3, ELEMENT1_MAJOR);
 		Element element2 = new Element(ELEMENT2_NAME, ELEMENT2_SYSTEM, ELEMENT2_PRICE, ELEMENT2_RENT_PRICE, ELEMENT2_NODEV, ELEMENT2_MINOR1, ELEMENT2_MINOR2, ELEMENT2_MINOR3, ELEMENT2_MAJOR);
