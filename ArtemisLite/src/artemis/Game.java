@@ -13,6 +13,10 @@ import java.util.Scanner;
 public class Game {
 
 	public static final Scanner sc = new Scanner(System.in);
+	public static final String INTRO_MESSAGE = "will lead an innovative and sustainable program of exploration with commercial and international partners\n"
+			+ "to enable human expansion across the solar system and to bring back to earth new knowledge and opportunities. Beginning with missions beyond\n"
+			+ "low-earth orbit, the US will lead the return of humans to the Moon for long-term exploration and utilisation, followed by human missions to Mars"
+			+ "and other destinations.";
 
 	/**
 	 * @param args
@@ -167,11 +171,13 @@ public class Game {
 				if (userInput.equalsIgnoreCase("Y")) {
 					player.tradeElementMenu(boardLayout, players);
 				} else {
-					System.out.println(player.getPlayerName() + ", you don't have any properties to trade, sadface!");
+					System.out.println(player.getPlayerName() + ", you don't want to trade? Sadface!");
 				}
+			} else {
+				System.out.println(player.getPlayerName() + ", you don't have any properties to trade, sadface!");
 			}
 
-			player.tradeElementMenu(boardLayout, players);
+			
 			if (player.getElementsOwned().size() > 0) {
 				System.out.println("Would you like to develop an element? [Y/N]");
 				userInput = sc.nextLine();
@@ -220,7 +226,7 @@ public class Game {
 		ArrayList<Player> players = pm.getPlayers();
 
 		boolean endGame = false;
-
+		displayIntroMessage(players);
 		do {
 			for (Player player : players) {
 				endGame = playerTurn(player, board, boardLayout, players);
@@ -230,6 +236,19 @@ public class Game {
 				}
 			}
 		} while (!endGame);
+	}
+	
+	public static void displayIntroMessage(ArrayList<Player> players) {
+		for (int loop=0; loop<players.size(); loop++) {
+			System.out.printf(players.get(loop).getPlayerName());
+			if (loop==players.size()-1) {
+				System.out.printf(" ");
+			} else {
+				System.out.printf(", ");
+			}
+			
+		}
+		System.out.println(INTRO_MESSAGE);
 	}
 
 }

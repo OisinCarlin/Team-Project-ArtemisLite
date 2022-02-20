@@ -10,10 +10,10 @@ package artemis;
  */
 public enum Sys {
 	
-	SYSTEM1 ("desc1"), 
-	SYSTEM2 ("desc2"), 
-	SYSTEM3 ("desc3"), 
-	SYSTEM4 ("desc4");
+	SYSTEM1 ("Gateway"), 
+	SYSTEM2 ("Space Launch System"), 
+	SYSTEM3 ("Orion Spacecraft"), 
+	SYSTEM4 ("Lunar Base Camp");
 	
 	private final String systemDesc;
 

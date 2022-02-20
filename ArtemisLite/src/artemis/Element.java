@@ -294,6 +294,31 @@ public class Element extends Square {
 		System.out.println("Price to develop:\t"+this.getCurrentPriceToDevelop());
 	}
 	
+	public void displayDevelopmentUpgradeInfo() {
+		switch (this.currentLevel.getLevelNum()) {
+		case 0:
+			System.out.println(this.none.getDevelopmentLevelName());
+			System.out.println(this.none.getDevelopmentLevelDesc());
+			break;
+		case 1:
+			System.out.println(this.minor1.getDevelopmentLevelName());
+			System.out.println(this.minor1.getDevelopmentLevelDesc());
+			break;
+		case 2:
+			System.out.println(this.minor2.getDevelopmentLevelName());
+			System.out.println(this.minor2.getDevelopmentLevelDesc());
+			break;
+		case 3:
+			System.out.println(this.minor3.getDevelopmentLevelName());
+			System.out.println(this.minor3.getDevelopmentLevelDesc());
+			break;
+		case 4:
+			System.out.println(this.major.getDevelopmentLevelName());
+			System.out.println(this.major.getDevelopmentLevelDesc());
+			break;
+		}
+	}
+	
 	
 
 }
