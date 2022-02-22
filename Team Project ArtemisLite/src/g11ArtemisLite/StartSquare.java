@@ -19,7 +19,7 @@ public class StartSquare extends Square {
 	 */
 	public StartSquare(String name, int resources) {
 		super(name);
-		this.setResources(resources);
+		this.resources = resources;
 	}
 
 	/**
