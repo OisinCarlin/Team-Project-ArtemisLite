@@ -135,7 +135,7 @@ public class Game {
 	 * @return
 	 */
 	public static boolean playerTurn(Player player, Board board, ArrayList<Square> boardLayout,
-			ArrayList<Player> players) {
+			ArrayList<Player> players, PlayerManager pm) {
 		// boolean to flag for game-ending conditions (player bankrupt, or all elements
 		// fully developed)
 		boolean endGameCheck = false;
@@ -148,10 +148,16 @@ public class Game {
 			Element element = (Element) player.getLocation();
 			if (element.getOwner() == null) {
 				System.out.println("Would you like to purchase this element? [Y/N]");
-				userInput = sc.nextLine();
-				if (userInput.equalsIgnoreCase("Y")) {
-					player.purchaseElement();
-				}
+				do {
+					userInput = sc.nextLine();
+					if (userInput.equalsIgnoreCase("Y")) {
+						player.purchaseElement(element, player);
+					} else if (userInput.equalsIgnoreCase("N")) {
+						pm.offerElementToOtherPlayers(player, boardLayout);
+					} else {
+						System.out.println("Incorrect input try again testing");
+					}
+				} while (!userInput.equalsIgnoreCase("Y") && !userInput.equalsIgnoreCase("N"));
 			} else if (element.getOwner().equals(player)) {
 				System.out.println("You already own this property!");
 			} else {
@@ -177,7 +183,6 @@ public class Game {
 				System.out.println(player.getPlayerName() + ", you don't have any properties to trade, sadface!");
 			}
 
-			
 			if (player.getElementsOwned().size() > 0) {
 				System.out.println("Would you like to develop an element? [Y/N]");
 				userInput = sc.nextLine();
@@ -195,6 +200,19 @@ public class Game {
 			}
 
 		}
+		do {
+			System.out
+					.println(player.getPlayerName() + ", one last question... Would you like to quit the game? [Y/N]");
+			userInput = sc.nextLine();
+			if (userInput.equalsIgnoreCase("Y")) {
+				endGameCheck = true;
+			} else if (userInput.equalsIgnoreCase("N")) {
+				System.out.println("Good for you, you're a real trouper!");
+			} else {
+				System.out.println("Incorrect input try again");
+			}
+		} while (!userInput.equalsIgnoreCase("Y") && !userInput.equalsIgnoreCase("N"));
+		gameFailure();
 		return endGameCheck;
 	}
 
@@ -229,7 +247,7 @@ public class Game {
 		displayIntroMessage(players);
 		do {
 			for (Player player : players) {
-				endGame = playerTurn(player, board, boardLayout, players);
+				endGame = playerTurn(player, board, boardLayout, players, pm);
 				if (endGame) {
 					board.displayEndGame();
 					break;
@@ -237,16 +255,16 @@ public class Game {
 			}
 		} while (!endGame);
 	}
-	
+
 	public static void displayIntroMessage(ArrayList<Player> players) {
-		for (int loop=0; loop<players.size(); loop++) {
+		for (int loop = 0; loop < players.size(); loop++) {
 			System.out.printf(players.get(loop).getPlayerName());
-			if (loop==players.size()-1) {
+			if (loop == players.size() - 1) {
 				System.out.printf(" ");
 			} else {
 				System.out.printf(", ");
 			}
-			
+
 		}
 		System.out.println(INTRO_MESSAGE);
 	}

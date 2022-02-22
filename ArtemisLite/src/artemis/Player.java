@@ -144,23 +144,20 @@ public class Player {
 	 * elements owner as player, and adds the element to the players elementsOwned
 	 * arraylist.
 	 */
-	public void purchaseElement() {
-		Element element = null;
+	public void purchaseElement(Element element, Player player) {
 		int priceToPurchase = 0;
-		if (this.location instanceof Element) {
-			element = (Element) this.location;
+		
+			
 			priceToPurchase = element.getPurchasePrice();
-			if (this.resources > priceToPurchase) {
-				this.setResources(this.resources - priceToPurchase);
+			if (player.getResources() > priceToPurchase) {
+				player.setResources(player.getResources() - priceToPurchase);
 				element.setOwner(this);
-				this.elementsOwned.add(element);
+				player.getElementsOwned().add(element);
 				System.out.println("You've bought it!");
 			} else {
 				System.out.println("Not enough resources to purchase");
 			}
-		} else {
-			System.out.println("Not an element, cannot purchase");
-		}
+		
 		sortElements(elementsOwned);
 
 	}
