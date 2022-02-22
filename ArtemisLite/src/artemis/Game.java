@@ -24,7 +24,7 @@ public class Game {
 	public static void main(String[] args) {
 
 		playTheGame();
-		System.out.println("Richards branch test message");
+		System.out.println("Richards new branch test message");
 
 	}
 
