@@ -12,24 +12,17 @@ import java.util.Random;
 
 public class Dice {
 	
-	public static final int NUM_SIDES = 6;
-	
 	private int numOfSides;
-	
-	public Dice() {
-	    numOfSides = NUM_SIDES;
+
+	/**
+	 * @param numOfSides
+	 */
+	public Dice(int numOfSides) {
+		this.numOfSides = numOfSides;
 	}
 
-	public int getNumOfSides() {
-		return numOfSides;
-	}
-
-	public void setNumOfSides(int numOfSides) {
-		this.numOfSides = NUM_SIDES;
-	}
-	//generates random number+1 within specified "numOfSides" range
-	public int roll() {  
-	    return (int) (Math.random() * numOfSides + 1);
+	public int roll() {
+		return (int) (Math.random() * numOfSides + 1);
 	}
 
 }
