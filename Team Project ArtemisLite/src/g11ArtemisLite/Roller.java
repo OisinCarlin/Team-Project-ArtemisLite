@@ -10,18 +10,19 @@ package g11ArtemisLite;
 import java.util.ArrayList;
 
 public class Roller {
+	
+	private ArrayList<Dice> dice;
 
-	Dice dice1 = new Dice();
-	Dice dice2 = new Dice();
-
-	int roll1 = dice1.roll();
-	int roll2 = dice2.roll();
-	int rollTotal = (roll1 + roll2);
-
-	public void roll() {
-		System.out.println("first dice rolled " + roll1);
-		System.out.println("second dice rolled " + roll2);
-		System.out.println("the roll total is " + rollTotal);
-
+	public Roller() {
+		this.dice = dice;
 	}
+
+	public int Roll(ArrayList<Dice> dice) {
+	int rollTotal = 0;	
+	for(Dice roll : dice) {
+		rollTotal += roll.roll();
+	}
+	return rollTotal;
+	}
+
 }
