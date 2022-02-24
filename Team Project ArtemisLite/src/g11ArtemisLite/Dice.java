@@ -9,6 +9,7 @@ package g11ArtemisLite;
 
 
 import java.util.Random;
+//showing example
 
 public class Dice {
 	
