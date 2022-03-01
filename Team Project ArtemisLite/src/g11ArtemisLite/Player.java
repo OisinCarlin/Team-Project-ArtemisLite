@@ -6,6 +6,7 @@ package g11ArtemisLite;
 import java.util.Set;
 
 /**
+ * The class contains addSquare, removeSquare, addResources, removeResources, ownFullSystem and displayAll methods.
  * @author jamielarkin
  *
  */
@@ -141,12 +142,16 @@ public class Player {
 			} else {
 				return false;
 				
-			}
-			
+			}	
 	}
 		return false;
 }
-	
-	
-	
+	/**
+	 * Prints out the squares and resources the player owns
+	 */
+	public void displayAll() {
+		System.out.println(name+" owns "+squaresOwned+".");
+		System.out.println(name+" has "+resources+" resources.");
+	}
+
 }
