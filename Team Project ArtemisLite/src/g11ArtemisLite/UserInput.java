@@ -3,9 +3,16 @@
  */
 package g11ArtemisLite;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
+
+import artemis.Element;
+import artemis.Player;
+import artemis.Square;
 
 /**
  * @author maeve
@@ -27,7 +34,7 @@ public class UserInput {
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as String
 	 */
-	private String requestUserInputReturnString(String messageRequest) {
+	public String requestUserInputReturnString(String messageRequest) {
 		String userInput = null;
 		try {
 			System.out.println(messageRequest);
@@ -45,7 +52,7 @@ public class UserInput {
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as int
 	 */
-	private int requestUserInputReturnInt(String messageRequest) {
+	public int requestUserInputReturnInt(String messageRequest) {
 		int userInput = -1;
 		try {
 			System.out.println(messageRequest);
@@ -133,5 +140,57 @@ public class UserInput {
 		} while (userInput == null);
 
 		return userChoice;
+	}
+
+	/**
+	 * 
+	 * @param players
+	 * @param currentPlayer
+	 * @return
+	 */
+	public Player chooseAPlayer(List<Player> players, Player currentPlayer) {
+		Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
+		int counter = 1;
+		for (Player player : players) {
+			if (!player.equals(this)) {
+				playerMap.put(counter, player);
+				counter++;
+			}
+		}
+
+		for (Integer key : playerMap.keySet()) {
+			System.out.println("To select " + playerMap.get(key).getPlayerName() + " press [" + key + "]");
+		}
+		System.out.println("To cancel press [" + (playerMap.size() + 1) + "]");
+		String userInput = "";
+		String ynInput = "";
+		int intUserInput = 0;
+		do {
+			userInput = scanner.nextLine();
+			intUserInput = parseWithDefault(userInput, 0);
+			if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
+				System.out.println("Incorrect selection");
+			} else if (intUserInput == playerMap.size() + 1) {
+				return null;
+			} else if (intUserInput > 0 && intUserInput <= playerMap.size()) {
+				return playerMap.get(intUserInput);
+
+			}
+		} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
+	}
+
+	/**
+	 * Returns a default value if an integer cannot be parsed from a string
+	 * 
+	 * @param number
+	 * @param defaultVal
+	 * @return
+	 */
+	public static int parseWithDefault(String number, int defaultVal) {
+		try {
+			return Integer.parseInt(number);
+		} catch (NumberFormatException e) {
+			return defaultVal;
+		}
 	}
 }
