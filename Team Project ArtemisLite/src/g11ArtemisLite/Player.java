@@ -144,5 +144,22 @@ public class Player {
 			System.out.println(element.getName() + " " + element.getOwner().getName());
 		}
 	}
+	
+	/**
+	 * Displays development info for a player's owned elements
+	 */
+	public void displayPropertyOwnedInfo() {
+		System.out.println("*************************");
+		if (this.squaresOwned.size() > 0) {
+			//sortElements(this.squaresOwned);
+			System.out.println(this.name + ": Properties Owned");
+			System.out.println("-------------------------");
+			for (Element element : this.squaresOwned) {
+				System.out.println("Name: "+element.getName()+" Price: "+element.getPurchasePrice());
+				System.out.println("-------------------------");
+			}
+		}
+
+	}
 
 }

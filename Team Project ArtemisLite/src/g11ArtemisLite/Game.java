@@ -12,12 +12,19 @@ import java.util.TreeMap;
 
 
 /**
- * Please note this is a work in progress... ive added methods from my game version
- * Some have been partially adapted, some haven't, just wanted to give an idea of my plans
+ * Please note this is a work in progress... ive added methods from my game
+ * version Some have been partially adapted, some haven't, just wanted to give
+ * an idea of my plans
+ * 
  * @author crclarke
  *
  */
 public class Game {
+
+	public static final String INTRO_MESSAGE = "will lead an innovative and sustainable program of exploration with commercial and international partners\n"
+			+ "to enable human expansion across the solar system and to bring back to earth new knowledge and opportunities. Beginning with missions beyond\n"
+			+ "low-earth orbit, the US will lead the return of humans to the Moon for long-term exploration and utilisation, followed by human missions to Mars"
+			+ "and other destinations.";
 
 	private PlayerManager playerManager;
 	private List<Player> players;
@@ -106,7 +113,11 @@ public class Game {
 			player.setCurrentSquare(board.getSquares().get(0));
 		});
 
-		int turnCount = 0;
+		// <<<<<<<<<<displays intro message>>>>>>>>>>
+		displayIntroMessage(players);
+
+		// <<<<<<<<<<i've removed turn count in preparation for end game
+		// conditions>>>>>>>>>>
 		while (isProgress) {
 			// Each player takes a turn - 1 round
 			for (Player player : players) {
@@ -118,123 +129,25 @@ public class Game {
 				System.out.println("\n" + player.getName() + " " + player.getResources());
 				player.displayAll();
 
-				// loops through all element systems and if the player owns that system, offers
-				// the chance to develop
-				for (ElementSystem elementSystem : allSystems) {
-					if (player.ownsFullSystem(elementSystem)) {
-						offerDevelopElement(player, elementSystem);
-					}
+				// <<<<<<<<<<calls method to display options post-move>>>>>>>>>>
+				if (postMoveOptions(players, player)) {
+					// <<<<<<<<<<postMoveOptions returns a boolean to signify endGame>>>>>>>>>>
+					// this can be pulled out to the single method you suggested but have left it as
+					// is
+					// for now so the game will play cleanly
+					isProgress = false;
+					break;
 				}
 			}
-
-			// Limiting game to 10 rounds - do prevent infinte loop
-			turnCount++;
-			if (turnCount == 40) {
+			// breaks outer loop when isProgress set to false by returned boolean from postMoveOptions
+			if (!isProgress) {
+				System.out.println("Game over");
 				break;
 			}
 		}
 	}
 
-	/**
-	 * displays a menu for options after initial move
-	 * 
-	 * @param player
-	 */
-	private void postMoveOptions(Player player) {
-		int userInputNum = 0;
-		do {
-			System.out.println("Would you like to...");
-			System.out.println("1. Develop an element");
-			System.out.println("2. Trade an Element");
-			System.out.println("3. End your turn");
-			System.out.println("4. Quit the game");
-			userInputNum = userInput.requestUserInputReturnInt("Choose option 1-4 and press [Enter]");
-			switch (userInputNum) {
-			case 1:
-				System.out.println("Opening development menu...");
-				developmentMenu();
-				break;
-			case 2:
-				System.out.println("Opening trade menu...");
-				tradeMenu();
-				break;
-			case 3:
-				System.out.println("Ending your turn...");
-				break;
-			case 4:
-				endGame();
-				break;
-			}
-		} while (userInputNum != 3);
-	}
-
-	/**
-	 * Presents a dynamically formed menu for a player to develop owned and
-	 * developable elements
-	 * 
-	 * @param boardLayout
-	 * @return
-	 */
-	public boolean developmentMenu(ArrayList<Square> boardLayout) {
-		// returns the developableElements array of elements from
-		// returnDevelopableElements method
-		ArrayList<Element> developableElements = returnDevelopableElements(boardLayout);
-
-		boolean gameWin = false;
-		String userInput = "";
-		int intUserInput = 0;
-		int fullyDevelopedCount = 0;
-		int elementCount = 0;
-
-		do {
-			// breaks the loop of the player has no elements to develop
-			if (noDevelopmentsToMakeChecker(boardLayout)) {
-				break;
-			}
-			for (Element element : developableElements) {
-
-				// filters out elements that have been fully developed
-				if (!element.getCurrentLevel().equals(DevelopmentLevel.MAJOR)) {
-					System.out.println("To develop " + element.getSquareName() + " enter ["
-							+ (developableElements.indexOf(element) + 1) + "]");
-				}
-			}
-			System.out.println("Don't want to develop any more? Enter [" + (developableElements.size() + 1) + "]");
-			userInput = sc.nextLine();
-			intUserInput = parseWithDefault(userInput, 0);
-			if (intUserInput <= developableElements.size() && intUserInput > 0) {
-				this.developElement(developableElements.get(intUserInput - 1));
-				// checks after each development if all elements are fully developed
-				for (Square square : boardLayout) {
-
-					if (square instanceof Element) {
-						elementCount++;
-						Element element = (Element) square;
-						if (element.getCurrentLevel().equals(DevelopmentLevel.MAJOR)) {
-							fullyDevelopedCount++;
-						}
-					}
-				}
-				// returns a true boolean if all elements are fully developed
-				if (fullyDevelopedCount == elementCount) {
-					gameWin = true;
-					return gameWin;
-				}
-				// breaks the loop if there are no further developments to make
-				if (noDevelopmentsToMakeChecker(boardLayout)) {
-					break;
-				}
-				// exits menu on appropriate user input
-			} else if (intUserInput == (developableElements.size() + 1)) {
-				System.out.println("Exiting development menu");
-			} else {
-				System.out.println("Incorrect input try again");
-			}
-			// loop will continue until player hits the appropriate 'Exit' option
-		} while (intUserInput != developableElements.size() + 1);
-		return gameWin;
-	}
-	
+	//<<<<<<<<<<<<<<<<<<<<// i left this is, but haven't used it>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	/**
 	 * Offers the current player the chance to develop an Element they own. Element
 	 * is develop if they enter yes, have enough resources and the development level
@@ -263,87 +176,310 @@ public class Game {
 		System.out.println("All possible developments are completed.");
 	}
 	
-	public void tradeElementMenu(ArrayList<Square> boardLayout, ArrayList<Player> players) {
-		String userInput = "";
+	//<<<<<<<<<<<<<<<<<<<<<<<<all new stuff from here>>>>>>>>>>>>>>>>>>>>>>>>
+	
+	/**
+	 * Displays intro message once players have entered their names
+	 * 
+	 * @param players
+	 */
+	public static void displayIntroMessage(List<Player> players) {
+		for (int loop = 0; loop < players.size(); loop++) {
+			System.out.printf(players.get(loop).getName());
+			if (loop == players.size() - 2) {
+				System.out.printf(" & ");
+			} else if (loop == players.size() - 1) {
+				System.out.printf(" ");
+			} else {
+				System.out.printf(", ");
+			}
+
+		}
+		System.out.println(INTRO_MESSAGE);
+	}
+
+	/**
+	 * displays a menu for options after initial move
+	 * 
+	 * @param player
+	 */
+	private boolean postMoveOptions(List<Player> allPlayers, Player player) {
+		boolean endGame = false;
+		int userInputNum = 0;
+		do {
+			System.out.println("Would you like to...");
+			System.out.println("1. Develop an element");
+			System.out.println("2. Trade an Element");
+			System.out.println("3. End your turn");
+			System.out.println("4. Quit the game");
+			userInputNum = userInput.requestUserInputReturnInt("Choose option 1-4 and press [Enter]");
+			switch (userInputNum) {
+			case 1:
+				System.out.println("Opening development menu...");
+				developmentMenu(player);
+				break;
+			case 2:
+				System.out.println("Opening trade menu...");
+				tradeElementMenu(allPlayers, player);
+				break;
+			case 3:
+				System.out.println("Ending your turn...");
+				break;
+			case 4:
+				endGame = true;
+				break;
+			}
+		} while (userInputNum != 3 && userInputNum != 4);
+		return endGame;
+	}
+	
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<development-related methods>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+	/**
+	 * Adds elements for which a player owns all in a system, and adds to a new list
+	 * 
+	 * @param boardLayout
+	 * @return
+	 */
+	public List<Element> returnDevelopableElements(Player player) {
+		List<Element> developableElements = new ArrayList<>();
+		for (ElementSystem system : allSystems) {
+			if (player.ownsFullSystem(system)) {
+				Set<Element> elements = system.getElements();
+				for (Element element : elements) {
+					developableElements.add(element);
+				}
+			}
+		}
+
+		return developableElements;
+	}
+
+	/**
+	 * Checks if the player has any developments to make, returning a true boolean
+	 * value if either 1. the player doesn't own all elements in any given system 2.
+	 * the player has developed all developable elements An appropriate message is
+	 * displayed for each case
+	 * 
+	 * @param boardLayout
+	 * @return
+	 */
+	public boolean noDevelopmentsToMakeChecker(Player player) {
+		List<Element> developableElements = returnDevelopableElements(player);
+		boolean breakIt = false;
+		int fullyDevelopedCount = 0;
+		int elementCount = 0;
+		if (developableElements.size() == 0) {
+			System.out.println("You need to own all elements in a system before you can develop!");
+			breakIt = true;
+			return breakIt;
+		}
+		for (Element element : player.getSquaresOwned()) {
+			elementCount++;
+			if (element.getDevLevel() == 4) {
+				fullyDevelopedCount++;
+			}
+		}
+		if (fullyDevelopedCount == elementCount) {
+			System.out.println("You don't have any developments to make!");
+			breakIt = true;
+			return breakIt;
+		}
+		return breakIt;
+	}
+
+	/**
+	 * checks that the square landed on is an element, that the player can afford
+	 * the development, and that the element is not fully developed. if so,
+	 * increases the elements development level and removes appropriate resources
+	 * from player
+	 */
+	public void developElement(Element element, Player player) {
+
+		int priceToDevelop = element.getDevelopmentPrice();
+		if (player.getResources() > priceToDevelop && element.getDevLevel() != 4) {
+			player.removeResources(priceToDevelop);
+			element.increaseDevLevel();
+			System.out.println("Upgraded to level " + element.getDevLevel());
+			System.out.println("You've developed it!");
+			// element.displayDevelopmentUpgradeInfo();
+		} else {
+			System.out.println("Not enough resources to develop or max development reached");
+		}
+
+	}
+
+	/**
+	 * Presents a dynamically formed menu for a player to develop owned and
+	 * developable elements
+	 * 
+	 * @param boardLayout
+	 * @return
+	 */
+	public boolean developmentMenu(Player player) {
+		List<Square> boardLayout = board.getSquares();
+		// returns the developableElements array of elements from
+		// returnDevelopableElements method
+		List<Element> developableElements = returnDevelopableElements(player);
+
+		boolean gameWin = false;
+		String userText = "";
+		int intUserInput = 0;
+		int fullyDevelopedCount = 0;
+		int elementCount = 0;
+
+		do {
+			// breaks the loop of the player has no elements to develop
+			if (noDevelopmentsToMakeChecker(player)) {
+				break;
+			}
+			for (Element element : developableElements) {
+
+				// filters out elements that have been fully developed
+				if (element.getDevLevel() != 4) {
+					System.out.println("To develop " + element.getName() + " enter ["
+							+ (developableElements.indexOf(element) + 1) + "]");
+				}
+			}
+			System.out.println("Don't want to develop any more? Enter [" + (developableElements.size() + 1) + "]");
+			userText = userInput.requestUserInputReturnString("Please choose an option followed by [Enter]");
+			intUserInput = UserInput.parseWithDefault(userText, 0);
+			if (intUserInput <= developableElements.size() && intUserInput > 0) {
+				developElement(developableElements.get(intUserInput - 1), player);
+				// checks after each development if all elements are fully developed
+				for (Square square : boardLayout) {
+
+					if (square instanceof Element) {
+						elementCount++;
+						Element element = (Element) square;
+						if (element.getDevLevel() == 4) {
+							fullyDevelopedCount++;
+						}
+					}
+				}
+				// returns a true boolean if all elements are fully developed
+				if (fullyDevelopedCount == elementCount) {
+					gameWin = true;
+					return gameWin;
+				}
+				// breaks the loop if there are no further developments to make
+				if (noDevelopmentsToMakeChecker(player)) {
+					break;
+				}
+				// exits menu on appropriate user input
+			} else if (intUserInput == (developableElements.size() + 1)) {
+				System.out.println("Exiting development menu");
+			} else {
+				System.out.println("Incorrect input try again");
+			}
+			// loop will continue until player hits the appropriate 'Exit' option
+		} while (intUserInput != developableElements.size() + 1);
+		return gameWin;
+	}
+
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Trade element
+	// and stuff like that>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+	/**
+	 * 
+	 * @param players
+	 * @param player
+	 */
+	public void tradeElementMenu(List<Player> players, Player player) {
+		Set<Element> playerElements;
+		List<Element> playerElementList;
+		String userText = "";
 		String ynInput = "";
 		int intUserInput = 0;
 		Element elementToTrade = null;
-		displayPropertyOwnedInfo();
 		do {
+			// repeats these steps after each trade so the list is correctly populated
+			playerElements = player.getSquaresOwned();
+			playerElementList = new ArrayList<>(playerElements);
+			player.displayPropertyOwnedInfo();
 			// breaks the loop of the player has no elements to trade
-			if (this.elementsOwned.size() == 0) {
+			if (playerElementList.size() == 0) {
 				System.out.println("You have no elements to trade");
 				break;
 			}
-			for (Element element : this.elementsOwned) {
+			for (Element element : playerElementList) {
 
-				System.out.println("To trade " + element.getSquareName() + " enter ["
-						+ (this.elementsOwned.indexOf(element) + 1) + "]");
+				System.out.println(
+						"To trade " + element.getName() + " enter [" + (playerElementList.indexOf(element) + 1) + "]");
 
 			}
-			System.out.println("Don't want to trade any more? Enter [" + (this.elementsOwned.size() + 1) + "]");
-			userInput = sc.nextLine();
-			intUserInput = parseWithDefault(userInput, 0);
-			if (intUserInput <= this.elementsOwned.size() && intUserInput > 0) {
-				elementToTrade = this.elementsOwned.get(intUserInput - 1);
+			System.out.println("Don't want to trade any more? Enter [" + (playerElementList.size() + 1) + "]");
+			userText = userInput.requestUserInputReturnString("Please choose an option followed by [Enter]");
+			intUserInput = UserInput.parseWithDefault(userText, 0);
+			if (intUserInput <= playerElementList.size() && intUserInput > 0) {
+				elementToTrade = playerElementList.get(intUserInput - 1);
 				System.out.println("Who would you like to trade with?");
 
 				Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
 				int counter = 1;
-				for (Player player : players) {
-					if (!player.equals(this)) {
-						playerMap.put(counter, player);
+				for (Player p : players) {
+					if (!p.equals(player)) {
+						playerMap.put(counter, p);
 						counter++;
 					}
 				}
-
-				for (Integer key : playerMap.keySet()) {
-					System.out.println("To trade with " + playerMap.get(key).getPlayerName() + " press [" + key + "]");
-				}
-				System.out.println("To cancel trade press [" + (playerMap.size() + 1) + "]");
-				userInput = sc.nextLine();
-				intUserInput = parseWithDefault(userInput, 0);
-				if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
-					System.out.println("Incorrect selection");
-				} else if (intUserInput == playerMap.size() + 1) {
-					break;
-				} else if (intUserInput > 0 && intUserInput <= playerMap.size()) {
-					System.out.println(playerMap.get(intUserInput).getPlayerName() + ", would you like to buy "
-							+ elementToTrade.getSquareName() + " from " + this.playerName + " ? [Y/N]");
-					ynInput = sc.nextLine();
-					if (ynInput.equalsIgnoreCase("Y")) {
-						tradeElement(elementToTrade, playerMap.get(intUserInput));
-					} else if (ynInput.equalsIgnoreCase("N")) {
-						System.out.println(
-								playerMap.get(intUserInput).getPlayerName() + " doesn't want to trade, hard luck!");
-					} else {
-						System.out.println("Incorrect input try again");
+				do {
+					for (Integer key : playerMap.keySet()) {
+						System.out.println("To trade with " + playerMap.get(key).getName() + " press [" + key + "]");
 					}
+					System.out.println("To cancel trade press [" + (playerMap.size() + 1) + "]");
 
-				}
-
-			} else if (intUserInput == (this.elementsOwned.size() + 1)) {
+					userText = userInput.requestUserInputReturnString("Please choose an option followed by [Enter]");
+					intUserInput = UserInput.parseWithDefault(userText, 0);
+					if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
+						System.out.println("Incorrect selection");
+						// breaks if user enters the cancel trade number
+					} else if (intUserInput == playerMap.size() + 1) {
+						break;
+					} else if (intUserInput > 0 && intUserInput <= playerMap.size()) {
+						do {
+							System.out.println(playerMap.get(intUserInput).getName() + ", would you like to buy "
+									+ elementToTrade.getName() + " from " + player.getName() + " ? [Y/N]");
+							ynInput = userInput.requestUserInputReturnString("Please enter [Y] or [N]");
+							if (ynInput.equalsIgnoreCase("Y")) {
+								tradeElement(elementToTrade, player, playerMap.get(intUserInput));
+							} else if (ynInput.equalsIgnoreCase("N")) {
+								System.out.println(
+										playerMap.get(intUserInput).getName() + " doesn't want to trade, hard luck!");
+							} else {
+								System.out.println("Incorrect input try again");
+							}
+						} while (!ynInput.equalsIgnoreCase("Y") && !ynInput.equalsIgnoreCase("N"));
+					}
+				} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
+			} else if (intUserInput == (playerElementList.size() + 1)) {
 				System.out.println("Exiting trade menu");
 			} else {
 				System.out.println("Incorrect input try again");
 			}
 			// loop will continue until player hits the appropriate 'Exit' option
-		} while (intUserInput != this.elementsOwned.size() + 1);
+		} while (intUserInput != playerElementList.size() + 1);
 
 	}
 
-	private void tradeElement(Element element, Player buyer) {
-		if (element.getPurchasePrice()<=buyer.getResources()) {
-		
-		this.elementsOwned.remove(element);
-		buyer.elementsOwned.add(element);
-		element.setOwner(buyer);
-		this.resources = this.resources - element.getPurchasePrice();
-		buyer.setResources(buyer.getResources() - element.getPurchasePrice());
-		System.out.println(
-				this.getPlayerName() + ", you sold " + element.getSquareName() + " to " + buyer.getPlayerName());
+	/**
+	 * Adds element to buyers owned list, removes it from sellers owned list
+	 * Also sets the elements owner as buyer, adds/removes appropriate resources
+	 * @param element
+	 * @param player
+	 * @param buyer
+	 */
+	private void tradeElement(Element element, Player player, Player buyer) {
+		if (element.getPurchasePrice() <= buyer.getResources()) {
+
+			player.removeSquare(element);
+			buyer.addSquare(element);
+			element.setOwner(buyer);
+			player.addResources(element.getPurchasePrice());
+			buyer.removeResources(element.getPurchasePrice());
+			System.out.println(player.getName() + ", you sold " + element.getName() + " to " + buyer.getName());
 		} else {
-			System.out.println(buyer.getPlayerName()+", you can't afford this purchase!");
+			System.out.println(buyer.getName() + ", you can't afford this purchase!");
 		}
 	}
 

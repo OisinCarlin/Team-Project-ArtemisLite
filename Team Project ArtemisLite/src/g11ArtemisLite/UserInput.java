@@ -137,6 +137,7 @@ public class UserInput {
 		return userChoice;
 	}
 
+	//<<<<<<<<<<<<<<<<<<left this in, but not used it as yet>>>>>>>>>>>>>>>>>>>>>>>>
 	/**
 	 * 
 	 * @param players
@@ -144,10 +145,11 @@ public class UserInput {
 	 * @return
 	 */
 	public Player chooseAPlayer(List<Player> players, Player currentPlayer) {
+		Player playerToReturn = null;
 		Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
 		int counter = 1;
 		for (Player player : players) {
-			if (!player.equals(this)) {
+			if (!player.equals(currentPlayer)) {
 				playerMap.put(counter, player);
 				counter++;
 			}
@@ -158,7 +160,6 @@ public class UserInput {
 		}
 		System.out.println("To cancel press [" + (playerMap.size() + 1) + "]");
 		String userInput = "";
-		String ynInput = "";
 		int intUserInput = 0;
 		do {
 			userInput = scanner.nextLine();
@@ -166,12 +167,13 @@ public class UserInput {
 			if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
 				System.out.println("Incorrect selection");
 			} else if (intUserInput == playerMap.size() + 1) {
-				return null;
+				break;
 			} else if (intUserInput > 0 && intUserInput <= playerMap.size()) {
-				return playerMap.get(intUserInput);
+				playerToReturn = playerMap.get(intUserInput);
 
 			}
 		} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
+		return playerToReturn;
 	}
 
 	/**
