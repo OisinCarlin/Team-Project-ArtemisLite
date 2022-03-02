@@ -3,6 +3,7 @@
  */
 package g11ArtemisLite;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,6 +19,11 @@ public class ElementSystem {
 	// Set to store Elements
 	private Set<Element> elements;
 	
+	public ElementSystem(String name) {
+		this.name = name;
+		elements = new HashSet<>();
+	}
+	
 	//**************************Getters and Setters******************************
 	
 	/**
@@ -26,14 +32,6 @@ public class ElementSystem {
 	 */
 	public String getName() {
 		return name;
-	}
-	
-	/**
-	 * Sets the name on the ElementSystem
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	/**
@@ -51,7 +49,6 @@ public class ElementSystem {
 	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
-	//***************************************************************************
 	
 	//**********Methods to add and remove Elements to Elements Set***************
 	
@@ -63,7 +60,8 @@ public class ElementSystem {
 		elements.remove(elementToRemove);
 	}
 	
-	//***************************************************************************
+	public Set<Element> getElements(){
+		return elements;
+	}
 	
-
 }
