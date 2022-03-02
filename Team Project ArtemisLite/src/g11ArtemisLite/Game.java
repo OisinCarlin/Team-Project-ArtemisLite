@@ -4,13 +4,12 @@
 package g11ArtemisLite;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
-import artemis.DevelopmentLevel;
-import artemis.Element;
-import artemis.Player;
-import artemis.Square;
 
 /**
  * Please note this is a work in progress... ive added methods from my game version
@@ -26,11 +25,11 @@ public class Game {
 	private Board board;
 	private boolean isProgress;
 	private Roller diceRoller;
-	private ElementSystems sysOne;
-	private ElementSystems sysTwo;
-	private ElementSystems sysThree;
-	private ElementSystems sysFour;
-	private Set<ElementSystems> allSystems;
+	private ElementSystem sysOne;
+	private ElementSystem sysTwo;
+	private ElementSystem sysThree;
+	private ElementSystem sysFour;
+	private Set<ElementSystem> allSystems;
 
 	/**
 	 * @param usernames
@@ -42,7 +41,7 @@ public class Game {
 		this.isProgress = true;
 
 		this.board = new Board();
-		Square square1 = new Start("Start", 10);
+		Square square1 = new StartSquare("Start", 10);
 		Element square2 = new Element("Element 1", 0, 0, 0);
 		Element square3 = new Element("Element 2", 0, 0, 0);
 		Element square4 = new Element("Element 3", 0, 0, 0);
@@ -67,21 +66,21 @@ public class Game {
 		board.addSquareToBoard(square11);
 		board.addSquareToBoard(square12);
 
-		this.sysOne = new ElementSystems("System 1");
+		this.sysOne = new ElementSystem("System 1");
 		sysOne.addElement(square2);
 		sysOne.addElement(square3);
 		sysOne.addElement(square4);
 
-		this.sysTwo = new ElementSystems("System 2");
+		this.sysTwo = new ElementSystem("System 2");
 		sysTwo.addElement(square5);
 		sysTwo.addElement(square6);
 		sysTwo.addElement(square7);
 
-		this.sysThree = new ElementSystems("System 3");
+		this.sysThree = new ElementSystem("System 3");
 		sysThree.addElement(square8);
 		sysThree.addElement(square9);
 
-		this.sysFour = new ElementSystems("System 4");
+		this.sysFour = new ElementSystem("System 4");
 		sysFour.addElement(square10);
 		sysFour.addElement(square11);
 
@@ -121,9 +120,9 @@ public class Game {
 
 				// loops through all element systems and if the player owns that system, offers
 				// the chance to develop
-				for (ElementSystems elementSystems : allSystems) {
-					if (player.ownsFullSystem(elementSystems)) {
-						offerDevelopElement(player, elementSystems);
+				for (ElementSystem elementSystem : allSystems) {
+					if (player.ownsFullSystem(elementSystem)) {
+						offerDevelopElement(player, elementSystem);
 					}
 				}
 			}
@@ -243,7 +242,7 @@ public class Game {
 	 * 
 	 * @param player
 	 */
-	private void offerDevelopElement(Player player, ElementSystems elementSystems) {
+	private void offerDevelopElement(Player player, ElementSystem elementSystems) {
 		for (Element square : elementSystems.getElements()) {
 			System.out.println("Do you want to develop " + square.getName());
 			boolean develop = userInput.yesOrNo();

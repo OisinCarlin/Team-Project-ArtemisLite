@@ -3,16 +3,11 @@
  */
 package g11ArtemisLite;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
-
-import artemis.Element;
-import artemis.Player;
-import artemis.Square;
 
 /**
  * @author maeve
@@ -159,7 +154,7 @@ public class UserInput {
 		}
 
 		for (Integer key : playerMap.keySet()) {
-			System.out.println("To select " + playerMap.get(key).getPlayerName() + " press [" + key + "]");
+			System.out.println("To select " + playerMap.get(key).getName() + " press [" + key + "]");
 		}
 		System.out.println("To cancel press [" + (playerMap.size() + 1) + "]");
 		String userInput = "";

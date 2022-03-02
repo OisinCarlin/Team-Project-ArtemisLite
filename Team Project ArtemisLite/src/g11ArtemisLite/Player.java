@@ -3,15 +3,19 @@
  */
 package g11ArtemisLite;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The class contains addSquare, removeSquare, addResources, removeResources, ownFullSystem and displayAll methods.
+ * The class contains addSquare, removeSquare, addResources, removeResources,
+ * ownFullSystem and displayAll methods.
+ * 
  * @author jamielarkin
  *
  */
 public class Player {
-	
+	private static final int STARTING_RESOURCES = 1000;
+
 	private String name;
 	private Set<Element> squaresOwned;
 	private int resources;
@@ -25,32 +29,25 @@ public class Player {
 	}
 
 	/**
-	 * Set the starting number of resources the player owns at the start of the game.
+	 * Set the starting number of resources the player owns at the start of the
+	 * game.
+	 * 
 	 * @param name
 	 * @param squaresOwned
 	 * @param resources
 	 * @param currentSquare
 	 */
-	public Player(String name, Set<Element> squaresOwned, int resources, Square currentSquare) {
-		super();
+	public Player(String name) {
+		squaresOwned = new HashSet<>();
 		this.name = name;
-		this.squaresOwned = squaresOwned;
-		this.resources = 1;
-		this.currentSquare = currentSquare;
+		this.resources = STARTING_RESOURCES;
 	}
-	
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -61,24 +58,10 @@ public class Player {
 	}
 
 	/**
-	 * @param squaresOwned the squaresOwned to set
-	 */
-	public void setSquaresOwned(Set<Element> squaresOwned) {
-		this.squaresOwned = squaresOwned;
-	}
-
-	/**
 	 * @return the resources
 	 */
 	public int getResources() {
 		return resources;
-	}
-
-	/**
-	 * @param resources the resources to set
-	 */
-	public void setResources(int resources) {
-		this.resources = resources;
 	}
 
 	/**
@@ -94,64 +77,72 @@ public class Player {
 	public void setCurrentSquare(Square currentSquare) {
 		this.currentSquare = currentSquare;
 	}
-	
-	
-	
+
 	/**
-	 * Add element to the squaresOwned ArrayList of the player 
+	 * Add element to the squaresOwned ArrayList of the player
+	 * 
 	 * @param element
 	 */
 	public void addSquare(Element element) {
 		squaresOwned.add(element);
 	}
-	
+
 	/**
-	 * Remove element from the squaresOwned ArrayList of the player 
+	 * Remove element from the squaresOwned ArrayList of the player
+	 * 
 	 * @param element
 	 */
 	public void removeSquare(Element element) {
 		squaresOwned.remove(element);
 	}
-	
+
 	/**
 	 * Add resources from StartSquare to Player resources
 	 */
-	public void addResources() {
-		resources += resources;
+	public void addResources(int resourcesToAdd) {
+		resources += resourcesToAdd;
 	}
-	
+
 	/**
 	 * Remove resources from Player resources
 	 */
-	public void removeResources() {
-		resources -= resources;
+	public void removeResources(int resourcesToRemove) {
+		resources -= resourcesToRemove;
 	}
-	
+
 	/**
-	 * If player owns all required elements and are developed, player owns full system
+	 * If player owns all required elements and are developed, player owns full
+	 * system
+	 * 
 	 * @param elements
 	 * @param developmentLevel
 	 * @return
 	 */
-	public boolean ownFullSystem(ElementSystem elements, Element developmentLevel) {
-		
-		if (elements == squaresOwned) {
-			if (squaresOwned == developmentLevel) {
-				return true;
-				
-			} else {
-				return false;
-				
-			}	
+	public boolean ownsFullSystem(ElementSystem elementSystem) {
+		boolean ownFullSystem = false;
+
+		Set<Element> fullSystem = new HashSet<>(elementSystem.getElements());
+		fullSystem.removeAll(squaresOwned);
+
+		if (fullSystem.isEmpty()) {
+			ownFullSystem = true;
+			elementSystem.setOwner(this);
+		}
+		return ownFullSystem;
 	}
-		return false;
-}
+
 	/**
 	 * Prints out the squares and resources the player owns
 	 */
 	public void displayAll() {
-		System.out.println(name+" owns "+squaresOwned+".");
-		System.out.println(name+" has "+resources+" resources.");
+		System.out.println("Player Info");
+		System.out.println("Player name :\t" + this.getName());
+		System.out.println("Resources :\t" + this.getResources());
+		System.out.println("Elements :\t");
+		
+		for(Element element : squaresOwned) {
+			System.out.println(element.getName() + " " + element.getOwner().getName());
+		}
 	}
 
 }

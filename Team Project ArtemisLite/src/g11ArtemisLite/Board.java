@@ -4,8 +4,7 @@
 package g11ArtemisLite;
 
 import java.util.ArrayList;
-
-import artemis.Start;
+import java.util.List;
 
 /**
  * @author oisincarlin
@@ -14,11 +13,16 @@ import artemis.Start;
 public class Board {
 	
 	//List to store Squares on board
-	private ArrayList<Square> squares;
+	private List<Square> squares;
 	
+	public Board() {
+		squares = new ArrayList<>();
+	}
 	
-	
-	
+	public List<Square> getSquares(){
+		return squares;
+	}
+
 	//************* Methods to add and remove Squares to Squares List *************
 	
 	/**
@@ -36,9 +40,7 @@ public class Board {
 	public void removeSquareFromBoard(Square squareToRemove) {
 		squares.remove(squareToRemove);
 	}
-	
-	//***************************************************************************
-	
+
 	//********************** Move Player Method ***********************************
 	
 	/**
@@ -48,23 +50,15 @@ public class Board {
 	 * @param player - the current player whose turn it is
 	 * @param roll - the roll of the dice by the player: how many squares along the board they move
 	 */
-	public void move(Player player, int roll) {
-		Player currentPlayer = player;
-		Square playerPosition = player.getCurrentSquare(); 
-		int movedIndex = squares.indexOf(playerPosition) + roll;
+	public void move(Player player, int squaresToMove) {
+		Square currentSquare = player.getCurrentSquare();
+		int startingSquareIndex = squares.indexOf(currentSquare);
 		
-		if (movedIndex >= squares.size()) {
-			movedIndex = movedIndex - squares.size();
-			
-			StartSquare start = (StartSquare) squares.get(0);
-			System.out.println(player.getPlayerName() + " passed " + start.getName() + ", collect "
-					+ start.getResources());
-			player.setResources(player.getResources() + start.getResources());
+		for(int square = 0; square < squaresToMove; square++) {
+			int nextSquareIndex = (startingSquareIndex + square) % squares.size();
+			Square nextSquare = squares.get(nextSquareIndex);
+			nextSquare.onPass(player);
 		}
-		
-		player.setCurrentSquare(squares.get(movedIndex));
-		System.out.println(player.getName() + " landed on " + player.getCurrentSquare().getName());
+		player.getCurrentSquare().onLand(player);
 	}
-	
-	//***************************************************************************
 }

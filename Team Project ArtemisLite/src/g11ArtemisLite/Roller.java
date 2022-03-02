@@ -1,21 +1,21 @@
 package g11ArtemisLite;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Roller {
 
-	private ArrayList<Dice> dice;
+	private List<Dice> dice;
 
-	public Roller() {
+	public Roller(List<Dice> dice) {
 		this.dice = dice;
 	}
 
-	public int Roll(ArrayList<Dice> dice) {
+	public int roll() {
 		int rollTotal = 0;
-		for (Dice roll : dice) {
-			rollTotal += roll.roll();
+		
+		for (Dice die : dice) {
+			rollTotal += die.roll();
 		}
 		return rollTotal;
 	}
-
 }

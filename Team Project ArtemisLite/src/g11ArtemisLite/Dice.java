@@ -6,12 +6,7 @@ package g11ArtemisLite;
  * @author Robbie
  *
  */
-
-
-import java.util.Random;
-
 public class Dice {
-	
 	private int numOfSides;
 
 	/**
@@ -24,6 +19,5 @@ public class Dice {
 	public int roll() {
 		return (int) (Math.random() * numOfSides + 1);
 	}
-
 }
 
