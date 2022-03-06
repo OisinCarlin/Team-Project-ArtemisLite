@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 class ElementTest {
 	
-	
 	//test data
 	String name;
 	int purchasePrice, rentPrice, developmentPrice, devLevel;
@@ -19,10 +18,7 @@ class ElementTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		
-		devLevel = 0;
-		ansTrue = true;
-	    ansFalse = false;
-		ownerNull = null;
+		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
 		Player player = new Player();
 	}
 	
