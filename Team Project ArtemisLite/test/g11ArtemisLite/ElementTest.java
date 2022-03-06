@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class ElementTest {
 	
+	
 	//test data
 	String name;
 	int purchasePrice, rentPrice, developmentPrice, devLevel;
