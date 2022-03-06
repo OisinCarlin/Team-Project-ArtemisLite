@@ -3,13 +3,16 @@
  */
 package g11ArtemisLite;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Element extends Square and has prices for purchase, rent and development and
  * a development level and an owner. The override method for onLand incorporates
  * private methods for purchasing an element and enforcing rent. Methods for
  * developing and trading elements are NOT a part of this class.
  * 
- * @author Maeve
+ * @author Maeve Higgins
  *
  */
 public class Element extends Square {
@@ -19,11 +22,13 @@ public class Element extends Square {
 	private int developmentPrice;
 	private int devLevel;
 	private Player owner;
+	private PlayerManager playerManager;
 	private UserInput userInput;
 
 	/**
 	 * Allows name, purchasePrice, rentPrice and developmentPrice to be set.
-	 * Development level is set to 0 and a new userInput instance created.
+	 * Development level is set to 0 and new userInput and playerManager instances
+	 * created.
 	 * 
 	 * @param name
 	 */
@@ -34,6 +39,7 @@ public class Element extends Square {
 		this.developmentPrice = developmentPrice;
 		this.devLevel = 0;
 		this.userInput = new UserInput();
+		this.playerManager = new PlayerManager();
 	}
 
 	/**
@@ -79,10 +85,23 @@ public class Element extends Square {
 	}
 
 	/**
+	 * Increments the development level by 1 and calls adjustRent()
+	 * 
 	 * @param devLevel the devLevel to set
 	 */
 	public void increaseDevLevel() {
 		this.devLevel++;
+		adjustRent();
+	}
+
+	/**
+	 * If the development level is > 0 the rent price is multiplied by the
+	 * development level
+	 */
+	public void adjustRent() {
+		if (devLevel > 0) {
+			setRentPrice(getRentPrice() * getDevLevel());
+		}
 	}
 
 	/**
@@ -104,14 +123,16 @@ public class Element extends Square {
 	 * own it they are told this. If it is owned by another player requestRent is
 	 * called.
 	 * 
-	 * @param player
+	 * @param players - the list of players in the game - enables offering purchase
+	 *                to other players
+	 * @param player  - the current player
 	 */
 	@Override
-	public void onLand(Player player) {
-		super.onLand(player);
+	public void onLand(List<Player> players, Player player) {
+		super.onLand(players, player);
 
 		if (this.owner == null) {
-			attemptPurchaseElement(player);
+			attemptPurchaseElement(players, player);
 		} else if (this.owner.equals(player)) {
 			System.out.println("You own this element");
 		} else {
@@ -123,26 +144,59 @@ public class Element extends Square {
 	 * Asks the current player if the want to purchase this element. If yes and they
 	 * have enough resources - current player is set to owner of this element. This
 	 * element is added to the players squaresOwned and the purchase price is
-	 * removed from players resources
+	 * removed from players resources. If no the player is given the option to offer
+	 * it to another player, if yes offerAltPlayerPurchase() is called
 	 * 
-	 * @param player
+	 * @param players - the list of players in the game - enables offering to other
+	 *                players
+	 * @param player  - the current player
 	 */
-	private void attemptPurchaseElement(Player player) {
-		System.out.println("\nDo you want to purchase " + this.getName());
+	private void attemptPurchaseElement(List<Player> players, Player player) {
+		System.out.printf("\n%s Do you want to purchase %s\n", player.getName(), this.getName());
 		boolean attemptPurchase = userInput.yesOrNo();
+		boolean altPlayerPurchase;
 
 		if (attemptPurchase) {
+			// Checks player has enough resources
 			if (player.getResources() >= purchasePrice) {
 				this.setOwner(player);
 				player.removeResources(getPurchasePrice());
 				player.addSquare(this);
-				System.out.println("Congratulations! You now own " + this.getName());
+				System.out.printf("Congratulations! You now own %s\n", this.getName());
 			} else {
-				System.err.println("Sorry not enough resources to purchase.");
+				System.err.println("Sorry not enough resources to purchase.\n");
 			}
 		} else {
-			System.err.println("Sorry you don't want to purchase :(");
+			System.err.println("Sorry you don't want to purchase :(\n");
+			System.out.printf("Do you want to offer %s to another player?\n", this.getName());
+			altPlayerPurchase = userInput.yesOrNo();
+			if (altPlayerPurchase) {
+				offerAltPlayerPurchase(players, player);
+			} else {
+				System.err.println("Sorry you don't want to share the purchase :(\n");
+			}
+
 		}
+	}
+
+	/**
+	 * Calls mapPlayer() and choosePlayer() for the player to select the player the
+	 * want to offer the purchase to. If the player is not null
+	 * attemptPurchaseElement() is called. Else a cancelled message is displayed
+	 * 
+	 * @param players - the list of players in the game - enables offering to other
+	 *                players
+	 * @param player  - the current player
+	 */
+	private void offerAltPlayerPurchase(List<Player> players, Player player) {
+		Map<Integer, Player> playerMap = playerManager.mapPlayers(players, player);
+		Player chosenPlayer = playerManager.choosePlayer(playerMap);
+		if (chosenPlayer != null) {
+			attemptPurchaseElement(players, chosenPlayer);
+		} else {
+			System.err.println("Cancelled");
+		}
+
 	}
 
 	/**
@@ -152,7 +206,7 @@ public class Element extends Square {
 	 * @param player
 	 */
 	private void requestRent(Player player) {
-		System.out.println("\n" + this.owner.getName() + " Do you want to charge " + player.getName() + " rent?");
+		System.out.println("\n" + this.owner.getName() + " Do you want to charge " + player.getName() + " rent?\n");
 		boolean enforceRent = userInput.yesOrNo();
 
 		if (enforceRent) {

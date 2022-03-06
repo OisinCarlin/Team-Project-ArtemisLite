@@ -5,10 +5,12 @@ package g11ArtemisLite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
- * @author maeve
+ * @author Maeve Higgins
  *
  */
 public class PlayerManager {
@@ -16,16 +18,18 @@ public class PlayerManager {
 	private static final int MIN_USERS = 2;
 	private UserInput userInput;
 	private List<Player> players;
+	private Message message;
 
 	/**
 	 * 
 	 */
 	public PlayerManager() {
 		this.userInput = new UserInput();
+		this.message = new Message();
 	}
 	
 	public int getUserCount() {
-		return userInput.requestUserNumber(MIN_USERS, MAX_USERS);
+		return userInput.getInt("Enter number of players between " + MIN_USERS + " - " + MAX_USERS,MIN_USERS, MAX_USERS);
 	}
 	
 	/**
@@ -35,7 +39,7 @@ public class PlayerManager {
 	 */
 	public List<String> getUsernames() {
 		List<String> usernames = new ArrayList<>();
-		welcome(userInput);
+		welcome();
 		return userInput.requestUsernames(usernames, getUserCount());
 	}
 	
@@ -70,9 +74,8 @@ public class PlayerManager {
 	 * menu with options to display rules (invoking the displayRules method), or
 	 * allowing for a new game to begin
 	 */
-	public static void welcome(UserInput uI) {
-		int lineNum = 0;
-		System.out.println("Welcome to ArtemisLite!");
+	private void welcome() {
+		System.out.println("Welcome to ArtemisLite!\n");
 		// adds a pause before displaying menu options
 		try {
 			Thread.sleep(1000);
@@ -80,18 +83,22 @@ public class PlayerManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		displayStartUpMenu();
+	}
+	
+	private void displayStartUpMenu() {
+		int lineNum = 0;
 		do {
-			System.out.println("Press [1]:\tDisplay Rules");
-			System.out.println("Press [2]:\tStart New Game");
+			System.out.println("[1]:\tDisplay Rules");
+			System.out.println("[2]:\tStart New Game");
 			
-			lineNum = uI.requestUserInputReturnInt("Input a number and press [Enter]");
+			lineNum = userInput.getInt(message.inputOptionRequest);
 			switch (lineNum) {
 			case 1:
-				displayRules(uI);
+				displayRules();
 				break;
 			case 2:
-				System.out.println("Artemis to the moon blah blah blah...");
+				System.out.println(message.startingMessage);
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -100,7 +107,7 @@ public class PlayerManager {
 				}
 				break;
 			default:
-				System.out.println("Incorrect option selected, try again...");
+				System.err.println(message.invalidOption);
 				break;
 			}
 		} while (lineNum != 2);
@@ -109,9 +116,44 @@ public class PlayerManager {
 	/**
 	 * Displays the game rules, exiting when a player presses [Enter]
 	 */
-	public static void displayRules(UserInput uI) {
-		System.out.println("Rules");
-		uI.requestUserInputReturnString("To return to the main menu press [Enter]");
+	public void displayRules() {
+		System.out.println(message.rules);
+		userInput.prompt(message.returnToMenu);;
 	}
 
+	public Map<Integer, Player> mapPlayers(List<Player> allPlayers, Player currentPlayer){
+		Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
+		int counter = 1;
+		for (Player player : allPlayers) {
+			if (!player.equals(currentPlayer)) {
+				playerMap.put(counter, player);
+				counter++;
+			}
+		}
+		return playerMap;
+	}
+	
+	public Player choosePlayer(Map<Integer, Player> playerMap) {
+		Player chosenPlayer = null;
+		int choice = -1;
+		
+		for(Integer key : playerMap.keySet()) {
+			System.out.printf("To select %s enter [ %d ]\n", playerMap.get(key).getName(), key);
+		}
+		System.out.printf("To cancel enter [ %d ]\n", playerMap.size() + 1);
+		
+		do {
+			choice = userInput.getInt("Enter number 1 - " + (playerMap.size() +1));
+			if(choice > 0 && choice <= playerMap.size()) {
+				chosenPlayer = playerMap.get(choice);
+			} else if(choice == playerMap.size() + 1) {
+				System.err.println("Cancelling");
+				chosenPlayer = null;
+			} else {
+				System.err.println(message.invalidOption);
+			}
+		} while(choice <= 0 || choice > playerMap.size() +1);
+		
+		return chosenPlayer;
+	}
 }

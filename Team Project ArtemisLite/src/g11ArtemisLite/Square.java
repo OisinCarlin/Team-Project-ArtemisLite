@@ -3,6 +3,8 @@
  */
 package g11ArtemisLite;
 
+import java.util.List;
+
 /**
  * Square is one part of a board. Each Square has a name and sets the players
  * location as they pass or land on it.
@@ -27,7 +29,7 @@ public class Square {
 	 * 
 	 * @param player
 	 */
-	public void onLand(Player player) {
+	public void onLand(List<Player> players, Player player) {
 		player.setCurrentSquare(this);
 		System.out.println(player.getName() + " has landed on " + this.name);
 	}
