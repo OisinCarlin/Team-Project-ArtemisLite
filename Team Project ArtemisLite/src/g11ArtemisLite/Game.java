@@ -125,7 +125,12 @@ public class Game {
 				System.out.println(player.getName() + " has rolled " + squaresToMove);
 
 				board.move(players, player, squaresToMove);
-
+				
+				if(player.bankruptCheck()) {
+					isProgress = false;
+					break;
+				}
+				
 				player.displayAll();
 
 				// <<<<<<<<<<calls method to display options post-move>>>>>>>>>>
@@ -141,10 +146,15 @@ public class Game {
 			// breaks outer loop when isProgress set to false by returned boolean from
 			// postMoveOptions
 			if (!isProgress) {
+				displayStateOfPlay();
 				System.out.println("Game over");
 				break;
 			}
 		}
+	}
+
+	private void displayStateOfPlay() {
+		System.out.println("This is state of play");
 	}
 
 	/**
@@ -194,11 +204,20 @@ public class Game {
 				System.out.println("Ending your turn...");
 				break;
 			case 4:
-				endGame = true;
+				endGame = quitGame();
 				break;
 			}
 		} while (userInputNum != 3 && userInputNum != 4);
 		return endGame;
+	}
+	
+	/**
+	 * Quits the game
+	 * @return
+	 */
+	public boolean quitGame() {
+		boolean quit = true;
+		return quit;
 	}
 
 	// <<<<development-related methods>>>>
@@ -324,6 +343,7 @@ public class Game {
 				// returns a true boolean if all elements are fully developed
 				if (fullyDevelopedCount == elementCount) {
 					gameWin = true;
+					displayEpilogue();
 					return gameWin;
 				}
 				// breaks the loop if there are no further developments to make
@@ -339,6 +359,10 @@ public class Game {
 			// loop will continue until player hits the appropriate 'Exit' option
 		} while (intUserInput != developableElements.size() + 1);
 		return gameWin;
+	}
+
+	private void displayEpilogue() {
+		System.out.println("This is the epilogue");
 	}
 
 	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Trade element
