@@ -3,7 +3,11 @@
  */
 package g11ArtemisLite;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -161,14 +165,34 @@ public class Player {
 	 */
 	public void displayPropertyOwnedInfo() {
 		if (this.squaresOwned.size() > 0) {
+			List<Element> elementsOwned = new ArrayList<>();
+			for (Element element : this.squaresOwned) {
+				elementsOwned.add(element);
+			}
 			System.out.println("*************************");
-			// sortElements(this.squaresOwned);
+			sortElements(elementsOwned);
 			System.out.println(this.name + ": Properties Owned");
 			System.out.println("-------------------------");
-			for (Element element : this.squaresOwned) {
+			for (Element element : elementsOwned) {
 				System.out.println("Name: " + element.getName() + " Price: " + element.getPurchasePrice());
 				System.out.println("-------------------------");
 			}
+		}
+	}
+
+	/**
+	 * Sorts an ArrayList of elements by Name
+	 * 
+	 * @param elements
+	 */
+	public void sortElements(List<Element> elements) {
+		if (elements.size() > 0) {
+			Collections.sort(elements, new Comparator<Element>() {
+				@Override
+				public int compare(final Element object1, final Element object2) {
+					return object1.getName().compareTo(object2.getName());
+				}
+			});
 		}
 	}
 }

@@ -216,4 +216,15 @@ public class Element extends Square {
 		}
 	}
 
+	public void displayDetails() {
+		System.out.println(this.getName());
+		if (this.owner != null) {
+			System.out.println("Owner: " + this.owner.getName());
+		} else {
+			System.out.println("Owner: Unowned");
+		}
+
+		System.out.println("Dev level: " + this.devLevel);
+	}
+
 }
