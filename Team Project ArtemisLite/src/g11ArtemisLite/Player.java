@@ -10,7 +10,7 @@ import java.util.Set;
  * The class contains addSquare, removeSquare, addResources, removeResources,
  * ownFullSystem and displayAll methods.
  * 
- * @author jamielarkin
+ * @author Jamie larkin, Maeve Higgins and Richard Clarke
  *
  */
 public class Player {
@@ -138,19 +138,16 @@ public class Player {
 		System.out.println("Player Info");
 		System.out.println("Player name :\t" + this.getName());
 		System.out.println("Resources :\t" + this.getResources());
-		System.out.println("Elements :\t");
+		displayPropertyOwnedInfo();
 		
-		for(Element element : squaresOwned) {
-			System.out.println(element.getName() + " " + element.getOwner().getName());
-		}
 	}
 	
 	/**
-	 * Displays development info for a player's owned elements
+	 * Displays the properties owned by the player along with its price
 	 */
 	public void displayPropertyOwnedInfo() {
-		System.out.println("*************************");
 		if (this.squaresOwned.size() > 0) {
+			System.out.println("*************************");
 			//sortElements(this.squaresOwned);
 			System.out.println(this.name + ": Properties Owned");
 			System.out.println("-------------------------");
@@ -159,7 +156,5 @@ public class Player {
 				System.out.println("-------------------------");
 			}
 		}
-
 	}
-
 }
