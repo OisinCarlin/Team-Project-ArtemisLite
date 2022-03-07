@@ -7,13 +7,22 @@ package g11ArtemisLite;
  *
  */
 public class Dice {
+	
 	private int numOfSides;
+	
+	
+	public Dice() {
+	}
 
 	/**
 	 * @param numOfSides
 	 */
 	public Dice(int numOfSides) {
 		this.numOfSides = numOfSides;
+	}
+	
+	public int getNumOfSides() {
+		return numOfSides;
 	}
 
 	public int roll() {
