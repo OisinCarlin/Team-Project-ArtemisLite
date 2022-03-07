@@ -116,7 +116,7 @@ public class PlayerManager {
 	/**
 	 * Displays the game rules, exiting when a player presses [Enter]
 	 */
-	public void displayRules() {
+	private void displayRules() {
 		System.out.println(message.rules);
 		userInput.prompt(message.returnToMenu);;
 	}
