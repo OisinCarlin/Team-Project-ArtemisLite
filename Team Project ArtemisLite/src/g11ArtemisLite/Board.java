@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author oisincarlin
+ * @author Oisin Carlin and Maeve Higgins
  *
  */
 public class Board {
@@ -45,12 +45,11 @@ public class Board {
 	
 	/**
 	 * Method to move a player along the board.
-	 * Start square at index (0) of Squares ArrayList.
-	 * Player resources updated upon passing Start square.
+	 * 
 	 * @param player - the current player whose turn it is
-	 * @param roll - the roll of the dice by the player: how many squares along the board they move
+	 * @param squaresToMove - the roll of the dice by the player: how many squares along the board they move
 	 */
-	public void move(Player player, int squaresToMove) {
+	public void move(List<Player> players, Player player, int squaresToMove) {
 		Square currentSquare = player.getCurrentSquare();
 		int startingSquareIndex = squares.indexOf(currentSquare);
 		
@@ -59,6 +58,6 @@ public class Board {
 			Square nextSquare = squares.get(nextSquareIndex);
 			nextSquare.onPass(player);
 		}
-		player.getCurrentSquare().onLand(player);
+		player.getCurrentSquare().onLand(players, player);
 	}
 }

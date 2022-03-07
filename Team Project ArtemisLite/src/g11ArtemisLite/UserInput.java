@@ -29,7 +29,7 @@ public class UserInput {
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as String
 	 */
-	public String requestUserInputReturnString(String messageRequest) {
+	public String getString(String messageRequest) {
 		String userInput = null;
 		try {
 			System.out.println(messageRequest);
@@ -42,12 +42,12 @@ public class UserInput {
 	}
 
 	/**
-	 * Requesting user input and returning a String
+	 * Requesting user input and returning an int
 	 * 
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as int
 	 */
-	public int requestUserInputReturnInt(String messageRequest) {
+	public int getInt(String messageRequest) {
 		int userInput = -1;
 		try {
 			System.out.println(messageRequest);
@@ -61,16 +61,16 @@ public class UserInput {
 	}
 
 	/**
-	 * 
+	 * Requesting user input within a speficied range and returning an int
 	 * @param minUsers
 	 * @param maxUsers
 	 * @return
 	 */
-	public int requestUserNumber(int minUsers, int maxUsers) {
+	public int getInt(String message, int minUsers, int maxUsers) {
 		int numUser = -1;
 
 		do {
-			numUser = requestUserInputReturnInt("Enter number of players 2-4");
+			numUser = getInt(message);
 
 			if (numUser < minUsers) {
 				System.err.println("Too few players. Min players is " + minUsers);
@@ -94,7 +94,7 @@ public class UserInput {
 
 		for (int user = 0; user < userCount; user++) {
 			do {
-				username = requestUserInputReturnString("Enter player " + (user + 1) + " name");
+				username = getString("Enter player " + (user + 1) + " name");
 				if (username.strip().isEmpty()) {
 					System.err.println("Not valid input. Please enter at least one visible character.");
 					username = null;
@@ -121,7 +121,7 @@ public class UserInput {
 		String userInput = null;
 
 		do {
-			userInput = requestUserInputReturnString("Enter YES or NO");
+			userInput = getString("Enter YES or NO");
 
 			if (userInput.equalsIgnoreCase("YES")) {
 				userChoice = true;
@@ -137,7 +137,8 @@ public class UserInput {
 		return userChoice;
 	}
 
-	//<<<<<<<<<<<<<<<<<<left this in, but not used it as yet>>>>>>>>>>>>>>>>>>>>>>>>
+	// <<<<<<<<<<<<<<<<<<left this in, but not used it as
+	// yet>>>>>>>>>>>>>>>>>>>>>>>>
 	/**
 	 * 
 	 * @param players
@@ -189,5 +190,16 @@ public class UserInput {
 		} catch (NumberFormatException e) {
 			return defaultVal;
 		}
+	}
+
+	/**
+	 * Prints a message to the user and waits until they hit return before
+	 * continuing.
+	 * 
+	 * @param message
+	 */
+	public void prompt(String message) {
+		System.out.println(message);
+		scanner.nextLine();
 	}
 }
