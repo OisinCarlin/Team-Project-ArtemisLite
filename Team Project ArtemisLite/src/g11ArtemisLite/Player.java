@@ -132,6 +132,20 @@ public class Player {
 	}
 
 	/**
+	 * Checks if the player resources goes below 0. Returns true if -ive resources
+	 * 
+	 * @return boolean - true if -ive resources, +ive if >= 0
+	 */
+	public boolean bankruptCheck() {
+		boolean bankrupt = false;
+
+		if (this.getResources() < 0) {
+			bankrupt = true;
+		}
+		return bankrupt;
+	}
+
+	/**
 	 * Prints out the squares and resources the player owns
 	 */
 	public void displayAll() {
@@ -139,20 +153,20 @@ public class Player {
 		System.out.println("Player name :\t" + this.getName());
 		System.out.println("Resources :\t" + this.getResources());
 		displayPropertyOwnedInfo();
-		
+
 	}
-	
+
 	/**
 	 * Displays the properties owned by the player along with its price
 	 */
 	public void displayPropertyOwnedInfo() {
 		if (this.squaresOwned.size() > 0) {
 			System.out.println("*************************");
-			//sortElements(this.squaresOwned);
+			// sortElements(this.squaresOwned);
 			System.out.println(this.name + ": Properties Owned");
 			System.out.println("-------------------------");
 			for (Element element : this.squaresOwned) {
-				System.out.println("Name: "+element.getName()+" Price: "+element.getPurchasePrice());
+				System.out.println("Name: " + element.getName() + " Price: " + element.getPurchasePrice());
 				System.out.println("-------------------------");
 			}
 		}
