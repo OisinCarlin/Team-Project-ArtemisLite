@@ -121,15 +121,15 @@ public class UserInput {
 		String userInput = null;
 
 		do {
-			userInput = getString("Enter YES or NO");
+			userInput = getString("Enter Y / N");
 
-			if (userInput.equalsIgnoreCase("YES")) {
+			if (userInput.equalsIgnoreCase("Y")) {
 				userChoice = true;
-			} else if (userInput.equalsIgnoreCase("NO")) {
+			} else if (userInput.equalsIgnoreCase("N")) {
 				userChoice = false;
 			} else {
 				userInput = null;
-				System.out.println("Not valid input. Please enter YES or NO");
+				System.out.println("Not valid input. Please enter Y / N");
 			}
 
 		} while (userInput == null);
