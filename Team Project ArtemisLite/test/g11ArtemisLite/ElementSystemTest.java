@@ -40,7 +40,7 @@ class ElementSystemTest {
 	int developmentPrice1, developmentPrice2, developmentPrice3;
 	
 	// Declare Set of Elements
-	Set<Element> elements;
+//	Set<Element> elements;
 	
 	/**
 	 * Set up test
@@ -88,11 +88,18 @@ class ElementSystemTest {
 	
 	/**
 	 *  Testing constructor with arguments
+	 *  Ensures System name is set to name passed as parameter argument
+	 *  Ensures ElementSystem object "es" is created and not null.
+	 *  Ensures an empty Set<Element> is created within the ElementSystem object
 	 */
 	@Test
 	void testConstructorArgs() {
 		ElementSystem es = new ElementSystem(systemName);
+		assertNotNull(es);
 		assertEquals(systemName, es.getName());
+		
+		Set<Element> elements = es.getElements();
+		assertTrue(elements.size()==0);
 	}
 	
 	/**
@@ -119,6 +126,7 @@ class ElementSystemTest {
 	/**
 	 *  Testing AddElement to add an Element to the elements Set
 	 *  Implements GetElements method which retrieves Elements in Set
+	 *  Adds 3 Elements to Set, checks if all 3 are added.
 	 */
 	@Test
 	void testAddElement() {
@@ -126,18 +134,27 @@ class ElementSystemTest {
 		elementSystem.addElement(element1);
 		elementSystem.addElement(element2);
 		elementSystem.addElement(element3);
-		
+
 		if(elementSystem.getElements().contains(element1)) {
-			assertTrue(true);
+			if(elementSystem.getElements().contains(element2)) {
+				if(elementSystem.getElements().contains(element3)) {
+					assertTrue(true);
+				} else {
+					assertTrue(false);
+				}
+			} else {
+				assertTrue(false);
+			}
 		} else {
 			assertTrue(false);
 		}
 	}
 	
 	/**
-	 *  Testing RemoveElement to remove and Element to the elements Set
+	 *  Testing RemoveElement to remove an Element to the elements Set
 	 *  Implements AddElement to add an Element to the elements Set
 	 *  Implements GetElements method which retrieves Elements in Set
+	 *  Adds three Elements then removes one, so checks that 2 remain
 	 */
 	@Test
 	void testRemoveElement() {
@@ -145,14 +162,21 @@ class ElementSystemTest {
 		elementSystem.addElement(element1);
 		elementSystem.addElement(element2);
 		elementSystem.addElement(element3);
-		
+
+
+
 		elementSystem.removeElement(element2);
-		
-		
+
+
 		if(elementSystem.getElements().contains(element2)) {
 			assertTrue(false);
-		} else {
-			assertTrue(true);
+		} else { 
+			if(elementSystem.getElements().size()==2) {
+				assertTrue(true);
+			} else {
+				assertTrue(false);
+			}
+
 		}
 	}
 }
