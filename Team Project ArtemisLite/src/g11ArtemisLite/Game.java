@@ -219,31 +219,35 @@ public class Game {
 		int userInputNum = 0;
 		do {
 			System.out.println("Would you like to...");
-			System.out.println("1. Develop an element");
-			System.out.println("2. Trade an Element");
-			System.out.println("3. End your turn");
-			System.out.println("4. Quit the game");
-			userInputNum = userInput.getInt("Choose option 1-4 and press [Enter]");
+			System.out.println("1. Display your resources & Properties Owned");
+			System.out.println("2. Develop an element");
+			System.out.println("3. Trade an Element");
+			System.out.println("4. End your turn");
+			System.out.println("5. Quit the game");
+			userInputNum = userInput.getInt("Choose option 1-5 and press [Enter]");
 			switch (userInputNum) {
 			case 1:
+				player.displayAll();
+				break;
+			case 2:
 				System.out.println("Opening development menu...");
 				endGame = developmentMenu(player);
 				break;
-			case 2:
+			case 3:
 				System.out.println("Opening trade menu...");
 				tradeElementMenu(allPlayers, player);
 				break;
-			case 3:
+			case 4:
 				System.out.println("Ending your turn...");
 				break;
-			case 4:
+			case 5:
 				endGame = quitGame();
 				break;
 			}
 			if (endGame) {
 				break;
 			}
-		} while (userInputNum != 3 && userInputNum != 4);
+		} while (userInputNum != 4 && userInputNum != 5);
 		return endGame;
 	}
 
