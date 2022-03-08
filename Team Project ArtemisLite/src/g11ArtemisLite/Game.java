@@ -4,11 +4,13 @@
 package g11ArtemisLite;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
 
 /**
  * Please note this is a work in progress... ive added methods from my game
@@ -25,6 +27,8 @@ public class Game {
 	private List<Player> players;
 	private UserInput userInput;
 	private Board board;
+	private DevelopmentInfoManager developmentInfoManager;
+	private Map<Element, DevelopmentInfo> myDevMap;
 	private boolean isProgress;
 	private Roller diceRoller;
 	private ElementSystem sysOne;
@@ -32,6 +36,7 @@ public class Game {
 	private ElementSystem sysThree;
 	private ElementSystem sysFour;
 	private Set<ElementSystem> allSystems;
+	private RandomEvents randomEvents;
 
 	/**
 	 * @param usernames
@@ -39,6 +44,7 @@ public class Game {
 	 */
 	public Game() {
 		this.playerManager = new PlayerManager();
+		this.developmentInfoManager = new DevelopmentInfoManager();
 		this.userInput = new UserInput();
 		this.message = new Message();
 		this.isProgress = true;
@@ -68,6 +74,23 @@ public class Game {
 		board.addSquareToBoard(square10);
 		board.addSquareToBoard(square11);
 		board.addSquareToBoard(square12);
+
+		// <<<<<<<<<<<linking elements to developmentInfo>>>>>>>>>>>>>>>>>
+		this.developmentInfoManager = new DevelopmentInfoManager();
+		List<DevelopmentInfo> allDevelopmentInfo = developmentInfoManager.getAllDevelopmentInfo();
+		myDevMap = new HashMap<Element, DevelopmentInfo>();
+		myDevMap.put(square2, allDevelopmentInfo.get(0));
+		myDevMap.put(square3, allDevelopmentInfo.get(1));
+		myDevMap.put(square4, allDevelopmentInfo.get(2));
+		myDevMap.put(square5, allDevelopmentInfo.get(3));
+		myDevMap.put(square6, allDevelopmentInfo.get(4));
+		myDevMap.put(square7, allDevelopmentInfo.get(5));
+		myDevMap.put(square8, allDevelopmentInfo.get(6));
+		myDevMap.put(square9, allDevelopmentInfo.get(7));
+		myDevMap.put(square10, allDevelopmentInfo.get(8));
+		myDevMap.put(square11, allDevelopmentInfo.get(9));
+		
+		this.randomEvents = new RandomEvents();
 
 		this.sysOne = new ElementSystem("System 1");
 		sysOne.addElement(square2);
@@ -125,12 +148,12 @@ public class Game {
 				System.out.println(player.getName() + " has rolled " + squaresToMove);
 
 				board.move(players, player, squaresToMove);
-				
-				if(player.bankruptCheck()) {
+
+				if (player.bankruptCheck()) {
 					isProgress = false;
 					break;
 				}
-				
+
 				player.displayAll();
 
 				// <<<<<<<<<<calls method to display options post-move>>>>>>>>>>
@@ -143,6 +166,7 @@ public class Game {
 					break;
 				}
 			}
+			
 			// breaks outer loop when isProgress set to false by returned boolean from
 			// postMoveOptions
 			if (!isProgress) {
@@ -150,11 +174,20 @@ public class Game {
 				System.out.println("Game over");
 				break;
 			}
+			
+			randomEvents.generateRandomEvent(players);
+			for (Player player : players) {
+				if (player.bankruptCheck()) {
+					isProgress = false;
+					break;
+				}
+			}
 		}
 	}
 
 	private void displayStateOfPlay() {
-		System.out.println("This is state of play");
+		System.out.println("This is the final state of play...");
+		board.displayElementDetails();
 	}
 
 	/**
@@ -194,7 +227,7 @@ public class Game {
 			switch (userInputNum) {
 			case 1:
 				System.out.println("Opening development menu...");
-				developmentMenu(player);
+				endGame = developmentMenu(player);
 				break;
 			case 2:
 				System.out.println("Opening trade menu...");
@@ -207,12 +240,16 @@ public class Game {
 				endGame = quitGame();
 				break;
 			}
+			if (endGame) {
+				break;
+			}
 		} while (userInputNum != 3 && userInputNum != 4);
 		return endGame;
 	}
-	
+
 	/**
 	 * Quits the game
+	 * 
 	 * @return
 	 */
 	public boolean quitGame() {
@@ -233,10 +270,13 @@ public class Game {
 			if (player.ownsFullSystem(system)) {
 				Set<Element> elements = system.getElements();
 				for (Element element : elements) {
+
 					developableElements.add(element);
+
 				}
 			}
 		}
+		player.sortElements(developableElements);
 		return developableElements;
 	}
 
@@ -249,23 +289,20 @@ public class Game {
 	 * @param boardLayout
 	 * @return
 	 */
-	public boolean noDevelopmentsToMakeChecker(Player player) {
-		List<Element> developableElements = returnDevelopableElements(player);
+	public boolean noDevelopmentsToMakeChecker(Player player, List<Element> developableElements) {
 		boolean breakIt = false;
-		int fullyDevelopedCount = 0;
-		int elementCount = 0;
 		if (developableElements.size() == 0) {
 			System.out.println("You need to own all elements in a system before you can develop!");
 			breakIt = true;
 			return breakIt;
 		}
-		for (Element element : player.getSquaresOwned()) {
-			elementCount++;
-			if (element.getDevLevel() == 4) {
-				fullyDevelopedCount++;
+		for (int loop = 0; loop < developableElements.size(); loop++) {
+
+			if (developableElements.get(loop).getDevLevel() == 4) {
+				developableElements.remove(developableElements.get(loop));
 			}
 		}
-		if (fullyDevelopedCount == elementCount) {
+		if (developableElements.size() == 0) {
 			System.out.println("You don't have any developments to make!");
 			breakIt = true;
 			return breakIt;
@@ -285,6 +322,7 @@ public class Game {
 			player.removeResources(priceToDevelop);
 			element.increaseDevLevel();
 			System.out.println("Upgraded to level " + element.getDevLevel());
+			myDevMap.get(element).displayCurrentDevInfo(element.getDevLevel());
 			System.out.println("You've developed it!");
 			// element.displayDevelopmentUpgradeInfo();
 		} else {
@@ -308,12 +346,10 @@ public class Game {
 		boolean gameWin = false;
 		String userText = "";
 		int intUserInput = 0;
-		int fullyDevelopedCount = 0;
-		int elementCount = 0;
 
 		do {
 			// breaks the loop of the player has no elements to develop
-			if (noDevelopmentsToMakeChecker(player)) {
+			if (noDevelopmentsToMakeChecker(player, developableElements)) {
 				break;
 			}
 			for (Element element : developableElements) {
@@ -330,6 +366,8 @@ public class Game {
 			if (intUserInput <= developableElements.size() && intUserInput > 0) {
 				developElement(developableElements.get(intUserInput - 1), player);
 				// checks after each development if all elements are fully developed
+				int fullyDevelopedCount = 0;
+				int elementCount = 0;
 				for (Square square : boardLayout) {
 
 					if (square instanceof Element) {
@@ -344,10 +382,10 @@ public class Game {
 				if (fullyDevelopedCount == elementCount) {
 					gameWin = true;
 					displayEpilogue();
-					return gameWin;
+					break;
 				}
 				// breaks the loop if there are no further developments to make
-				if (noDevelopmentsToMakeChecker(player)) {
+				if (noDevelopmentsToMakeChecker(player, developableElements)) {
 					break;
 				}
 				// exits menu on appropriate user input
@@ -384,6 +422,7 @@ public class Game {
 			// repeats these steps after each trade so the list is correctly populated
 			playerElements = player.getSquaresOwned();
 			playerElementList = new ArrayList<>(playerElements);
+			player.sortElements(playerElementList);
 			player.displayPropertyOwnedInfo();
 			// breaks the loop of the player has no elements to trade
 			if (playerElementList.size() == 0) {
@@ -471,5 +510,7 @@ public class Game {
 			System.out.println(buyer.getName() + ", you can't afford this purchase!");
 		}
 	}
+	
+	
 
 }

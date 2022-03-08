@@ -60,4 +60,15 @@ public class Board {
 		}
 		player.getCurrentSquare().onLand(players, player);
 	}
+	
+	public void displayElementDetails() {
+		for (Square square : squares) {
+			if (square instanceof Element) {
+				Element element = (Element) square;
+				System.out.println("***********************************");
+				element.displayDetails();
+			}
+		}
+		System.out.println("***********************************");
+	}
 }

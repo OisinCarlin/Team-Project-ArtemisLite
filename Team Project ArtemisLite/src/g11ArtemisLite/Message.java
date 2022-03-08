@@ -3,8 +3,8 @@ package g11ArtemisLite;
 public class Message {
 	
 	public String startingMessage = "Every story needs heroes, "
-			+ "\nand the story of mankind’s glorious return to the Moon is no exception. "
-			+ "\nNow is the time to make your mark in the annals of history…\n";
+			+ "\nand the story of mankind's glorious return to the Moon is no exception. "
+			+ "\nNow is the time to make your mark in the annals of history...\n";
 
 	public String intro = "will lead an innovative and sustainable program of exploration with commercial and international partners "
 			+ "\nto enable human expansion across the solar system and to bring back to earth new knowledge and opportunities. "
