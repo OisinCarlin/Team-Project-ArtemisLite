@@ -145,6 +145,10 @@ public class DevelopmentInfoManager {
 	public void addDevelopmentInfo(DevelopmentInfo developmentInfo) {
 		allDevelopmentInfo.add(developmentInfo);
 	}
+	
+	public void removeDevelopmentInfo(DevelopmentInfo developmentInfo) {
+		allDevelopmentInfo.remove(developmentInfo);
+	}
 
 	/**
 	 * @return the allDevelopmentInfo
