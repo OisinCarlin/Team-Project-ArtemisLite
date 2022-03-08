@@ -118,6 +118,7 @@ class PlayerTest {
 		 * 
 		 * assertEquals(player.getSquaresOwned(), player.getSquaresOwned());
 		 */
+		
 	}
 
 	@Test
