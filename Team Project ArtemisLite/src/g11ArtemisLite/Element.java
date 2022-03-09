@@ -16,7 +16,7 @@ import java.util.Map;
  *
  */
 public class Element extends Square {
-
+	private static final long serialVersionUID = 2938313309603492644L;
 	private int purchasePrice;
 	private int rentPrice;
 	private int developmentPrice;

@@ -17,13 +17,17 @@ import java.util.Set;
  * @author Jamie larkin, Maeve Higgins and Richard Clarke
  *
  */
-public class Player {
+public class Player implements java.io.Serializable {
+	private static final long serialVersionUID = 2938313309603492644L;
+	
 	private static final int STARTING_RESOURCES = 1000;
 
 	private String name;
 	private Set<Element> squaresOwned;
 	private int resources;
 	private Square currentSquare;
+	private boolean isCurrentTurn;
+	private boolean hasMoved;
 
 	/**
 	 * 
@@ -80,6 +84,34 @@ public class Player {
 	 */
 	public void setCurrentSquare(Square currentSquare) {
 		this.currentSquare = currentSquare;
+	}
+
+	/**
+	 * @return the isCurrentTurn
+	 */
+	public boolean isCurrentTurn() {
+		return isCurrentTurn;
+	}
+
+	/**
+	 * @param isCurrentTurn the isCurrentTurn to set
+	 */
+	public void setCurrentTurn(boolean isCurrentTurn) {
+		this.isCurrentTurn = isCurrentTurn;
+	}
+	
+	/**
+	 * @return the hasMoved
+	 */
+	public boolean hasMoved() {
+		return hasMoved;
+	}
+
+	/**
+	 * @param hasMoved the hasMoved to set
+	 */
+	public void setHasMoved(boolean hasMoved) {
+		this.hasMoved = hasMoved;
 	}
 
 	/**

@@ -10,7 +10,9 @@ import java.util.List;
  * @author Oisin Carlin and Maeve Higgins
  *
  */
-public class Board {
+public class Board implements java.io.Serializable{
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 	
 	//List to store Squares on board
 	private List<Square> squares;

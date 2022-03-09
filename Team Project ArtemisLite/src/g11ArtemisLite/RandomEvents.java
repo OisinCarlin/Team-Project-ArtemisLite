@@ -11,7 +11,9 @@ import java.util.Random;
  * @author crclarke
  *
  */
-public class RandomEvents {
+public class RandomEvents implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 	private static final String BADEVENT1 = "You fastened the rockets the wrong way round!";
 	private static final String BADEVENT2 = "Someone spilt Mountain Dew on the circuit boards!";
 	private static final String BADEVENT3 = "One of your astronauts got sick on the flight simulator!";

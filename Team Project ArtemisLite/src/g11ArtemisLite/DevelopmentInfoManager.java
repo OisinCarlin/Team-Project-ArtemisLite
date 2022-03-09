@@ -10,7 +10,9 @@ import java.util.List;
  * @author crclarke
  *
  */
-public class DevelopmentInfoManager {
+public class DevelopmentInfoManager implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 
 	public static final String START_SQUARE_NAME = "Mission Control";
 	public static final String EMPTY_SQUARE_NAME = "Exploration Ground Systems";

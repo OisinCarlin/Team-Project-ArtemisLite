@@ -1,7 +1,7 @@
 package g11ArtemisLite;
 
-public class Message {
-	
+public class Message implements java.io.Serializable {
+	private static final long serialVersionUID = 2938313309603492644L;
 	public String startingMessage = "Every story needs heroes, "
 			+ "\nand the story of mankind's glorious return to the Moon is no exception. "
 			+ "\nNow is the time to make your mark in the annals of history...\n";
@@ -52,5 +52,11 @@ public class Message {
 	public String encouragement = "Good for you, you're a real trouper!";
 
 	public String missionFailure = "Your mission is a failure, you are all failures!";
+	
+	public String restoringGame = "Restoring game...";
+	
+	public String randomEventBankrupt = "Oh dear, events have conspired against you, you're bankrupt!";
+	
+	public String userQuitFail = "You've quit the game, which means Game Over for all players!";
 
 }

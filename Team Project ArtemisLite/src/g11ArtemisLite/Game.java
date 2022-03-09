@@ -11,11 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-
 /**
- * Please note this is a work in progress... ive added methods from my game
- * version Some have been partially adapted, some haven't, just wanted to give
- * an idea of my plans
  * 
  * @author Richard Clarke and Maeve Higgins
  *
@@ -37,6 +33,7 @@ public class Game {
 	private ElementSystem sysFour;
 	private Set<ElementSystem> allSystems;
 	private RandomEvents randomEvents;
+	private Serializaion serializaion;
 
 	/**
 	 * @param usernames
@@ -47,6 +44,7 @@ public class Game {
 		this.developmentInfoManager = new DevelopmentInfoManager();
 		this.userInput = new UserInput();
 		this.message = new Message();
+		this.serializaion = new Serializaion();
 		this.isProgress = true;
 
 		this.board = new Board();
@@ -75,7 +73,7 @@ public class Game {
 		board.addSquareToBoard(square11);
 		board.addSquareToBoard(square12);
 
-		// <<<<<<<<<<<linking elements to developmentInfo>>>>>>>>>>>>>>>>>
+		// linking each element to it's developmentInfo class
 		this.developmentInfoManager = new DevelopmentInfoManager();
 		List<DevelopmentInfo> allDevelopmentInfo = developmentInfoManager.getAllDevelopmentInfo();
 		myDevMap = new HashMap<Element, DevelopmentInfo>();
@@ -89,7 +87,7 @@ public class Game {
 		myDevMap.put(square9, allDevelopmentInfo.get(7));
 		myDevMap.put(square10, allDevelopmentInfo.get(8));
 		myDevMap.put(square11, allDevelopmentInfo.get(9));
-		
+
 		this.randomEvents = new RandomEvents();
 
 		this.sysOne = new ElementSystem("System 1");
@@ -123,50 +121,97 @@ public class Game {
 	}
 
 	public void start(List<String> usernames) {
-		// Creating the players from the usernames and adding them to a list
-		playerManager.createPlayers(usernames);
-		players = playerManager.getPlayers();
 
-		// Setting the starting square of all players
-		playerManager.getPlayers().stream().forEach((Player player) -> {
-			player.setCurrentSquare(board.getSquares().get(0));
-		});
-
-		// <<<<<<<<<<displays intro message>>>>>>>>>>
-		displayIntroMessage(players);
-
-		while (isProgress) {
-			// Each player takes a turn - 1 round
+		// userNames passed as an empty list if player selects restore
+		if (usernames.isEmpty()) {
+			// board restored
+			this.board = serializaion.RestoreBoard();
+			// players restored
+			players = serializaion.RestorePlayers();
+			// matches players current square to the equivalent square of the newly
+			// instantiated board (fixes non-matching IDs)
 			for (Player player : players) {
-				int squaresToMove = diceRoller.roll();
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println(player.getName() + " has rolled " + squaresToMove);
-
-				board.move(players, player, squaresToMove);
-
-				if (player.bankruptCheck()) {
-					isProgress = false;
-					break;
-				}
-
-				player.displayAll();
-
-				// <<<<<<<<<<calls method to display options post-move>>>>>>>>>>
-				if (postMoveOptions(players, player)) {
-					// <<<<<<<<<<postMoveOptions returns a boolean to signify endGame>>>>>>>>>>
-					// this can be pulled out to the single method you suggested but have left it as
-					// is
-					// for now so the game will play cleanly
-					isProgress = false;
-					break;
+				String squareName = player.getCurrentSquare().getName();
+				for (Square square : board.getSquares()) {
+					if (squareName.equals(square.getName())) {
+						player.setCurrentSquare(square);
+					}
 				}
 			}
-			
+		} else {
+			// Creating the players from the usernames and adding them to a list
+			playerManager.createPlayers(usernames);
+			players = playerManager.getPlayers();
+
+			// Setting the starting square of all players
+			playerManager.getPlayers().stream().forEach((Player player) -> {
+				player.setCurrentSquare(board.getSquares().get(0));
+			});
+
+			displayIntroMessage(players);
+			//sets the first player's currentTurn status as true
+			players.get(0).setCurrentTurn(true);
+			//sets the first player's hasMoved status to false
+			players.get(0).setHasMoved(false);
+		}
+
+		while (isProgress) {
+			// Each player takes a turn
+			// <<<<<<<<<<< I changed this loop so as to have access to player.get(loop+1)
+			for (int loop=0;loop<players.size();loop++) {
+				// finds the player whos currentTurn status is true
+				if (players.get(loop).isCurrentTurn()) {
+					// checks if the current player has moved
+					if (!players.get(loop).hasMoved()) {
+						int squaresToMove = diceRoller.roll();
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						System.out.println(players.get(loop).getName() + " has rolled " + squaresToMove);
+
+						board.move(players, players.get(loop), squaresToMove);
+
+						if (players.get(loop).bankruptCheck()) {
+							isProgress = false;
+							break;
+						}
+						// sets current player's hasMoved status to true
+						players.get(loop).setHasMoved(true);
+					}
+					players.get(loop).displayAll();
+					// saves current game state after player has moved, been offered purchase etc...
+					serializaion.SaveData(players, board);
+
+					// calls method to display options post-move
+					if (postMoveOptions(players, players.get(loop))) {
+						// postMoveOptions returns a boolean to signify endGame
+						
+						// breaks the loop if endGame conditions have been met
+						isProgress = false;
+						break;
+					}
+					// resets current players turn and moved status to false at the end of their turn
+					players.get(loop).setCurrentTurn(false);
+					players.get(loop).setHasMoved(false);
+					
+					// sets the next players currentTurn status to true
+					int nextPlayerIndex = 0;
+					if (loop==players.size()-1) {
+						nextPlayerIndex=0;
+					} else {
+						nextPlayerIndex=loop+1;
+					}
+					players.get(nextPlayerIndex).setCurrentTurn(true);
+					
+					// saves the game state
+					serializaion.SaveData(players, board);
+					
+				}
+			}
+
 			// breaks outer loop when isProgress set to false by returned boolean from
 			// postMoveOptions
 			if (!isProgress) {
@@ -174,10 +219,11 @@ public class Game {
 				System.out.println("Game over");
 				break;
 			}
-			
+
 			randomEvents.generateRandomEvent(players);
 			for (Player player : players) {
 				if (player.bankruptCheck()) {
+					System.out.println(message.randomEventBankrupt);
 					isProgress = false;
 					break;
 				}
@@ -219,12 +265,14 @@ public class Game {
 		int userInputNum = 0;
 		do {
 			System.out.println("Would you like to...");
-			System.out.println("1. Display your resources & Properties Owned");
+			System.out.println("1. Display your Resources & Properties Owned");
 			System.out.println("2. Develop an element");
 			System.out.println("3. Trade an Element");
-			System.out.println("4. End your turn");
-			System.out.println("5. Quit the game");
-			userInputNum = userInput.getInt("Choose option 1-5 and press [Enter]");
+			System.out.println("4. End your Turn");
+			System.out.println("5. Save Game");
+			System.out.println("6. Quit the Game");
+			
+			userInputNum = userInput.getInt("Choose option 1-6 and press [Enter]");
 			switch (userInputNum) {
 			case 1:
 				player.displayAll();
@@ -241,13 +289,20 @@ public class Game {
 				System.out.println("Ending your turn...");
 				break;
 			case 5:
+				System.out.println("Saving game...");
+				serializaion.SaveData(players, board);
+				break;
+			case 6:
 				endGame = quitGame();
+				break;
+			default:
+				System.out.println("Incorrect option selected try again...");
 				break;
 			}
 			if (endGame) {
 				break;
 			}
-		} while (userInputNum != 4 && userInputNum != 5);
+		} while (userInputNum != 4 && userInputNum != 6);
 		return endGame;
 	}
 
@@ -257,6 +312,7 @@ public class Game {
 	 * @return
 	 */
 	public boolean quitGame() {
+		System.out.println(message.userQuitFail);
 		boolean quit = true;
 		return quit;
 	}
@@ -366,7 +422,7 @@ public class Game {
 			}
 			System.out.println("Don't want to develop any more? Enter [" + (developableElements.size() + 1) + "]");
 			userText = userInput.getString("Please choose an option followed by [Enter]");
-			intUserInput = UserInput.parseWithDefault(userText, 0);
+			intUserInput = userInput.parseWithDefault(userText, 0);
 			if (intUserInput <= developableElements.size() && intUserInput > 0) {
 				developElement(developableElements.get(intUserInput - 1), player);
 				// checks after each development if all elements are fully developed
@@ -441,7 +497,7 @@ public class Game {
 			}
 			System.out.println("Don't want to trade any more? Enter [" + (playerElementList.size() + 1) + "]");
 			userText = userInput.getString("Please choose an option followed by [Enter]");
-			intUserInput = UserInput.parseWithDefault(userText, 0);
+			intUserInput = userInput.parseWithDefault(userText, 0);
 			if (intUserInput <= playerElementList.size() && intUserInput > 0) {
 				elementToTrade = playerElementList.get(intUserInput - 1);
 				System.out.println("Who would you like to trade with?");
@@ -461,7 +517,7 @@ public class Game {
 					System.out.println("To cancel trade press [" + (playerMap.size() + 1) + "]");
 
 					userText = userInput.getString("Please choose an option followed by [Enter]");
-					intUserInput = UserInput.parseWithDefault(userText, 0);
+					intUserInput = userInput.parseWithDefault(userText, 0);
 					if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
 						System.out.println("Incorrect selection");
 						// breaks if user enters the cancel trade number
@@ -514,7 +570,5 @@ public class Game {
 			System.out.println(buyer.getName() + ", you can't afford this purchase!");
 		}
 	}
-	
-	
 
 }
