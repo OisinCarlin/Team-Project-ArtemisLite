@@ -147,4 +147,28 @@ class PlayerTest {
 		player.removeResources(startingResources + 10);
 		assertTrue(player.bankruptCheck());
 	}
+	
+	@Test
+	void testCurrentTurnTrue() {
+		player.setCurrentTurn(true);
+		assertTrue(player.isCurrentTurn());
+	}
+	
+	@Test
+	void testCurrentTurnFalse() {
+		player.setCurrentTurn(false);
+		assertFalse(player.isCurrentTurn());
+	}
+	
+	@Test
+	void testHasMovedTrue() {
+		player.setHasMoved(true);
+		assertTrue(player.hasMoved());
+	}
+	
+	@Test
+	void testHasMovedFalse() {
+		player.setHasMoved(false);
+		assertFalse(player.hasMoved());
+	}
 }

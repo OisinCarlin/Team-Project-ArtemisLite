@@ -21,7 +21,6 @@ public class Game {
 	private PlayerManager playerManager;
 	private Message message;
 	private List<Player> players;
-	private UserInput userInput;
 	private Board board;
 	private DevelopmentInfoManager developmentInfoManager;
 	private Map<Element, DevelopmentInfo> myDevMap;
@@ -42,7 +41,6 @@ public class Game {
 	public Game() {
 		this.playerManager = new PlayerManager();
 		this.developmentInfoManager = new DevelopmentInfoManager();
-		this.userInput = new UserInput();
 		this.message = new Message();
 		this.serializaion = new Serializaion();
 		this.isProgress = true;
@@ -272,7 +270,7 @@ public class Game {
 			System.out.println("5. Save Game");
 			System.out.println("6. Quit the Game");
 			
-			userInputNum = userInput.getInt("Choose option 1-6 and press [Enter]");
+			userInputNum = UserInput.getInt("Choose option 1-6 and press [Enter]");
 			switch (userInputNum) {
 			case 1:
 				player.displayAll();
@@ -421,8 +419,8 @@ public class Game {
 				}
 			}
 			System.out.println("Don't want to develop any more? Enter [" + (developableElements.size() + 1) + "]");
-			userText = userInput.getString("Please choose an option followed by [Enter]");
-			intUserInput = userInput.parseWithDefault(userText, 0);
+			userText = UserInput.getString("Please choose an option followed by [Enter]");
+			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= developableElements.size() && intUserInput > 0) {
 				developElement(developableElements.get(intUserInput - 1), player);
 				// checks after each development if all elements are fully developed
@@ -496,8 +494,8 @@ public class Game {
 
 			}
 			System.out.println("Don't want to trade any more? Enter [" + (playerElementList.size() + 1) + "]");
-			userText = userInput.getString("Please choose an option followed by [Enter]");
-			intUserInput = userInput.parseWithDefault(userText, 0);
+			userText = UserInput.getString("Please choose an option followed by [Enter]");
+			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= playerElementList.size() && intUserInput > 0) {
 				elementToTrade = playerElementList.get(intUserInput - 1);
 				System.out.println("Who would you like to trade with?");
@@ -516,8 +514,8 @@ public class Game {
 					}
 					System.out.println("To cancel trade press [" + (playerMap.size() + 1) + "]");
 
-					userText = userInput.getString("Please choose an option followed by [Enter]");
-					intUserInput = userInput.parseWithDefault(userText, 0);
+					userText = UserInput.getString("Please choose an option followed by [Enter]");
+					intUserInput = UserInput.parseWithDefault(userText, 0);
 					if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
 						System.out.println("Incorrect selection");
 						// breaks if user enters the cancel trade number
@@ -527,7 +525,7 @@ public class Game {
 						do {
 							System.out.println(playerMap.get(intUserInput).getName() + ", would you like to buy "
 									+ elementToTrade.getName() + " from " + player.getName() + " ? [Y/N]");
-							ynInput = userInput.getString("Please enter [Y] or [N]");
+							ynInput = UserInput.getString("Please enter [Y] or [N]");
 							if (ynInput.equalsIgnoreCase("Y")) {
 								tradeElement(elementToTrade, player, playerMap.get(intUserInput));
 							} else if (ynInput.equalsIgnoreCase("N")) {

@@ -58,6 +58,7 @@ public class UserInput implements java.io.Serializable {
 			scanner.nextLine();
 		} catch (InputMismatchException e) {
 			System.err.println("Problem with input " + e.getMessage());
+			scanner.nextLine();
 		}
 		return userInput;
 	}
@@ -186,7 +187,7 @@ public class UserInput implements java.io.Serializable {
 	 * @param defaultVal
 	 * @return
 	 */
-	public int parseWithDefault(String number, int defaultVal) {
+	public static int parseWithDefault(String number, int defaultVal) {
 		try {
 			return Integer.parseInt(number);
 		} catch (NumberFormatException e) {

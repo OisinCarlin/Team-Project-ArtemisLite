@@ -17,7 +17,6 @@ public class PlayerManager implements java.io.Serializable {
 	private static final long serialVersionUID = 2938313309603492644L;
 	private static final int MAX_USERS = 4;
 	private static final int MIN_USERS = 2;
-	private UserInput userInput;
 	private List<Player> players;
 	private Message message;
 
@@ -25,12 +24,11 @@ public class PlayerManager implements java.io.Serializable {
 	 * 
 	 */
 	public PlayerManager() {
-		this.userInput = new UserInput();
 		this.message = new Message();
 	}
 	
 	public int getUserCount() {
-		return userInput.getInt("Enter number of players between " + MIN_USERS + " - " + MAX_USERS,MIN_USERS, MAX_USERS);
+		return UserInput.getInt("Enter number of players between " + MIN_USERS + " - " + MAX_USERS,MIN_USERS, MAX_USERS);
 	}
 	
 	/**
@@ -45,7 +43,7 @@ public class PlayerManager implements java.io.Serializable {
 		restore = welcome();
 		if (!restore) {
 			// proceeds as standard if user does not select restore
-			return userInput.requestUsernames(usernames, getUserCount());
+			return UserInput.requestUsernames(usernames, getUserCount());
 		} else {
 			// returns an empty username list if restore selected
 			return usernames;
@@ -110,8 +108,8 @@ public class PlayerManager implements java.io.Serializable {
 			System.out.println("[2]:\tStart New Game");
 			System.out.println("[3]:\tRestore Saved Game");
 			
-			line = userInput.getString(message.inputOptionRequest);
-			lineNum = userInput.parseWithDefault(line, 0);
+			line = UserInput.getString(message.inputOptionRequest);
+			lineNum = UserInput.parseWithDefault(line, 0);
 			switch (lineNum) {
 			case 1:
 				displayRules();
@@ -143,7 +141,7 @@ public class PlayerManager implements java.io.Serializable {
 	 */
 	private void displayRules() {
 		System.out.println(message.rules);
-		userInput.prompt(message.returnToMenu);;
+		UserInput.prompt(message.returnToMenu);;
 	}
 
 	public Map<Integer, Player> mapPlayers(List<Player> allPlayers, Player currentPlayer){
@@ -168,7 +166,7 @@ public class PlayerManager implements java.io.Serializable {
 		System.out.printf("To cancel enter [ %d ]\n", playerMap.size() + 1);
 		
 		do {
-			choice = userInput.getInt("Enter number 1 - " + (playerMap.size() +1));
+			choice = UserInput.getInt("Enter number 1 - " + (playerMap.size() +1));
 			if(choice > 0 && choice <= playerMap.size()) {
 				chosenPlayer = playerMap.get(choice);
 			} else if(choice == playerMap.size() + 1) {
