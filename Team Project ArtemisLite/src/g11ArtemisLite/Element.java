@@ -23,7 +23,6 @@ public class Element extends Square {
 	private int devLevel;
 	private Player owner;
 	private PlayerManager playerManager;
-	private UserInput userInput;
 
 	/**
 	 * Allows name, purchasePrice, rentPrice and developmentPrice to be set.
@@ -38,7 +37,6 @@ public class Element extends Square {
 		this.rentPrice = rentPrice;
 		this.developmentPrice = developmentPrice;
 		this.devLevel = 0;
-		this.userInput = new UserInput();
 		this.playerManager = new PlayerManager();
 	}
 
@@ -71,13 +69,6 @@ public class Element extends Square {
 	}
 
 	/**
-	 * @param developmentPrice the developmentPrice to set
-	 */
-	public void setDevelopmentPrice(int developmentPrice) {
-		this.developmentPrice = developmentPrice;
-	}
-
-	/**
 	 * @return the devLevel
 	 */
 	public int getDevLevel() {
@@ -87,7 +78,7 @@ public class Element extends Square {
 	/**
 	 * Increments the development level by 1 and calls adjustRent()
 	 * 
-	 * @param devLevel the devLevel to set
+	 * @param startingDevLevel the devLevel to set
 	 */
 	public void increaseDevLevel() {
 		this.devLevel++;
@@ -98,7 +89,7 @@ public class Element extends Square {
 	 * If the development level is > 0 the rent price is multiplied by the
 	 * development level
 	 */
-	public void adjustRent() {
+	private void adjustRent() {
 		if (devLevel > 0) {
 			setRentPrice(getRentPrice() * getDevLevel());
 		}
@@ -153,7 +144,7 @@ public class Element extends Square {
 	 */
 	private void attemptPurchaseElement(List<Player> players, Player player) {
 		System.out.printf("\n%s Do you want to purchase %s\n", player.getName(), this.getName());
-		boolean attemptPurchase = userInput.yesOrNo();
+		boolean attemptPurchase = UserInput.yesOrNo();
 		boolean altPlayerPurchase;
 
 		if (attemptPurchase) {
@@ -169,7 +160,7 @@ public class Element extends Square {
 		} else {
 			System.err.println("Sorry you don't want to purchase :(\n");
 			System.out.printf("Do you want to offer %s to another player?\n", this.getName());
-			altPlayerPurchase = userInput.yesOrNo();
+			altPlayerPurchase = UserInput.yesOrNo();
 			if (altPlayerPurchase) {
 				offerAltPlayerPurchase(players, player);
 			} else {
@@ -196,7 +187,6 @@ public class Element extends Square {
 		} else {
 			System.err.println("Cancelled");
 		}
-
 	}
 
 	/**
@@ -207,7 +197,7 @@ public class Element extends Square {
 	 */
 	private void requestRent(Player player) {
 		System.out.println("\n" + this.owner.getName() + " Do you want to charge " + player.getName() + " rent?\n");
-		boolean enforceRent = userInput.yesOrNo();
+		boolean enforceRent = UserInput.yesOrNo();
 
 		if (enforceRent) {
 			player.removeResources(rentPrice);

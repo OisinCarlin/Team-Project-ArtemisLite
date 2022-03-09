@@ -2,110 +2,145 @@ package g11ArtemisLite;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+/**
+ * 
+ * @author Robbie and Maeve
+ *
+ */
 class ElementTest {
-	
-	
-	//test data
-	String name;
-	int purchasePrice, rentPrice, developmentPrice, devLevel;
-	boolean ansTrue, ansFalse;
+
+	// test data
+	String elementName, playerName, player2Name;
+	int purchasePrice, rentPrice, developmentPrice, startingDevLevel, increasedDevLevel, startingRes, afterPurchRes, afterRentRes, afterDevRes, adjustedRentPrice, addedRentRes;
 	Player owner;
 	Player ownerNull;
-	UserInput userInput;
+	Element element;
+	Player player1;
+	Player player2;
+	List<Player> players;
 
 	@BeforeEach
 	void setUp() throws Exception {
+		elementName = "element";
+		playerName = "player";
+		player2Name = "player2";
+
+		startingRes = 1000;
+		purchasePrice = 100;
+		afterPurchRes = startingRes - purchasePrice;
+		rentPrice = 200;
+		adjustedRentPrice = 400;
+		afterRentRes = startingRes - rentPrice;
+		addedRentRes = startingRes + rentPrice;
+		developmentPrice = 50;
+		afterDevRes = startingRes - developmentPrice;
+		startingDevLevel = 0;
+		increasedDevLevel = 2;
 		
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-		Player player = new Player();
+		element = new Element(elementName, purchasePrice, rentPrice, developmentPrice);
+		
+		ownerNull = null;
+		owner = new Player(playerName);
+		player1 = new Player(playerName);
+		player2 = new Player(player2Name);
+		
+		players = new ArrayList<>();
+		players.add(player1);
+		players.add(player2);
 	}
-	
+
 	/**
 	 * Test constructor with args
 	 */
 	@Test
 	void testElementConstructorArgs() {
-		
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-		
-		assertEquals(name, element.getName());
+		Element element = new Element(elementName, purchasePrice, rentPrice, developmentPrice);
+
+		assertEquals(elementName, element.getName());
 		assertEquals(purchasePrice, element.getPurchasePrice());
 		assertEquals(rentPrice, element.getRentPrice());
 		assertEquals(developmentPrice, element.getDevelopmentPrice());
-		
+		assertEquals(startingDevLevel, element.getDevLevel());
 	}
 
 	@Test
 	void testGetSetRentPrice() {
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-		
 		element.setRentPrice(rentPrice);
 		assertEquals(rentPrice, element.getRentPrice());
-		
 	}
 
 	@Test
-	void testGetSetDevelopmentPrice() {
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-
-		element.setDevelopmentPrice(developmentPrice);
+	void testGetDevelopmentPrice() {
 		assertEquals(developmentPrice, element.getDevelopmentPrice());
-		
 	}
 
 	@Test
 	void testIncreaseDevLevel() {
-		
-
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-		
 		element.increaseDevLevel();
-		
-		assertEquals((devLevel + 1), element.getDevLevel());
-		
+		element.increaseDevLevel();
+		assertEquals(increasedDevLevel, element.getDevLevel());
+		assertEquals(adjustedRentPrice, element.getRentPrice());
 	}
 
 	@Test
 	void testGetSetOwner() {
-		
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-
 		element.setOwner(owner);
 		assertEquals(owner, element.getOwner());
+	}
+	
+	@Test
+	void testGetSetOwnerNull() {
+		assertEquals(ownerNull, element.getOwner());
+	}
+	
+	@Test
+	void testOnLandAndPurchase() {
+		element.onLand(players, player1);
 		
+		assertEquals(element, player1.getCurrentSquare());
+		assertEquals(afterPurchRes, player1.getResources());
+		assertTrue(player1.getSquaresOwned().size() == 1 && player1.getSquaresOwned().contains(element));
+	}
+	
+	@Test
+	void testOnLandAndAltPlayerPurchase() {
+		element.onLand(players, player1);
+
+		assertEquals(element, player1.getCurrentSquare());
+		assertEquals(afterPurchRes, player2.getResources());
+		assertTrue(player2.getSquaresOwned().size() == 1 && player2.getSquaresOwned().contains(element));
+	}
+	
+	@Test
+	void testOnLandAndNoPurchase() {
+		element.onLand(players, player1);
+		
+		assertEquals(element, player1.getCurrentSquare());
+		assertEquals(startingRes, player2.getResources()); 
+		assertTrue(player1.getSquaresOwned().size() == 0);	
+	}
+	
+	@Test
+	void testOnLandAndPayRent() {
+		element.setOwner(player2);
+		element.onLand(players, player1);
+		
+		assertEquals(element, player1.getCurrentSquare());
+		assertEquals(afterRentRes, player1.getResources());
+		assertEquals(addedRentRes, player2.getResources());
+	}
+	
+	@Test
+	void testOnLandAndNoRent() {
+		element.setOwner(player2);
+		element.onLand(players, player1);
+		
+		assertEquals(element, player1.getCurrentSquare());
+		assertEquals(startingRes, player1.getResources());
+		assertEquals(startingRes, player2.getResources());
 	}
 }
-/*
-	@Test
-	void testOnLandNull() 
-		
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-		Player player = new Player();
-		
-//assert true? - mock out private method, call onland, check private method has been called
-		assertEquals(element.onLand(player), attemptPurchaseElement(player));
-	}
-	@Test
-	void testOnLandPlayerEqualsOwner() {
-		
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-		Player player = new Player();
-		element.setOwner(owner);
-		
-// set own as player - mockito? assert method has been called
-		assert(System.out.println("You own this element"));
-	}
-	@Test
-	void testOnLandPlayerElse() {
-
-		Element element = new Element(name, purchasePrice, rentPrice, developmentPrice);
-		Player player = new Player();
-
-		assertEquals(player.requestRent(player), element.requestRent(player));
-	}
-}		
-*/
-

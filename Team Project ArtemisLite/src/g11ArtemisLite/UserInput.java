@@ -31,7 +31,7 @@ public class UserInput implements java.io.Serializable {
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as String
 	 */
-	public String getString(String messageRequest) {
+	public static String getString(String messageRequest) {
 		String userInput = null;
 		try {
 			System.out.println(messageRequest);
@@ -49,7 +49,7 @@ public class UserInput implements java.io.Serializable {
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as int
 	 */
-	public int getInt(String messageRequest) {
+	public static int getInt(String messageRequest) {
 		int userInput = -1;
 		try {
 			System.out.println(messageRequest);
@@ -68,7 +68,7 @@ public class UserInput implements java.io.Serializable {
 	 * @param maxUsers
 	 * @return
 	 */
-	public int getInt(String message, int minUsers, int maxUsers) {
+	public static int getInt(String message, int minUsers, int maxUsers) {
 		int numUser = -1;
 
 		do {
@@ -91,7 +91,7 @@ public class UserInput implements java.io.Serializable {
 	 * @param userCount
 	 * @return
 	 */
-	public List<String> requestUsernames(List<String> usernames, int userCount) {
+	public static List<String> requestUsernames(List<String> usernames, int userCount) {
 		String username = null;
 
 		for (int user = 0; user < userCount; user++) {
@@ -118,7 +118,7 @@ public class UserInput implements java.io.Serializable {
 	 * 
 	 * @return true if answer is yes
 	 */
-	public boolean yesOrNo() {
+	public static boolean yesOrNo() {
 		boolean userChoice = false;
 		String userInput = null;
 
@@ -147,7 +147,7 @@ public class UserInput implements java.io.Serializable {
 	 * @param currentPlayer
 	 * @return
 	 */
-	public Player chooseAPlayer(List<Player> players, Player currentPlayer) {
+	public static Player chooseAPlayer(List<Player> players, Player currentPlayer) {
 		Player playerToReturn = null;
 		Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
 		int counter = 1;
@@ -200,7 +200,7 @@ public class UserInput implements java.io.Serializable {
 	 * 
 	 * @param message
 	 */
-	public void prompt(String message) {
+	public static void prompt(String message) {
 		System.out.println(message);
 		scanner.nextLine();
 	}

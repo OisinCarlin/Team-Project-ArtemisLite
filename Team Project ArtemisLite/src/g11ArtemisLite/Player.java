@@ -30,13 +30,6 @@ public class Player implements java.io.Serializable {
 	private boolean hasMoved;
 
 	/**
-	 * 
-	 */
-	public Player() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
 	 * Set the starting number of resources the player owns at the start of the
 	 * game.
 	 * 
@@ -49,7 +42,7 @@ public class Player implements java.io.Serializable {
 		squaresOwned = new HashSet<>();
 		this.name = name;
 		this.resources = STARTING_RESOURCES;
-	}
+	} 
 
 	/**
 	 * @return the name
