@@ -2,35 +2,54 @@ package g11ArtemisLite;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashSet;
 import java.util.Set;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+/**
+ * 
+ * @author Robbie and Maeve
+ *
+ */
 class PlayerTest {
 
 	// test data
-	String name;
+	Player player, player2;
+	String playerName, elementName, element2Name, element3Name, elementSystemName;
 	Set<Element> squaresOwned;
-	int resources;
+	int resources, resourcesToAdd, startingResources;
 	Square currentSquare;
-	Element element;
-	int resourcesToAdd;
-	int startingResources;
+	Element element, element2, element3;
 	ElementSystem elementSystem;
 
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		
-		name = "test Name";
+		playerName = "player";
 		resources = 100;
 		resourcesToAdd = 100;
+		startingResources = 1000;
+		player = new Player(playerName);
+		player2 = new Player(playerName);
 		
-		Player player = new Player();
+		elementName = "element";
+		element2Name = "element2";
+		element3Name = "element3";
+		element = new Element(elementName, 0, 0, 0);
+		element2 = new Element(element2Name, 0, 0, 0);
+		element3 = new Element(element3Name, 0, 0, 0);
 		
-		// reflected final int
-		startingResources = player.getResources();
+		elementSystemName = "elementSystem";
+		elementSystem = new ElementSystem(elementSystemName);
+		elementSystem.addElement(element);
+		elementSystem.addElement(element2);
+
+		currentSquare = element;
+		squaresOwned = new HashSet<>();
+		squaresOwned.add(element);
+		squaresOwned.add(element2);
+		player.addSquare(element);
+		player.addSquare(element2);
 	}
 
 	/**
@@ -38,19 +57,16 @@ class PlayerTest {
 	 */
 	@Test
 	void testPlayerConstuctorArgs() {
+		Player player = new Player(playerName);
 
-		Player player = new Player(name);
-
-		assertEquals(name, player.getName());
-
+		assertEquals(playerName, player.getName());
+		assertEquals(startingResources, player.getResources());
+		assertTrue(player.getSquaresOwned().size() == 0);
 	}
 
 	@Test
 	void testGetNameString() {
-
-		Player player = new Player(name);
-
-		String expected = name;
+		String expected = playerName;
 		String actual = player.getName();
 
 		assertEquals(expected, actual);
@@ -59,87 +75,50 @@ class PlayerTest {
 
 	@Test
 	void testGetSquaresOwnedElement() {
-
-		Player player = new Player();
-
-		Set<Element> expected = squaresOwned;
-		Set<Element> actual = player.getSquaresOwned();
-
-		assertEquals(expected, actual);
-
+		assertEquals(squaresOwned, player.getSquaresOwned());
 	}
 
 	@Test
 	void testGetResourcesInt() {
-
-		Player player = new Player();
-	
 		int expected = startingResources;
 		int actual = player.getResources();
 
 		assertEquals(expected, actual);
-
 	}
 
 	@Test
 	void testGetSetCurrentSquareSquare() {
-
-		Player player = new Player();
-
 		player.setCurrentSquare(currentSquare);
 
 		assertEquals(currentSquare, player.getCurrentSquare());
-
-	}
+	} 
 
 	@Test
 	void testAddSquareElement() {
-
-		/*
-		 * Player player = new Player(); 
-		 * Element element1 = new Element("element", 100, 100, 100);
-		 * 
-		 * player.addSquare(element1);
-		 * 
-		 * Set<Element> expected = Set<Element> element1;
-		 * Set<Element> actual = player.getSquaresOwned();
-		 * 
-		 * assertEquals(expected, actual);
-		 */
+		player.addSquare(element3);
+		
+		assertTrue(player.getSquaresOwned().size() == 3 && player.getSquaresOwned().contains(element) && player.getSquaresOwned().contains(element2) && player.getSquaresOwned().contains(element3));
 	}
 
 	@Test
 	void testRemoveSquareElement() {
-		/*
-		 * Player player = new Player(); Element element1 = new Element("element", 100,
-		 * 100, 100);
-		 * 
-		 * player.removeSquare(element1);
-		 * 
-		 * assertEquals(player.getSquaresOwned(), player.getSquaresOwned());
-		 */
+		player.removeSquare(element);
 		
-	}
+		assertTrue(player.getSquaresOwned().size() == 1 && player.getSquaresOwned().contains(element2));
+	} 
 
 	@Test
 	void testAddResources() {
-
-		Player player = new Player();
-
 		player.addResources(resourcesToAdd);
 
 		int expected = (startingResources + resourcesToAdd);
 		int actual = player.getResources();
 
 		assertEquals(expected, actual);
-
 	}
 
 	@Test
 	void testRemoveResources() {
-
-		Player player = new Player();
-
 		player.removeResources(resourcesToAdd);
 
 		int expected = (startingResources - resourcesToAdd);
@@ -149,16 +128,23 @@ class PlayerTest {
 	}
 
 	@Test
-	void testOwnsFullSystem() {
-
-		/*
-		Player player = new Player();
-
-		boolean testSystem = player.ownsFullSystem(elementSystem);
-
-		assertTrue(testSystem);
-		*/
-
+	void testOwnsFullSystemTrue() {
+		assertTrue(player.ownsFullSystem(elementSystem));
+	}
+	
+	@Test
+	void testOwnsFullSystemFalse() {
+		assertFalse(player2.ownsFullSystem(elementSystem));
 	}
 
+	@Test
+	void testBankruptCheckFalse() {
+		assertFalse(player.bankruptCheck());
+	}
+	
+	@Test
+	void testBankruptCheckTrue() {
+		player.removeResources(startingResources + 10);
+		assertTrue(player.bankruptCheck());
+	}
 }
