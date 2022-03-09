@@ -4,63 +4,68 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+/**
+ * 
+ * @author Robbie and Maeve
+ *
+ */
 class StartSquareTest {
-	
-    //test data
-	int resources;
+
+	// test data
+	StartSquare startSquare;
+	Player player;
+	String playerName;
+
+	int resources, startingResources;
 	String name;
-	
+
 	@BeforeEach
 	void setUp() throws Exception {
 		
+		startingResources = 1000;
 		resources = 100;
 		name = "test Name";
-		
-		StartSquare startsquare = new StartSquare(name, resources);
 
+		startSquare = new StartSquare(name, resources);
+
+		playerName = "player";
+		player = new Player(playerName);
 	}
 
-	
 	/**
 	 * Test constructor with args
 	 */
 	@Test
 	void testStartSquareConstructorArgs() {
-		
+
 		StartSquare startsquare = new StartSquare(name, resources);
-		
+
 		assertEquals(name, startsquare.getName());
 		assertEquals(resources, startsquare.getResources());
-		
+
 	}
 
 	@Test
 	void testGetResourcesInt() {
-		
+
 		StartSquare startsquare = new StartSquare(name, resources);
-		
+
 		int expected = resources;
 		int actual = startsquare.getResources();
-		
+
 		assertEquals(expected, actual);
-		
+
 	}
-	
-	
+
+	/**
+	 * Tests when a player passes the start square their current square is set
+	 * correctly and they have the appropriate resources added.
+	 */
 	@Test
 	void testOnPass() {
-		
-		/*
-		StartSquare startsquare = new StartSquare(name, resources);
-		Player player = new Player();
-		
-		int expected = ?
-		int actual = player.addResources(getResources();
-		
-		assertEquals(expected, actual);
-		*/
-
+		startSquare.onPass(player);
+		assertEquals(startSquare, player.getCurrentSquare());
+		assertEquals(startingResources + resources, player.getResources());
 	}
 
 }

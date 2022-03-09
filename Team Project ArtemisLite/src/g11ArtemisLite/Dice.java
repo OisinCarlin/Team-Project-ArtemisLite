@@ -1,5 +1,7 @@
 package g11ArtemisLite;
 
+import java.util.Random;
+
 /**
  * Dice class, one dice which returns a random number between 1-6
  * 
@@ -8,12 +10,9 @@ package g11ArtemisLite;
  */
 public class Dice {
 	
+	private static final Random RANDOM = new Random();
 	private int numOfSides;
 	
-	
-	public Dice() {
-	}
-
 	/**
 	 * @param numOfSides
 	 */
@@ -26,7 +25,7 @@ public class Dice {
 	}
 
 	public int roll() {
-		return (int) (Math.random() * numOfSides + 1);
+		return RANDOM.nextInt(numOfSides) + 1;
 	}
 }
 

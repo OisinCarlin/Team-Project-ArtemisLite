@@ -26,13 +26,6 @@ public class Player {
 	private Square currentSquare;
 
 	/**
-	 * 
-	 */
-	public Player() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
 	 * Set the starting number of resources the player owns at the start of the
 	 * game.
 	 * 
@@ -45,7 +38,7 @@ public class Player {
 		squaresOwned = new HashSet<>();
 		this.name = name;
 		this.resources = STARTING_RESOURCES;
-	}
+	} 
 
 	/**
 	 * @return the name
