@@ -8,9 +8,9 @@ import java.util.Random;
  * @author Robbie
  *
  */
-public class Dice {
+public class Dice implements java.io.Serializable {
 	
-	private static final Random RANDOM = new Random();
+	private static final long serialVersionUID = 2938313309603492644L;
 	private int numOfSides;
 	
 	/**

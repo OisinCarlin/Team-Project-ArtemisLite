@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
  * @author Maeve Higgins
  *
  */
-public class PlayerManager {
+public class PlayerManager implements java.io.Serializable {
+	private static final long serialVersionUID = 2938313309603492644L;
 	private static final int MAX_USERS = 4;
 	private static final int MIN_USERS = 2;
 	private UserInput userInput;
@@ -38,9 +39,18 @@ public class PlayerManager {
 	 * @return The list of usernames
 	 */
 	public List<String> getUsernames() {
+		boolean restore = false;
 		List<String> usernames = new ArrayList<>();
-		welcome();
-		return userInput.requestUsernames(usernames, getUserCount());
+		// collects boolean from welcome if user selects restore option
+		restore = welcome();
+		if (!restore) {
+			// proceeds as standard if user does not select restore
+			return userInput.requestUsernames(usernames, getUserCount());
+		} else {
+			// returns an empty username list if restore selected
+			return usernames;
+		}
+		
 	}
 	
 	/**
@@ -72,9 +82,11 @@ public class PlayerManager {
 	/**
 	 * Displays a welcome message on game initialisation, then offers the players a
 	 * menu with options to display rules (invoking the displayRules method), or
-	 * allowing for a new game to begin
+	 * allowing for a new game to begin. Also returns a boolean true value if user selects
+	 * restore option
 	 */
-	private void welcome() {
+	private boolean welcome() {
+		boolean restore = false;
 		System.out.println("Welcome to ArtemisLite!\n");
 		// adds a pause before displaying menu options
 		try {
@@ -83,16 +95,23 @@ public class PlayerManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		displayStartUpMenu();
+		// collects restore boolean from displayStartUpMenu if user selects restore
+		restore = displayStartUpMenu();
+		return restore;
 	}
 	
-	private void displayStartUpMenu() {
+	private boolean displayStartUpMenu() {
+		// boolean to track if user selects restore
+		boolean restore = false;
+		String line = "";
 		int lineNum = 0;
 		do {
 			System.out.println("[1]:\tDisplay Rules");
 			System.out.println("[2]:\tStart New Game");
+			System.out.println("[3]:\tRestore Saved Game");
 			
-			lineNum = userInput.getInt(message.inputOptionRequest);
+			line = userInput.getString(message.inputOptionRequest);
+			lineNum = userInput.parseWithDefault(line, 0);
 			switch (lineNum) {
 			case 1:
 				displayRules();
@@ -106,11 +125,17 @@ public class PlayerManager {
 					e.printStackTrace();
 				}
 				break;
+			case 3:
+				System.out.println(message.restoringGame);
+				// sets boolean to true if user restores
+				restore = true;
+				break;
 			default:
 				System.err.println(message.invalidOption);
 				break;
 			}
-		} while (lineNum != 2);
+		} while (lineNum !=2 && lineNum !=3 );
+		return restore;
 	}
 	
 	/**

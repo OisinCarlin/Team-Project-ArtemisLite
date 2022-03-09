@@ -2,7 +2,9 @@ package g11ArtemisLite;
 
 import java.util.List;
 
-public class Roller {
+public class Roller implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 
 	private List<Dice> dice;
 

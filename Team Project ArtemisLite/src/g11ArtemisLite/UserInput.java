@@ -13,7 +13,9 @@ import java.util.TreeMap;
  * @author maeve
  *
  */
-public class UserInput {
+public class UserInput implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 	private static final Scanner scanner = new Scanner(System.in);
 
 	/**
@@ -184,7 +186,7 @@ public class UserInput {
 	 * @param defaultVal
 	 * @return
 	 */
-	public static int parseWithDefault(String number, int defaultVal) {
+	public int parseWithDefault(String number, int defaultVal) {
 		try {
 			return Integer.parseInt(number);
 		} catch (NumberFormatException e) {

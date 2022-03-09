@@ -11,7 +11,7 @@ package g11ArtemisLite;
  *
  */
 public class StartSquare extends Square {
-
+	private static final long serialVersionUID = 2938313309603492644L;
 	private int resources;
 
 	/**
