@@ -349,17 +349,21 @@ public class Game {
 	 */
 	public boolean noDevelopmentsToMakeChecker(Player player, List<Element> developableElements) {
 		boolean breakIt = false;
+		List<Element> tempList = new ArrayList<>();
 		if (developableElements.size() == 0) {
 			System.out.println("You need to own all elements in a system before you can develop!");
 			breakIt = true;
 			return breakIt;
 		}
 		for (int loop = 0; loop < developableElements.size(); loop++) {
-
 			if (developableElements.get(loop).getDevLevel() == 4) {
-				developableElements.remove(developableElements.get(loop));
+				tempList.add(developableElements.get(loop));
 			}
 		}
+		for (Element element : tempList) {
+			developableElements.remove(element);
+		}
+		
 		if (developableElements.size() == 0) {
 			System.out.println("You don't have any developments to make!");
 			breakIt = true;
@@ -376,13 +380,11 @@ public class Game {
 	 */
 	public void developElement(Element element, Player player) {
 		int priceToDevelop = element.getDevelopmentPrice();
-		if (player.getResources() > priceToDevelop && element.getDevLevel() != 4) {
+		if (player.getResources() >= priceToDevelop && element.getDevLevel() != 4) {
 			player.removeResources(priceToDevelop);
 			element.increaseDevLevel();
 			System.out.println("Upgraded to level " + element.getDevLevel());
-			myDevMap.get(element).displayCurrentDevInfo(element.getDevLevel());
 			System.out.println("You've developed it!");
-			// element.displayDevelopmentUpgradeInfo();
 		} else {
 			System.out.println("Not enough resources to develop or max development reached");
 		}
@@ -423,6 +425,7 @@ public class Game {
 			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= developableElements.size() && intUserInput > 0) {
 				developElement(developableElements.get(intUserInput - 1), player);
+				myDevMap.get(developableElements.get(intUserInput - 1)).displayCurrentDevInfo(developableElements.get(intUserInput - 1).getDevLevel());
 				// checks after each development if all elements are fully developed
 				int fullyDevelopedCount = 0;
 				int elementCount = 0;
@@ -555,7 +558,7 @@ public class Game {
 	 * @param player
 	 * @param buyer
 	 */
-	private void tradeElement(Element element, Player player, Player buyer) {
+	public void tradeElement(Element element, Player player, Player buyer) {
 		if (element.getPurchasePrice() <= buyer.getResources()) {
 
 			player.removeSquare(element);

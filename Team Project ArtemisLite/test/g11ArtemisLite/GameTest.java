@@ -24,7 +24,9 @@ class GameTest {
 	Element e1;
 	Element e2;
 	Element e3;
-	ElementSystem eS1;
+	Element e4;
+	List<Element> elements;
+	List<Element> developableElements;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -32,6 +34,7 @@ class GameTest {
 		System.setOut(new PrintStream(outputStreamCaptor));
 		
 		game = new Game();
+		elements = new ArrayList<>();
 		
 		p1 = new Player("player1");
 		p2 = new Player("player2");
@@ -42,16 +45,26 @@ class GameTest {
 		players.add(p3);
 	
 		e1 = new Element("element1", 0, 0, 0);
-		e2 = new Element("element1", 0, 0, 0);
-		e3 = new Element("element1", 0, 0, 0);
+		e2 = new Element("element2", 0, 0, 2000);
+		e3 = new Element("element3", 2000, 0, 1000);
+		e4 = new Element("element4", 0, 0, 0);
+		e4.increaseDevLevel();
+		e4.increaseDevLevel();
+		e4.increaseDevLevel();
+		e4.increaseDevLevel();
+		
+		elements.add(e1);
+		elements.add(e2);
+		elements.add(e3);
+		elements.add(e4);
 		
 		p1.addSquare(e1);
 		p2.addSquare(e2);
 		p3.addSquare(e3);
 		
-		eS1 = new ElementSystem("elementSystem1");
-		eS1.addElement(e1);
-		
+		e1.setOwner(p1);
+		e2.setOwner(p2);
+		e3.setOwner(p3);
 		
 	}
 	
@@ -62,15 +75,9 @@ class GameTest {
 
 	@Test
 	void testGame() {
-		
-		fail("Not yet implemented");
+		assertNotNull(game);
 	}
-
-	@Test
-	void testStart() {
-		fail("Not yet implemented");
-	}
-
+ 
 	@Test
 	void testDisplayIntroMessage() {
 		game.displayIntroMessage(players);
@@ -83,33 +90,98 @@ class GameTest {
 
 	@Test
 	void testQuitGame() {
-		fail("Not yet implemented");
+		boolean quitGame;
+		quitGame = game.quitGame();
+		assertTrue(quitGame);
+		assertEquals("You've quit the game, which means Game Over for all players!", outputStreamCaptor.toString().trim());
 	}
 
 	@Test
 	void testReturnDevelopableElements() {
-		fail("Not yet implemented");
+		developableElements = game.returnDevelopableElements(p1);
+		assertTrue(developableElements.size()==0);
 	}
 
 	@Test
 	void testNoDevelopmentsToMakeChecker() {
-		fail("Not yet implemented");
+		// test that one fully developed element is removed
+		boolean breaker = game.noDevelopmentsToMakeChecker(p1, elements);
+		assertFalse(breaker);
+		assertTrue(elements.size()==3 && elements.contains(e1) && elements.contains(e2) && elements.contains(e3) && !elements.contains(e4));
+		
+		e1.increaseDevLevel();
+		e1.increaseDevLevel();
+		e1.increaseDevLevel();
+		e1.increaseDevLevel();
+		
+		e2.increaseDevLevel();
+		e2.increaseDevLevel();
+		e2.increaseDevLevel();
+		e2.increaseDevLevel();
+		
+		e3.increaseDevLevel();
+		e3.increaseDevLevel();
+		e3.increaseDevLevel();
+		e3.increaseDevLevel();
+		
+		// test that when all elements are fully developed they are removed and system displays message
+		breaker = game.noDevelopmentsToMakeChecker(p1, elements);
+		assertTrue(breaker);
+		assertTrue(elements.size()==0);
+		assertEquals("You don't have any developments to make!", outputStreamCaptor.toString().trim());
 	}
 
 	@Test
 	void testDevelopElement() {
 		
-		fail("Not yet implemented");
+		// test for valid development
+		int currentDevLevelE1 = e1.getDevLevel();
+		int developedDevLevelE1 = currentDevLevelE1+1;
+		int developmentPriceE1 = e1.getDevelopmentPrice();
+		int startingResourcesP1 = p1.getResources();
+		game.developElement(e1, p1);
+		assertEquals(developedDevLevelE1, e1.getDevLevel());
+		assertEquals(startingResourcesP1-developmentPriceE1, p1.getResources());
+		
+		// test for invalid development
+		int currentDevLevelE2 = e2.getDevLevel();
+		int startingResourcesP2 = p2.getResources();
+		game.developElement(e2, p2);
+		assertEquals(currentDevLevelE2, e2.getDevLevel());
+		assertEquals(startingResourcesP2, p2.getResources());
+		
+		
+		// test at boundary, developmentPrice == playerResources
+		int currentDevLevelE3 = e3.getDevLevel();
+		int developedDevLevelE3 = currentDevLevelE3+1;
+		int developmentPriceE3 = e3.getDevelopmentPrice();
+		int startingResourcesP3 = p3.getResources();
+		game.developElement(e3, p3);
+		assertEquals(developedDevLevelE3, e3.getDevLevel());
+		assertEquals(startingResourcesP3-developmentPriceE3, p3.getResources());
+		
+		
 	}
 
 	@Test
-	void testDevelopmentMenu() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testTradeElementMenu() {
-		fail("Not yet implemented");
+	void testTradeElement() {
+		int startingResourcesP1 = p1.getResources();
+		int startingResourcesP2 = p2.getResources();
+		int startingResourcesP3 = p3.getResources();
+		
+		// test for valid trade
+		game.tradeElement(e1, p1, p2);
+		assertTrue(!p1.getSquaresOwned().contains(e1) && p2.getSquaresOwned().contains(e1));
+		assertTrue(e1.getOwner()==p2);
+		assertEquals(startingResourcesP1+e1.getPurchasePrice(), p1.getResources());
+		assertEquals(startingResourcesP2-e1.getPurchasePrice(), p2.getResources());
+		
+		// test for invalid trade
+		game.tradeElement(e3, p3, p2);
+		assertTrue(!p2.getSquaresOwned().contains(e3) && p3.getSquaresOwned().contains(e3));
+		assertTrue(e3.getOwner()==p3);
+		assertEquals(startingResourcesP2, p2.getResources());
+		assertEquals(startingResourcesP3, p3.getResources());
 	}
 
 }
