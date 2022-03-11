@@ -28,7 +28,7 @@ public class PlayerManager implements java.io.Serializable {
 	}
 	
 	public int getUserCount() {
-		return UserInput.getInt("Enter number of players between " + MIN_USERS + " - " + MAX_USERS,MIN_USERS, MAX_USERS);
+		return UserInput.getInt("Enter number of players between " + MIN_USERS + " to " + MAX_USERS,MIN_USERS, MAX_USERS);
 	}
 	
 	/**
@@ -107,6 +107,11 @@ public class PlayerManager implements java.io.Serializable {
 			System.out.println("[1]:\tDisplay Rules");
 			System.out.println("[2]:\tStart New Game");
 			System.out.println("[3]:\tRestore Saved Game");
+			System.out.println("[4]:\tEnable speech");
+			
+			if(UserInput.isSpeak()) {
+				new Speech("1 Display Rules. 2 Start New Game. 3 Restore Saved Game.");
+			}
 			
 			line = UserInput.getString(message.inputOptionRequest);
 			lineNum = UserInput.parseWithDefault(line, 0);
@@ -115,6 +120,9 @@ public class PlayerManager implements java.io.Serializable {
 				displayRules();
 				break;
 			case 2:
+				if(UserInput.isSpeak()) {
+					new Speech(message.startingMessage);
+				}
 				System.out.println(message.startingMessage);
 				try {
 					Thread.sleep(1000);
@@ -124,12 +132,28 @@ public class PlayerManager implements java.io.Serializable {
 				}
 				break;
 			case 3:
+				if(UserInput.isSpeak()) {
+					new Speech(message.restoringGame);
+				}
 				System.out.println(message.restoringGame);
 				// sets boolean to true if user restores
 				restore = true;
 				break;
+			case 4:
+				new Speech("To enable speech enter Y or N");
+				if(UserInput.yesOrNo()) {
+					UserInput.setSpeak(true);
+					System.out.println("Speech Enabled");
+					if(UserInput.isSpeak()) {
+						new Speech("Speech Enabled");
+					}
+				}
+				break;
 			default:
-				System.err.println(message.invalidOption);
+				if(UserInput.isSpeak()) {
+					new Speech(message.invalidOption);
+				}
+				System.out.println(message.invalidOption);
 				break;
 			}
 		} while (lineNum !=2 && lineNum !=3 );
@@ -141,6 +165,9 @@ public class PlayerManager implements java.io.Serializable {
 	 */
 	private void displayRules() {
 		System.out.println(message.rules);
+		if(UserInput.isSpeak()) {
+			new Speech(message.rules);
+		}
 		UserInput.prompt(message.returnToMenu);;
 	}
 
@@ -162,18 +189,30 @@ public class PlayerManager implements java.io.Serializable {
 		
 		for(Integer key : playerMap.keySet()) {
 			System.out.printf("To select %s enter [ %d ]\n", playerMap.get(key).getName(), key);
+			if(UserInput.isSpeak()) {
+				new Speech("To select " + playerMap.get(key).getName() + " enter " + key);
+			}
 		}
 		System.out.printf("To cancel enter [ %d ]\n", playerMap.size() + 1);
+		if(UserInput.isSpeak()) {
+			new Speech("To cancel enter " + (playerMap.size() + 1));
+		}
 		
 		do {
 			choice = UserInput.getInt("Enter number 1 - " + (playerMap.size() +1));
 			if(choice > 0 && choice <= playerMap.size()) {
 				chosenPlayer = playerMap.get(choice);
 			} else if(choice == playerMap.size() + 1) {
-				System.err.println("Cancelling");
+				System.out.println("Cancelling");
+				if(UserInput.isSpeak()) {
+					new Speech("Cancelling");
+				}
 				chosenPlayer = null;
 			} else {
-				System.err.println(message.invalidOption);
+				System.out.println(message.invalidOption);
+				if(UserInput.isSpeak()) {
+					new Speech(message.invalidOption);
+				}
 			}
 		} while(choice <= 0 || choice > playerMap.size() +1);
 		

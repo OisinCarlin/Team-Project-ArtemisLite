@@ -126,6 +126,9 @@ public class Element extends Square {
 			attemptPurchaseElement(players, player);
 		} else if (this.owner.equals(player)) {
 			System.out.println("You own this element");
+			if(UserInput.isSpeak()) {
+				new Speech("You own this element");
+			}
 		} else {
 			requestRent(player);
 		}
@@ -144,6 +147,9 @@ public class Element extends Square {
 	 */
 	private void attemptPurchaseElement(List<Player> players, Player player) {
 		System.out.printf("\n%s Do you want to purchase %s\n", player.getName(), this.getName());
+		if(UserInput.isSpeak()) {
+			new Speech(player.getName() + "Do you want to purchase" + this.getName());
+		}
 		boolean attemptPurchase = UserInput.yesOrNo();
 		boolean altPlayerPurchase;
 
@@ -154,17 +160,30 @@ public class Element extends Square {
 				player.removeResources(getPurchasePrice());
 				player.addSquare(this);
 				System.out.printf("Congratulations! You now own %s\n", this.getName());
+				if(UserInput.isSpeak()) {
+					new Speech("Congratulations! You now own" + this.getName());
+				}
 			} else {
-				System.err.println("Sorry not enough resources to purchase.\n");
+				System.out.println("Sorry not enough resources to purchase.\n");
+				if(UserInput.isSpeak()) {
+					new Speech("Sorry not enough resources to purchase.");
+				}
 			}
 		} else {
-			System.err.println("Sorry you don't want to purchase :(\n");
+			System.out.println("Sorry you don't want to purchase :(\n");
 			System.out.printf("Do you want to offer %s to another player?\n", this.getName());
+			if(UserInput.isSpeak()) {
+				new Speech("Sorry you don't want to purchase"
+						+ "Do you want to offer"+ this.getName() +"to another player?");
+			}
 			altPlayerPurchase = UserInput.yesOrNo();
 			if (altPlayerPurchase) {
 				offerAltPlayerPurchase(players, player);
 			} else {
-				System.err.println("Sorry you don't want to share the purchase :(\n");
+				System.out.println("Sorry you don't want to share the purchase :(\n");
+				if(UserInput.isSpeak()) {
+					new Speech("Sorry you don't want to share the purchase");
+				}
 			}
 
 		}
@@ -185,7 +204,10 @@ public class Element extends Square {
 		if (chosenPlayer != null) {
 			attemptPurchaseElement(players, chosenPlayer);
 		} else {
-			System.err.println("Cancelled");
+			System.out.println("Cancelled");
+			if(UserInput.isSpeak()) {
+				new Speech("Cancelled");
+			}
 		}
 	}
 
@@ -197,24 +219,41 @@ public class Element extends Square {
 	 */
 	private void requestRent(Player player) {
 		System.out.println("\n" + this.owner.getName() + " Do you want to charge " + player.getName() + " rent?\n");
+		if(UserInput.isSpeak()) {
+			new Speech(this.owner.getName() + " Do you want to charge " + player.getName() + " rent?");
+		}
 		boolean enforceRent = UserInput.yesOrNo();
 
 		if (enforceRent) {
 			player.removeResources(rentPrice);
 			owner.addResources(rentPrice);
-			System.err.println(player.getName() + " you have been charged " + this.rentPrice + " in rent");
+			System.out.println(player.getName() + " you have been charged " + this.rentPrice + " in rent");
+			if(UserInput.isSpeak()) {
+				new Speech(player.getName() + " you have been charged " + this.rentPrice + " in rent");
+			}
 		}
 	}
 
 	public void displayDetails() {
 		System.out.println(this.getName());
+		if(UserInput.isSpeak()) {
+			new Speech(this.getName());
+		}
 		if (this.owner != null) {
 			System.out.println("Owner: " + this.owner.getName());
+			if(UserInput.isSpeak()) {
+				new Speech("Owner is " + this.owner.getName());
+			}
 		} else {
 			System.out.println("Owner: Unowned");
+			if(UserInput.isSpeak()) {
+				new Speech("Unowned");
+			}
 		}
-
 		System.out.println("Dev level: " + this.devLevel);
+		if(UserInput.isSpeak()) {
+			new Speech("Development level is" + this.devLevel);
+		}
 	}
 
 }

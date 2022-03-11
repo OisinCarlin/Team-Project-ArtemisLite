@@ -107,18 +107,30 @@ public class DevelopmentInfo implements java.io.Serializable {
 		case 1:
 			System.out.println("Dev level: "+this.developmentLevel1Name);
 			System.out.println("Description: "+this.developmentLevel1Desc);
+			if(UserInput.isSpeak()) {
+				new Speech("Development level " + this.developmentLevel1Name + this.developmentLevel1Desc);
+			}
 			break;
 		case 2:
 			System.out.println("Dev level: "+this.developmentLevel2Name);
 			System.out.println("Description: "+this.developmentLevel2Desc);
+			if(UserInput.isSpeak()) {
+				new Speech("Development level " + this.developmentLevel2Name + this.developmentLevel2Desc);
+			}
 			break;
 		case 3:
 			System.out.println("Dev level: "+this.developmentLevel3Name);
 			System.out.println("Description: "+this.developmentLevel3Desc);
+			if(UserInput.isSpeak()) {
+				new Speech("Development level " + this.developmentLevel3Name + this.developmentLevel3Desc);
+			}
 			break;
 		case 4:
 			System.out.println("Dev level: "+this.developmentLevel4Name);
 			System.out.println("Description: "+this.developmentLevel4Desc);
+			if(UserInput.isSpeak()) {
+				new Speech("Development level " + this.developmentLevel4Name + this.developmentLevel4Desc);
+			}
 			break;
 		default:
 			System.out.println("incorrect selection");

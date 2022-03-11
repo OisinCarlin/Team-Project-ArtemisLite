@@ -169,6 +169,9 @@ public class Game {
 							e.printStackTrace();
 						}
 						System.out.println(players.get(loop).getName() + " has rolled " + squaresToMove);
+						if(UserInput.isSpeak()) {
+							new Speech(players.get(loop).getName() + " has rolled " + squaresToMove);
+						}
 
 						board.move(players, players.get(loop), squaresToMove);
 
@@ -215,6 +218,9 @@ public class Game {
 			if (!isProgress) {
 				displayStateOfPlay();
 				System.out.println("Game over");
+				if(UserInput.isSpeak()) {
+					new Speech("Game Over");
+				}
 				break;
 			}
 
@@ -222,6 +228,9 @@ public class Game {
 			for (Player player : players) {
 				if (player.bankruptCheck()) {
 					System.out.println(message.randomEventBankrupt);
+					if(UserInput.isSpeak()) {
+						new Speech(message.randomEventBankrupt);
+					}
 					isProgress = false;
 					break;
 				}
@@ -231,6 +240,9 @@ public class Game {
 
 	private void displayStateOfPlay() {
 		System.out.println("This is the final state of play...");
+		if(UserInput.isSpeak()) {
+			new Speech("This is the final state of play...");
+		}
 		board.displayElementDetails();
 	}
 
@@ -242,8 +254,14 @@ public class Game {
 	public void displayIntroMessage(List<Player> players) {
 		for (int loop = 0; loop < players.size(); loop++) {
 			System.out.printf(players.get(loop).getName());
+			if(UserInput.isSpeak()) {
+				new Speech(players.get(loop).getName());
+			}
 			if (loop == players.size() - 2) {
 				System.out.printf(" & ");
+				if(UserInput.isSpeak()) {
+					new Speech("and");
+				}
 			} else if (loop == players.size() - 1) {
 				System.out.printf(" ");
 			} else {
@@ -251,6 +269,9 @@ public class Game {
 			}
 		}
 		System.out.println(message.intro);
+		if(UserInput.isSpeak()) {
+			new Speech(message.intro);
+		}
 	}
 
 	/**
@@ -270,6 +291,16 @@ public class Game {
 			System.out.println("5. Save Game");
 			System.out.println("6. Quit the Game");
 			
+			if(UserInput.isSpeak()) {
+				new Speech("Would you like to."
+						+ "1 Display your Resources and Properties Owned."
+						+ "2 Develop an element."
+						+ "3 Trade an Element."
+						+ "4 End your Turn."
+						+ "5 Save Game."
+						+ "6 Quit the Game.");
+			}
+			
 			userInputNum = UserInput.getInt("Choose option 1-6 and press [Enter]");
 			switch (userInputNum) {
 			case 1:
@@ -277,24 +308,39 @@ public class Game {
 				break;
 			case 2:
 				System.out.println("Opening development menu...");
+				if(UserInput.isSpeak()) {
+					new Speech("Opening development menu");
+				}
 				endGame = developmentMenu(player);
 				break;
 			case 3:
 				System.out.println("Opening trade menu...");
+				if(UserInput.isSpeak()) {
+					new Speech("Opening trade menu");
+				}
 				tradeElementMenu(allPlayers, player);
 				break;
 			case 4:
 				System.out.println("Ending your turn...");
+				if(UserInput.isSpeak()) {
+					new Speech("Ending your turn");
+				}
 				break;
 			case 5:
 				System.out.println("Saving game...");
+				if(UserInput.isSpeak()) {
+					new Speech("Saving game");
+				}
 				serializaion.SaveData(players, board);
 				break;
 			case 6:
 				endGame = quitGame();
 				break;
 			default:
-				System.out.println("Incorrect option selected try again...");
+				System.out.println(message.invalidOption);
+				if(UserInput.isSpeak()) {
+					new Speech(message.invalidOption);
+				}
 				break;
 			}
 			if (endGame) {
@@ -311,6 +357,9 @@ public class Game {
 	 */
 	public boolean quitGame() {
 		System.out.println(message.userQuitFail);
+		if(UserInput.isSpeak()) {
+			new Speech(message.userQuitFail);
+		}
 		boolean quit = true;
 		return quit;
 	}
@@ -352,6 +401,9 @@ public class Game {
 		List<Element> tempList = new ArrayList<>();
 		if (developableElements.size() == 0) {
 			System.out.println("You need to own all elements in a system before you can develop!");
+			if(UserInput.isSpeak()) {
+				new Speech("You need to own all elements in a system before you can develop!");
+			}
 			breakIt = true;
 			return breakIt;
 		}
@@ -366,6 +418,9 @@ public class Game {
 		
 		if (developableElements.size() == 0) {
 			System.out.println("You don't have any developments to make!");
+			if(UserInput.isSpeak()) {
+				new Speech("You don't have any developments to make!");
+			}
 			breakIt = true;
 			return breakIt;
 		}
@@ -385,8 +440,14 @@ public class Game {
 			element.increaseDevLevel();
 			System.out.println("Upgraded to level " + element.getDevLevel());
 			System.out.println("You've developed it!");
+			if(UserInput.isSpeak()) {
+				new Speech("Upgraded to level " + element.getDevLevel() + "You've developed it!");
+			}
 		} else {
 			System.out.println("Not enough resources to develop or max development reached");
+			if(UserInput.isSpeak()) {
+				new Speech("Not enough resources to develop or max development reached");
+			}
 		}
 	}
 
@@ -413,14 +474,19 @@ public class Game {
 				break;
 			}
 			for (Element element : developableElements) {
-
 				// filters out elements that have been fully developed
 				if (element.getDevLevel() != 4) {
 					System.out.println("To develop " + element.getName() + " enter ["
 							+ (developableElements.indexOf(element) + 1) + "]");
+					if(UserInput.isSpeak()) {
+						new Speech("To develop" + element.getName() + "enter" + (developableElements.indexOf(element) + 1));
+					}
 				}
 			}
 			System.out.println("Don't want to develop any more? Enter [" + (developableElements.size() + 1) + "]");
+			if(UserInput.isSpeak()) {
+				new Speech("Don't want to develop any more? Enter" + (developableElements.size() + 1));
+			}
 			userText = UserInput.getString("Please choose an option followed by [Enter]");
 			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= developableElements.size() && intUserInput > 0) {
@@ -452,8 +518,14 @@ public class Game {
 				// exits menu on appropriate user input
 			} else if (intUserInput == (developableElements.size() + 1)) {
 				System.out.println("Exiting development menu");
+				if(UserInput.isSpeak()) {
+					new Speech("Exiting development menu");
+				}
 			} else {
-				System.out.println("Incorrect input try again");
+				System.out.println(message.invalidInput);
+				if(UserInput.isSpeak()) {
+					new Speech(message.invalidInput);
+				}
 			}
 			// loop will continue until player hits the appropriate 'Exit' option
 		} while (intUserInput != developableElements.size() + 1);
@@ -462,6 +534,9 @@ public class Game {
 
 	private void displayEpilogue() {
 		System.out.println("This is the epilogue");
+		if(UserInput.isSpeak()) {
+			new Speech("This is the epilogue");
+		}
 	}
 
 	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Trade element
@@ -488,21 +563,31 @@ public class Game {
 			// breaks the loop of the player has no elements to trade
 			if (playerElementList.size() == 0) {
 				System.out.println("You have no elements to trade");
+				if(UserInput.isSpeak()) {
+					new Speech("You have no elements to trade");
+				}
 				break;
 			}
 			for (Element element : playerElementList) {
-
 				System.out.println(
 						"To trade " + element.getName() + " enter [" + (playerElementList.indexOf(element) + 1) + "]");
-
+				if(UserInput.isSpeak()) {
+					new Speech("To trade " + element.getName() + " enter " + (playerElementList.indexOf(element) + 1) );
+				}
 			}
 			System.out.println("Don't want to trade any more? Enter [" + (playerElementList.size() + 1) + "]");
+			
+			if(UserInput.isSpeak()) {
+				new Speech("Don't want to trade any more? Enter " + (playerElementList.size() + 1));
+			}
 			userText = UserInput.getString("Please choose an option followed by [Enter]");
 			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= playerElementList.size() && intUserInput > 0) {
 				elementToTrade = playerElementList.get(intUserInput - 1);
 				System.out.println("Who would you like to trade with?");
-
+				if(UserInput.isSpeak()) {
+					new Speech("Who would you like to trade with?");
+				}
 				Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
 				int counter = 1;
 				for (Player p : players) {
@@ -514,13 +599,21 @@ public class Game {
 				do {
 					for (Integer key : playerMap.keySet()) {
 						System.out.println("To trade with " + playerMap.get(key).getName() + " press [" + key + "]");
+						if(UserInput.isSpeak()) {
+							new Speech("To trade with " + playerMap.get(key).getName() + " press [" + key + "]");
+						}
 					}
 					System.out.println("To cancel trade press [" + (playerMap.size() + 1) + "]");
-
+					if(UserInput.isSpeak()) {
+						new Speech("To cancel trade press [" + (playerMap.size() + 1) );
+					}
 					userText = UserInput.getString("Please choose an option followed by [Enter]");
 					intUserInput = UserInput.parseWithDefault(userText, 0);
 					if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
 						System.out.println("Incorrect selection");
+						if(UserInput.isSpeak()) {
+							new Speech(message.invalidInput);
+						}
 						// breaks if user enters the cancel trade number
 					} else if (intUserInput == playerMap.size() + 1) {
 						break;
@@ -528,22 +621,38 @@ public class Game {
 						do {
 							System.out.println(playerMap.get(intUserInput).getName() + ", would you like to buy "
 									+ elementToTrade.getName() + " from " + player.getName() + " ? [Y/N]");
+							if(UserInput.isSpeak()) {
+								new Speech(playerMap.get(intUserInput).getName() + ", would you like to buy "
+										+ elementToTrade.getName() + " from " + player.getName());
+							}
 							ynInput = UserInput.getString("Please enter [Y] or [N]");
 							if (ynInput.equalsIgnoreCase("Y")) {
 								tradeElement(elementToTrade, player, playerMap.get(intUserInput));
 							} else if (ynInput.equalsIgnoreCase("N")) {
 								System.out.println(
 										playerMap.get(intUserInput).getName() + " doesn't want to trade, hard luck!");
+								if(UserInput.isSpeak()) {
+									new Speech(playerMap.get(intUserInput).getName() + " doesn't want to trade, hard luck!");
+								}
 							} else {
-								System.out.println("Incorrect input try again");
+								System.out.println(message.invalidInput);
+								if(UserInput.isSpeak()) {
+									new Speech(message.invalidInput);
+								}
 							}
 						} while (!ynInput.equalsIgnoreCase("Y") && !ynInput.equalsIgnoreCase("N"));
 					}
 				} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
 			} else if (intUserInput == (playerElementList.size() + 1)) {
 				System.out.println("Exiting trade menu");
+				if(UserInput.isSpeak()) {
+					new Speech("Exiting trade menu");
+				}
 			} else {
-				System.out.println("Incorrect input try again");
+				System.out.println(message.invalidInput);
+				if(UserInput.isSpeak()) {
+					new Speech(message.invalidInput);
+				}
 			}
 			// loop will continue until player hits the appropriate 'Exit' option
 		} while (intUserInput != playerElementList.size() + 1);
@@ -567,8 +676,14 @@ public class Game {
 			player.addResources(element.getPurchasePrice());
 			buyer.removeResources(element.getPurchasePrice());
 			System.out.println(player.getName() + ", you sold " + element.getName() + " to " + buyer.getName());
+			if(UserInput.isSpeak()) {
+				new Speech(player.getName() + ", you sold " + element.getName() + " to " + buyer.getName());
+			}
 		} else {
 			System.out.println(buyer.getName() + ", you can't afford this purchase!");
+			if(UserInput.isSpeak()) {
+				new Speech(buyer.getName() + ", you can't afford this purchase!");
+			}
 		}
 	}
 
