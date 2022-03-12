@@ -5,16 +5,17 @@ package g11ArtemisLite;
 
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 /**
  * @author maeve
  *
  */
-public class UserInput {
+public class UserInput implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 	private static final Scanner scanner = new Scanner(System.in);
+	private static boolean speak = false;
 
 	/**
 	 * 
@@ -29,11 +30,13 @@ public class UserInput {
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as String
 	 */
-	public String getString(String messageRequest) {
+	public static String getString(String messageRequest) {
 		String userInput = null;
 		try {
 			System.out.println(messageRequest);
-
+			if(speak) {
+				new Speech(messageRequest);
+			}
 			userInput = scanner.nextLine();
 		} catch (InputMismatchException e) {
 			System.out.println("Problem with input " + e.getMessage());
@@ -47,15 +50,18 @@ public class UserInput {
 	 * @param messageRequest - Question requesting specific input
 	 * @return input requested as int
 	 */
-	public int getInt(String messageRequest) {
+	public static int getInt(String messageRequest) {
 		int userInput = -1;
 		try {
 			System.out.println(messageRequest);
-
+			if(speak) {
+				new Speech(messageRequest);
+			}
 			userInput = scanner.nextInt();
 			scanner.nextLine();
 		} catch (InputMismatchException e) {
 			System.err.println("Problem with input " + e.getMessage());
+			scanner.nextLine();
 		}
 		return userInput;
 	}
@@ -66,17 +72,23 @@ public class UserInput {
 	 * @param maxUsers
 	 * @return
 	 */
-	public int getInt(String message, int minUsers, int maxUsers) {
+	public static int getInt(String message, int minUsers, int maxUsers) {
 		int numUser = -1;
 
 		do {
 			numUser = getInt(message);
 
 			if (numUser < minUsers) {
-				System.err.println("Too few players. Min players is " + minUsers);
+				System.out.println("Too few players. Min players is " + minUsers);
+				if(speak) {
+					new Speech("Too few players. Min players is " + minUsers);
+				}
 			}
 			if (numUser > maxUsers) {
-				System.err.println("Too many players. Max players is " + maxUsers);
+				System.out.println("Too many players. Max players is " + maxUsers);
+				if(speak) {
+					new Speech("Too many players. Max players is " + maxUsers);
+				}
 			}
 		} while (numUser < minUsers || numUser > maxUsers);
 
@@ -89,18 +101,24 @@ public class UserInput {
 	 * @param userCount
 	 * @return
 	 */
-	public List<String> requestUsernames(List<String> usernames, int userCount) {
+	public static List<String> requestUsernames(List<String> usernames, int userCount) {
 		String username = null;
 
 		for (int user = 0; user < userCount; user++) {
 			do {
 				username = getString("Enter player " + (user + 1) + " name");
 				if (username.strip().isEmpty()) {
-					System.err.println("Not valid input. Please enter at least one visible character.");
+					System.out.println("Not valid input. Please enter at least one visible character.");
+					if(speak) {
+						new Speech("Not valid input. Please enter at least one visible character.");
+					}
 					username = null;
 				}
 				if (usernames.contains(username)) {
-					System.err.println("Name already used. Please enter a different name.");
+					System.out.println("Name already used. Please enter a different name.");
+					if(speak) {
+						new Speech("Name already used. Please enter a different name.");
+					}
 					username = null;
 				}
 			} while (username == null);
@@ -116,7 +134,7 @@ public class UserInput {
 	 * 
 	 * @return true if answer is yes
 	 */
-	public boolean yesOrNo() {
+	public static boolean yesOrNo() {
 		boolean userChoice = false;
 		String userInput = null;
 
@@ -130,51 +148,14 @@ public class UserInput {
 			} else {
 				userInput = null;
 				System.out.println("Not valid input. Please enter Y / N");
+				if(speak) {
+					new Speech("Not valid input. Please enter Y / N");
+				}
 			}
 
 		} while (userInput == null);
 
 		return userChoice;
-	}
-
-	// <<<<<<<<<<<<<<<<<<left this in, but not used it as
-	// yet>>>>>>>>>>>>>>>>>>>>>>>>
-	/**
-	 * 
-	 * @param players
-	 * @param currentPlayer
-	 * @return
-	 */
-	public Player chooseAPlayer(List<Player> players, Player currentPlayer) {
-		Player playerToReturn = null;
-		Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
-		int counter = 1;
-		for (Player player : players) {
-			if (!player.equals(currentPlayer)) {
-				playerMap.put(counter, player);
-				counter++;
-			}
-		}
-
-		for (Integer key : playerMap.keySet()) {
-			System.out.println("To select " + playerMap.get(key).getName() + " press [" + key + "]");
-		}
-		System.out.println("To cancel press [" + (playerMap.size() + 1) + "]");
-		String userInput = "";
-		int intUserInput = 0;
-		do {
-			userInput = scanner.nextLine();
-			intUserInput = parseWithDefault(userInput, 0);
-			if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
-				System.out.println("Incorrect selection");
-			} else if (intUserInput == playerMap.size() + 1) {
-				break;
-			} else if (intUserInput > 0 && intUserInput <= playerMap.size()) {
-				playerToReturn = playerMap.get(intUserInput);
-
-			}
-		} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
-		return playerToReturn;
 	}
 
 	/**
@@ -198,8 +179,22 @@ public class UserInput {
 	 * 
 	 * @param message
 	 */
-	public void prompt(String message) {
+	public static void prompt(String message) {
 		System.out.println(message);
 		scanner.nextLine();
+	}
+
+	/**
+	 * @return the speak
+	 */
+	public static boolean isSpeak() {
+		return speak;
+	}
+
+	/**
+	 * @param speak the speak to set
+	 */
+	public static void setSpeak(boolean speak) {
+		UserInput.speak = speak;
 	}
 }

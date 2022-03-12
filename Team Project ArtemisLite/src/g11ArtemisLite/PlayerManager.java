@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
  * @author Maeve Higgins
  *
  */
-public class PlayerManager {
+public class PlayerManager implements java.io.Serializable {
+	private static final long serialVersionUID = 2938313309603492644L;
 	private static final int MAX_USERS = 4;
 	private static final int MIN_USERS = 2;
-	private UserInput userInput;
 	private List<Player> players;
 	private Message message;
 
@@ -24,12 +24,11 @@ public class PlayerManager {
 	 * 
 	 */
 	public PlayerManager() {
-		this.userInput = new UserInput();
 		this.message = new Message();
 	}
 	
 	public int getUserCount() {
-		return userInput.getInt("Enter number of players between " + MIN_USERS + " - " + MAX_USERS,MIN_USERS, MAX_USERS);
+		return UserInput.getInt("Enter number of players between " + MIN_USERS + " to " + MAX_USERS,MIN_USERS, MAX_USERS);
 	}
 	
 	/**
@@ -38,9 +37,18 @@ public class PlayerManager {
 	 * @return The list of usernames
 	 */
 	public List<String> getUsernames() {
+		boolean restore = false;
 		List<String> usernames = new ArrayList<>();
-		welcome();
-		return userInput.requestUsernames(usernames, getUserCount());
+		// collects boolean from welcome if user selects restore option
+		restore = welcome();
+		if (!restore) {
+			// proceeds as standard if user does not select restore
+			return UserInput.requestUsernames(usernames, getUserCount());
+		} else {
+			// returns an empty username list if restore selected
+			return usernames;
+		}
+		
 	}
 	
 	/**
@@ -72,9 +80,11 @@ public class PlayerManager {
 	/**
 	 * Displays a welcome message on game initialisation, then offers the players a
 	 * menu with options to display rules (invoking the displayRules method), or
-	 * allowing for a new game to begin
+	 * allowing for a new game to begin. Also returns a boolean true value if user selects
+	 * restore option
 	 */
-	private void welcome() {
+	private boolean welcome() {
+		boolean restore = false;
 		System.out.println("Welcome to ArtemisLite!\n");
 		// adds a pause before displaying menu options
 		try {
@@ -83,21 +93,36 @@ public class PlayerManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		displayStartUpMenu();
+		// collects restore boolean from displayStartUpMenu if user selects restore
+		restore = displayStartUpMenu();
+		return restore;
 	}
 	
-	private void displayStartUpMenu() {
+	private boolean displayStartUpMenu() {
+		// boolean to track if user selects restore
+		boolean restore = false;
+		String line = "";
 		int lineNum = 0;
 		do {
 			System.out.println("[1]:\tDisplay Rules");
 			System.out.println("[2]:\tStart New Game");
+			System.out.println("[3]:\tRestore Saved Game");
+			System.out.println("[4]:\tEnable speech");
 			
-			lineNum = userInput.getInt(message.inputOptionRequest);
+			if(UserInput.isSpeak()) {
+				new Speech("1 Display Rules. 2 Start New Game. 3 Restore Saved Game.");
+			}
+			
+			line = UserInput.getString(message.inputOptionRequest);
+			lineNum = UserInput.parseWithDefault(line, 0);
 			switch (lineNum) {
 			case 1:
 				displayRules();
 				break;
 			case 2:
+				if(UserInput.isSpeak()) {
+					new Speech(message.startingMessage);
+				}
 				System.out.println(message.startingMessage);
 				try {
 					Thread.sleep(1000);
@@ -106,11 +131,33 @@ public class PlayerManager {
 					e.printStackTrace();
 				}
 				break;
+			case 3:
+				if(UserInput.isSpeak()) {
+					new Speech(message.restoringGame);
+				}
+				System.out.println(message.restoringGame);
+				// sets boolean to true if user restores
+				restore = true;
+				break;
+			case 4:
+				new Speech("To enable speech enter Y or N");
+				if(UserInput.yesOrNo()) {
+					UserInput.setSpeak(true);
+					System.out.println("Speech Enabled");
+					if(UserInput.isSpeak()) {
+						new Speech("Speech Enabled");
+					}
+				}
+				break;
 			default:
-				System.err.println(message.invalidOption);
+				if(UserInput.isSpeak()) {
+					new Speech(message.invalidOption);
+				}
+				System.out.println(message.invalidOption);
 				break;
 			}
-		} while (lineNum != 2);
+		} while (lineNum !=2 && lineNum !=3 );
+		return restore;
 	}
 	
 	/**
@@ -118,7 +165,10 @@ public class PlayerManager {
 	 */
 	private void displayRules() {
 		System.out.println(message.rules);
-		userInput.prompt(message.returnToMenu);;
+		if(UserInput.isSpeak()) {
+			new Speech(message.rules);
+		}
+		UserInput.prompt(message.returnToMenu);;
 	}
 
 	public Map<Integer, Player> mapPlayers(List<Player> allPlayers, Player currentPlayer){
@@ -139,18 +189,30 @@ public class PlayerManager {
 		
 		for(Integer key : playerMap.keySet()) {
 			System.out.printf("To select %s enter [ %d ]\n", playerMap.get(key).getName(), key);
+			if(UserInput.isSpeak()) {
+				new Speech("To select " + playerMap.get(key).getName() + " enter " + key);
+			}
 		}
 		System.out.printf("To cancel enter [ %d ]\n", playerMap.size() + 1);
+		if(UserInput.isSpeak()) {
+			new Speech("To cancel enter " + (playerMap.size() + 1));
+		}
 		
 		do {
-			choice = userInput.getInt("Enter number 1 - " + (playerMap.size() +1));
+			choice = UserInput.getInt("Enter number 1 - " + (playerMap.size() +1));
 			if(choice > 0 && choice <= playerMap.size()) {
 				chosenPlayer = playerMap.get(choice);
 			} else if(choice == playerMap.size() + 1) {
-				System.err.println("Cancelling");
+				System.out.println("Cancelling");
+				if(UserInput.isSpeak()) {
+					new Speech("Cancelling");
+				}
 				chosenPlayer = null;
 			} else {
-				System.err.println(message.invalidOption);
+				System.out.println(message.invalidOption);
+				if(UserInput.isSpeak()) {
+					new Speech(message.invalidOption);
+				}
 			}
 		} while(choice <= 0 || choice > playerMap.size() +1);
 		

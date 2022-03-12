@@ -11,7 +11,9 @@ import java.util.Random;
  * @author crclarke
  *
  */
-public class RandomEvents {
+public class RandomEvents implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 	private static final String BADEVENT1 = "You fastened the rockets the wrong way round!";
 	private static final String BADEVENT2 = "Someone spilt Mountain Dew on the circuit boards!";
 	private static final String BADEVENT3 = "One of your astronauts got sick on the flight simulator!";
@@ -130,12 +132,16 @@ public class RandomEvents {
 			}
 			System.out.println(badList.get(badEventNum));
 			System.out.println(players.get(playerNum).getName()+", pay up! Fine: "+fees.get(fineNum));
+			
 			players.get(playerNum).removeResources(fees.get(fineNum));
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			if(UserInput.isSpeak()) {
+				new Speech(badList.get(badEventNum) + players.get(playerNum).getName()+", pay up! Fine: "+fees.get(fineNum));
 			}
 		} else {
 			try {
@@ -152,6 +158,9 @@ public class RandomEvents {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			if(UserInput.isSpeak()) {
+				new Speech(goodList.get(goodEventNum) + players.get(playerNum).getName()+", Congratulations! You receive: "+fees.get(fineNum));
 			}
 		}
 		System.out.println("******* END OF EVENT *******");

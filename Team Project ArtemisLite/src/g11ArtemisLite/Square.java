@@ -12,8 +12,9 @@ import java.util.List;
  * @author maeve
  *
  */
-public class Square {
+public class Square implements java.io.Serializable{
 
+	private static final long serialVersionUID = 2938313309603492644L;
 	private String name;
 
 	/**
@@ -32,6 +33,9 @@ public class Square {
 	public void onLand(List<Player> players, Player player) {
 		player.setCurrentSquare(this);
 		System.out.println(player.getName() + " has landed on " + this.name);
+		if(UserInput.isSpeak()) {
+			new Speech(player.getName() + " has landed on " + this.name);
+		}
 	}
 
 	/**

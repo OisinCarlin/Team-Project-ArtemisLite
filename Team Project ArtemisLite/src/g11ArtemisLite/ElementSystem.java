@@ -10,7 +10,9 @@ import java.util.Set;
  * @author oisincarlin
  *
  */
-public class ElementSystem {
+public class ElementSystem implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 2938313309603492644L;
 	
 	// Instance Variables
 	private String name;
