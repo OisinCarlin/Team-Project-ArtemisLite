@@ -107,10 +107,15 @@ public class PlayerManager implements java.io.Serializable {
 			System.out.println("[1]:\tDisplay Rules");
 			System.out.println("[2]:\tStart New Game");
 			System.out.println("[3]:\tRestore Saved Game");
-			System.out.println("[4]:\tEnable speech");
+			
+			if(!UserInput.isSpeak()) {
+				System.out.println("[4]:\tEnable speech");
+			} else {
+				System.out.println("[4]:\tDisable speech");
+			}
 			
 			if(UserInput.isSpeak()) {
-				new Speech("1 Display Rules. 2 Start New Game. 3 Restore Saved Game.");
+				new Speech("1 Display Rules. 2 Start New Game. 3 Restore Saved Game. 4 Disable speech");
 			}
 			
 			line = UserInput.getString(message.inputOptionRequest);
@@ -140,14 +145,23 @@ public class PlayerManager implements java.io.Serializable {
 				restore = true;
 				break;
 			case 4:
-				new Speech("To enable speech enter Y or N");
-				if(UserInput.yesOrNo()) {
-					UserInput.setSpeak(true);
-					System.out.println("Speech Enabled");
-					if(UserInput.isSpeak()) {
-						new Speech("Speech Enabled");
+				if(!UserInput.isSpeak()) {
+					new Speech("To enable speech enter Y or N");
+					if(UserInput.yesOrNo()) {
+						UserInput.setSpeak(true);
+						System.out.println("Speech Enabled");
+						if(UserInput.isSpeak()) {
+							new Speech("Speech Enabled");
+						}
+					}
+				} else {
+					new Speech("To disable speech enter Y or N");
+					if(UserInput.yesOrNo()) {
+						UserInput.setSpeak(false);
+						System.out.println("Speech Disabled");
 					}
 				}
+				
 				break;
 			default:
 				if(UserInput.isSpeak()) {
