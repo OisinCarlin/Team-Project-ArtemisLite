@@ -15,7 +15,8 @@ class ElementTest {
 
 	// test data
 	String elementName, playerName, player2Name;
-	int purchasePrice, rentPrice, developmentPrice, startingDevLevel, increasedDevLevel, startingRes, afterPurchRes, afterRentRes, afterDevRes, adjustedRentPrice, addedRentRes;
+	int elementNum, purchasePrice, rentPrice, developmentPrice, startingDevLevel, increasedDevLevel, startingRes, afterPurchRes, afterRentRes, afterDevRes, adjustedRentPrice, addedRentRes;
+	
 	Player owner;
 	Player ownerNull;
 	Element element;
@@ -28,6 +29,7 @@ class ElementTest {
 		elementName = "element";
 		playerName = "player";
 		player2Name = "player2";
+		elementNum = 1;
 
 		startingRes = 1000;
 		purchasePrice = 100;
@@ -41,7 +43,7 @@ class ElementTest {
 		startingDevLevel = 0;
 		increasedDevLevel = 2;
 		
-		element = new Element(elementName, purchasePrice, rentPrice, developmentPrice);
+		element = new Element(elementName, elementNum, purchasePrice, rentPrice, developmentPrice);
 		
 		ownerNull = null;
 		owner = new Player(playerName);
@@ -58,7 +60,7 @@ class ElementTest {
 	 */
 	@Test
 	void testElementConstructorArgs() {
-		Element element = new Element(elementName, purchasePrice, rentPrice, developmentPrice);
+		Element element = new Element(elementName, elementNum, purchasePrice, rentPrice, developmentPrice);
 
 		assertEquals(elementName, element.getName());
 		assertEquals(purchasePrice, element.getPurchasePrice());

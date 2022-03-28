@@ -17,7 +17,7 @@ class PlayerTest {
 	Player player, player2;
 	String playerName, elementName, element2Name, element3Name, elementSystemName;
 	Set<Element> squaresOwned;
-	int resources, resourcesToAdd, startingResources;
+	int elementNum, resources, resourcesToAdd, startingResources;
 	Square currentSquare;
 	Element element, element2, element3;
 	ElementSystem elementSystem;
@@ -35,9 +35,10 @@ class PlayerTest {
 		elementName = "element";
 		element2Name = "element2";
 		element3Name = "element3";
-		element = new Element(elementName, 0, 0, 0);
-		element2 = new Element(element2Name, 0, 0, 0);
-		element3 = new Element(element3Name, 0, 0, 0);
+		elementNum = 1;
+		element = new Element(elementName, elementNum, 0, 0, 0);
+		element2 = new Element(element2Name, elementNum, 0, 0, 0);
+		element3 = new Element(element3Name, elementNum, 0, 0, 0);
 		
 		elementSystemName = "elementSystem";
 		elementSystem = new ElementSystem(elementSystemName);

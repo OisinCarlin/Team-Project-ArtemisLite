@@ -58,5 +58,71 @@ public class Message implements java.io.Serializable {
 	public String randomEventBankrupt = "Oh dear, events have conspired against you, you're bankrupt!";
 	
 	public String userQuitFail = "You've quit the game, which means Game Over for all players!";
+	
+	public String epilogue1 = "\nArtemis: twin sister of Apollo, Goddess of the Moon... Humanity will once again unite to push beyond the boundaries of space exploration, \n"
+			+ "science and technology. Thanks to your hard work and dedication, NASA, along with its partners in industry, nations and academia, is ready \n"
+			+ "to begin a new era of sustainable travel to the Moon and beyond!\n\n";
+	
+	public String epilogue2 = "Beginning in 2021, the first Commercial Lunar Payload Services deliveries began delivering instruments to the lunar surface that paved \n"
+			+ "the way for human explorers. The golf-cart-sized VIPER rover was the first to investigate lunar polar soil samples to characterize the \n"
+			+ "distribution and concentration of volatiles, including water, across a large region of the Moon.\n\n";
+	
+	public String epilogue3 = "With the completion Space Launch System rocket and its accompanying Orion spacecraft, the first main Artemis mission, Artemis I, completed \n"
+			+ "its successful uncrewed launch. This allowed for verification of the spacecrafts performance and testing of Orion's heat shield during its \n"
+			+ "high-speed reentry at nearly 5000 degress Farenheit.\n\n";
+	
+	public String epilogue4 = "The first pieces of the Gateway, the Power and Propulsion Element (PPE) and the Habitation and Logistics Outpost (HALO), were then \n"
+			+ "successfully launched and installed at the lunar NRHO. On-board science investigations from NASA and the European Space Agency conducted \n"
+			+ "early characterization of the deep space environment.\n\n";
+	
+	public String epilogue5 = "The overwhelming success of the first Artemis launch was followed by Artemis II, the 10-day crewed test flight. NASA astronauts set the \n"
+			+ "record for the for the farthest human travel from Earth to date. They successfully validated deep space communication and navigation systems, \n"
+			+ "with the innovative new life support systems keeping them healthy and safe throughout.\n\n";
+	
+	public String epilogue6 = "With the confidence gained through Artemis I and Artemis II, Orion and its crew were ready to once again travel to the Moon, this time \n"
+			+ "boarding the completed Human Landing System designed to deliver the first woman and next man to the lunar surface!\n\n";
+	
+	public String epilogue7 = "T-minus 60 seconds and counting\n";
+	
+	public String epilogue8 = "Give me a go/no go for launch\n";
+	
+	public String epilogueBooster = "BOOSTER...";
+	public String epilogueRetro = "RETRO...";
+	public String epilogueFIDO = "FIDO...";
+	public String epilogueGuidance = "GUIDANCE...";
+	public String epilogueSurgeon = "SURGEON...";
+	public String epilogueEECOM = "EECOM...";
+	public String epilogueControl = "CONTROL...";
+	public String epilogueProcedures = "PROCEDURES...";
+	public String epilogueINCO = "INCO...";
+	public String epilogueNetwork = "NETWORK...";
+	public String epilogueRecovery = "RECOVERY...";
+	public String epilogueCAPCOM = "CAPCOM...";
+	public String epilogueGO = "GO!\n";
+	
+	public String epilogue9 = "Launch Control this is Houston we are go for launch!\n"
+			+ "Coming up on a go for Auto Sequence start\n";
+	
+	public String epilogue10 = "booster ignition and liftoff of Artemis III! \n"
+			+ "...Paving the way for a new era of mans exploration of the Moon and beyond!\n";
+	
+	public void epilogueCountdown() {
+		for (int countdown = 10; countdown >= 1; countdown--) {
+			System.out.println(countdown);
+			if (countdown == 5) {
+				System.out.println("Ignition sequence start!");
+			}
+			delay(1000);
+		}
+	}
+	
+	public void delay(long milliseconds) {
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

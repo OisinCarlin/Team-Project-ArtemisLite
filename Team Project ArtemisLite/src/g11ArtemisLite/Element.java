@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public class Element extends Square {
 	private static final long serialVersionUID = 2938313309603492644L;
+	private int elementNumber;
 	private int purchasePrice;
 	private int rentPrice;
 	private int developmentPrice;
@@ -31,13 +32,21 @@ public class Element extends Square {
 	 * 
 	 * @param name
 	 */
-	public Element(String name, int purchasePrice, int rentPrice, int developmentPrice) {
+	public Element(String name, int elementNumber, int purchasePrice, int rentPrice, int developmentPrice) {
 		super(name);
+		this.elementNumber = elementNumber;
 		this.purchasePrice = purchasePrice;
 		this.rentPrice = rentPrice;
 		this.developmentPrice = developmentPrice;
 		this.devLevel = 0;
 		this.playerManager = new PlayerManager();
+	}
+	
+	/**
+	 * @return the elementNumber
+	 */
+	public int getElementNumber() {
+		return elementNumber;
 	}
 
 	/**

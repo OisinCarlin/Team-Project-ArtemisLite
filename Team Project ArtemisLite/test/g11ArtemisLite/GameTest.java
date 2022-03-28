@@ -25,6 +25,7 @@ class GameTest {
 	Element e2;
 	Element e3;
 	Element e4;
+	int elementNum1, elementNum2, elementNum3, elementNum4;
 	List<Element> elements;
 	List<Element> developableElements;
 
@@ -43,11 +44,16 @@ class GameTest {
 		players.add(p1);
 		players.add(p2);
 		players.add(p3);
+		
+		elementNum1 = 1;
+		elementNum2 = 2;
+		elementNum3 = 3;
+		elementNum4 = 4;
 	
-		e1 = new Element("element1", 0, 0, 0);
-		e2 = new Element("element2", 0, 0, 2000);
-		e3 = new Element("element3", 2000, 0, 1000);
-		e4 = new Element("element4", 0, 0, 0);
+		e1 = new Element("element1", elementNum1, 0, 0, 0);
+		e2 = new Element("element2", elementNum2, 0, 0, 2000);
+		e3 = new Element("element3", elementNum3, 2000, 0, 1000);
+		e4 = new Element("element4", elementNum4, 0, 0, 0);
 		e4.increaseDevLevel();
 		e4.increaseDevLevel();
 		e4.increaseDevLevel();

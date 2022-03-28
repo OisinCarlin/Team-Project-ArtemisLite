@@ -46,18 +46,18 @@ public class Game {
 		this.isProgress = true;
 
 		this.board = new Board();
-		Square square1 = new StartSquare("Start", 10);
-		Element square2 = new Element("Element 1", 0, 0, 0);
-		Element square3 = new Element("Element 2", 0, 0, 0);
-		Element square4 = new Element("Element 3", 0, 0, 0);
-		Element square5 = new Element("Element 4", 0, 0, 0);
-		Element square6 = new Element("Element 5", 0, 0, 0);
-		Element square7 = new Element("Element 6", 0, 0, 0);
-		Element square8 = new Element("Element 7", 0, 0, 0);
-		Element square9 = new Element("Element 8", 0, 0, 0);
-		Element square10 = new Element("Element 9", 0, 0, 0);
-		Element square11 = new Element("Element 10", 0, 0, 0);
-		Square square12 = new Square("Blank");
+		Square square1 = new StartSquare("Mission Control", 10);
+		Element square2 = new Element("Power and Propulsion System", 1, 0, 0, 0);
+		Element square3 = new Element("Habitation and Logistics Outpost", 2, 0, 0, 0);
+		Element square4 = new Element("Avionics", 3, 0, 0, 0);
+		Element square5 = new Element("Core Stage and Propulsion", 4, 0, 0, 0);
+		Element square6 = new Element("Interim Cryogenic Propulsion Stage", 5, 0, 0, 0);
+		Element square7 = new Element("Crew Module", 6, 0, 0, 0);
+		Element square8 = new Element("Launch Abort Systems", 7, 0, 0, 0);
+		Element square9 = new Element("Service Module", 8, 0, 0, 0);
+		Element square10 = new Element("Human Landing System", 9, 0, 0, 0);
+		Element square11 = new Element("xEMU Spacesuit", 10,  0, 0, 0);
+		Square square12 = new Square("Press Conference");
 		board.addSquareToBoard(square1);
 		board.addSquareToBoard(square2);
 		board.addSquareToBoard(square3);
@@ -88,21 +88,21 @@ public class Game {
 
 		this.randomEvents = new RandomEvents();
 
-		this.sysOne = new ElementSystem("System 1");
+		this.sysOne = new ElementSystem("Gateway");
 		sysOne.addElement(square2);
 		sysOne.addElement(square3);
-		sysOne.addElement(square4);
 
-		this.sysTwo = new ElementSystem("System 2");
+		this.sysTwo = new ElementSystem("Space Launch System");
+		sysOne.addElement(square4);
 		sysTwo.addElement(square5);
 		sysTwo.addElement(square6);
-		sysTwo.addElement(square7);
 
-		this.sysThree = new ElementSystem("System 3");
+		this.sysThree = new ElementSystem("Orion Spacecraft");
+		sysTwo.addElement(square7);
 		sysThree.addElement(square8);
 		sysThree.addElement(square9);
 
-		this.sysFour = new ElementSystem("System 4");
+		this.sysFour = new ElementSystem("Lunar Base Camp");
 		sysFour.addElement(square10);
 		sysFour.addElement(square11);
 
@@ -533,9 +533,88 @@ public class Game {
 	}
 
 	private void displayEpilogue() {
-		System.out.println("This is the epilogue");
+		System.out.println(message.epilogue1);
+		message.delay(5000);
+		System.out.println(message.epilogue2);
+		message.delay(5000);
+		System.out.println(message.epilogue3);
+		message.delay(5000);
+		System.out.println(message.epilogue4);
+		message.delay(5000);
+		System.out.println(message.epilogue5);
+		message.delay(5000);
+		System.out.println(message.epilogue6);
+		message.delay(5000);
+		System.out.println(message.epilogue7);
+		message.delay(3000);
+		System.out.println(message.epilogue8);
+		message.delay(1000);
+		System.out.println(message.epilogueBooster);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueRetro);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueFIDO);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueGuidance);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueSurgeon);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueEECOM);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueControl);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueProcedures);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueINCO);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueNetwork);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueRecovery);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(500);
+		System.out.println(message.epilogueCAPCOM);
+		message.delay(500);
+		System.out.println(message.epilogueGO);
+		message.delay(2000);
+		System.out.println(message.epilogue9);
+		message.delay(2000);
+		message.epilogueCountdown();
+		System.out.println(message.epilogue10);
+		message.delay(5000);
+		
 		if(UserInput.isSpeak()) {
-			new Speech("This is the epilogue");
+			new Speech(message.epilogue1);
+			new Speech(message.epilogue2);
+			new Speech(message.epilogue3);
+			new Speech(message.epilogue4);
+			new Speech(message.epilogue5);
+			new Speech(message.epilogue6);
+			new Speech(message.epilogue7);
+			new Speech(message.epilogue8);
+			new Speech(message.epilogue9);
+			new Speech(message.epilogue10);
+			
 		}
 	}
 
