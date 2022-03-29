@@ -64,8 +64,13 @@ class PlayerManagerTest {
 	@Test
 	void testGetPlayers() {
 		
-		PlayerManager playerManager = new PlayerManager();
-		assertNotNull(playerManager.getPlayers());
+		if (players.contains(p1)) {
+		    assertTrue(true);
+		} else if (players.contains(p2)) {
+			assertTrue(true);
+		} else {
+			assertFalse(false);		
+			}
 	}
 
 	@Test
