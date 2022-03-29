@@ -215,7 +215,7 @@ public class Player implements java.io.Serializable {
 			Collections.sort(elements, new Comparator<Element>() {
 				@Override
 				public int compare(final Element object1, final Element object2) {
-					return object1.getName().compareTo(object2.getName());
+					return object1.getElementNumber()-object2.getElementNumber();
 				}
 			});
 		}

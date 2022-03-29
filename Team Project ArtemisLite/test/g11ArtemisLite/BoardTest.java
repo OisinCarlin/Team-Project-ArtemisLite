@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +49,7 @@ class BoardTest {
 
 	// Element class data
 	String elementName1, elementName2, elementName3; 
+	int elementNum1, elementNum2, elementNum3;
 	int purchasePrice1, purchasePrice2, purchasePrice3; 
 	int rentPrice1, rentPrice2, rentPrice3; 
 	int developmentPrice1, developmentPrice2, developmentPrice3;
@@ -79,6 +79,11 @@ class BoardTest {
 		elementName1 = "Element 1";
 		elementName2 = "Element 2";
 		elementName3 = "Element 3";
+		
+		// Numbers of Elements
+		elementNum1 = 1;
+		elementNum2 = 2;
+		elementNum3 = 3;
 
 		// Purchase prices for Elements
 		purchasePrice1 = 500;
@@ -101,9 +106,9 @@ class BoardTest {
 		player3 = new Player(playerName3);
 
 		// Instantiate Elements	
-		element1 = new Element(elementName1, purchasePrice1, rentPrice1, developmentPrice1);
-		element2 = new Element(elementName2, purchasePrice2, rentPrice2, developmentPrice2);
-		element3 = new Element(elementName3, purchasePrice3, rentPrice3, developmentPrice3);
+		element1 = new Element(elementName1, elementNum1, purchasePrice1, rentPrice1, developmentPrice1);
+		element2 = new Element(elementName2, elementNum2, purchasePrice2, rentPrice2, developmentPrice2);
+		element3 = new Element(elementName3, elementNum3, purchasePrice3, rentPrice3, developmentPrice3);
 
 		// Instantiate Squares
 		square1 = new Square(squareName1);
