@@ -20,7 +20,7 @@ import java.util.Set;
 public class Player implements java.io.Serializable {
 	private static final long serialVersionUID = 2938313309603492644L;
 	
-	private static final int STARTING_RESOURCES = 1000;
+	private static final int STARTING_RESOURCES = 5000;
 
 	private String name;
 	private Set<Element> squaresOwned;

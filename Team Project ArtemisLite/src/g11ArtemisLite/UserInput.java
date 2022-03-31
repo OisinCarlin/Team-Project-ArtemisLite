@@ -39,7 +39,7 @@ public class UserInput implements java.io.Serializable {
 			}
 			userInput = scanner.nextLine();
 		} catch (InputMismatchException e) {
-			System.out.println("Problem with input " + e.getMessage());
+			System.out.println(Message.invalidInput);
 		}
 		return userInput;
 	}
@@ -60,7 +60,7 @@ public class UserInput implements java.io.Serializable {
 			userInput = scanner.nextInt();
 			scanner.nextLine();
 		} catch (InputMismatchException e) {
-			System.err.println("Problem with input " + e.getMessage());
+			System.out.println(Message.invalidInput);
 			scanner.nextLine();
 		}
 		return userInput;
@@ -79,15 +79,15 @@ public class UserInput implements java.io.Serializable {
 			numUser = getInt(message);
 
 			if (numUser < minUsers) {
-				System.out.println("Too few players. Min players is " + minUsers);
+				System.out.println(Message.tooFewPlayers + minUsers);
 				if(speak) {
-					new Speech("Too few players. Min players is " + minUsers);
+					new Speech(Message.tooFewPlayers + minUsers);
 				}
 			}
 			if (numUser > maxUsers) {
-				System.out.println("Too many players. Max players is " + maxUsers);
+				System.out.println(Message.tooManyPlayers + maxUsers);
 				if(speak) {
-					new Speech("Too many players. Max players is " + maxUsers);
+					new Speech(Message.tooManyPlayers + maxUsers);
 				}
 			}
 		} while (numUser < minUsers || numUser > maxUsers);
@@ -108,16 +108,16 @@ public class UserInput implements java.io.Serializable {
 			do {
 				username = getString("Enter player " + (user + 1) + " name");
 				if (username.strip().isEmpty()) {
-					System.out.println("Not valid input. Please enter at least one visible character.");
+					System.out.println(Message.invalidInput + Message.oneVisibleChar);
 					if(speak) {
-						new Speech("Not valid input. Please enter at least one visible character.");
+						new Speech(Message.invalidInput + Message.oneVisibleChar);
 					}
 					username = null;
 				}
 				if (usernames.contains(username)) {
-					System.out.println("Name already used. Please enter a different name.");
+					System.out.println(Message.usedName);
 					if(speak) {
-						new Speech("Name already used. Please enter a different name.");
+						new Speech(Message.usedName);
 					}
 					username = null;
 				}
@@ -139,7 +139,7 @@ public class UserInput implements java.io.Serializable {
 		String userInput = null;
 
 		do {
-			userInput = getString("Enter Y / N");
+			userInput = getString(Message.enterYN);
 
 			if (userInput.equalsIgnoreCase("Y")) {
 				userChoice = true;
@@ -147,9 +147,9 @@ public class UserInput implements java.io.Serializable {
 				userChoice = false;
 			} else {
 				userInput = null;
-				System.out.println("Not valid input. Please enter Y / N");
+				System.out.println(Message.invalidInput + Message.enterYN);
 				if(speak) {
-					new Speech("Not valid input. Please enter Y / N");
+					new Speech(Message.invalidInput + Message.enterYN);
 				}
 			}
 

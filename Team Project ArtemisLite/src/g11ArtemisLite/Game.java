@@ -19,7 +19,6 @@ import java.util.TreeMap;
 public class Game {
 
 	private PlayerManager playerManager;
-	private Message message;
 	private List<Player> players;
 	private Board board;
 	private DevelopmentInfoManager developmentInfoManager;
@@ -41,22 +40,21 @@ public class Game {
 	public Game() {
 		this.playerManager = new PlayerManager();
 		this.developmentInfoManager = new DevelopmentInfoManager();
-		this.message = new Message();
 		this.serializaion = new Serializaion();
 		this.isProgress = true;
 
 		this.board = new Board();
-		Square square1 = new StartSquare("Mission Control", 10);
-		Element square2 = new Element("Power and Propulsion System", 1, 0, 0, 0);
-		Element square3 = new Element("Habitation and Logistics Outpost", 2, 0, 0, 0);
-		Element square4 = new Element("Avionics", 3, 0, 0, 0);
-		Element square5 = new Element("Core Stage and Propulsion", 4, 0, 0, 0);
-		Element square6 = new Element("Interim Cryogenic Propulsion Stage", 5, 0, 0, 0);
-		Element square7 = new Element("Crew Module", 6, 0, 0, 0);
-		Element square8 = new Element("Launch Abort Systems", 7, 0, 0, 0);
-		Element square9 = new Element("Service Module", 8, 0, 0, 0);
-		Element square10 = new Element("Human Landing System", 9, 0, 0, 0);
-		Element square11 = new Element("xEMU Spacesuit", 10,  0, 0, 0);
+		Square square1 = new StartSquare("Mission Control", 200);
+		Element square2 = new Element("Power and Propulsion System", 1, 100, 10, 20);
+		Element square3 = new Element("Habitation and Logistics Outpost", 2, 100, 10, 20);
+		Element square4 = new Element("Avionics", 3, 200, 20, 40);
+		Element square5 = new Element("Core Stage and Propulsion", 4, 200, 20, 40);
+		Element square6 = new Element("Interim Cryogenic Propulsion Stage", 5, 200, 20, 40);
+		Element square7 = new Element("Crew Module", 6, 250, 25, 50);
+		Element square8 = new Element("Launch Abort Systems", 7, 250, 25, 50);
+		Element square9 = new Element("Service Module", 8, 250, 25, 50);
+		Element square10 = new Element("Human Landing System", 9, 300, 30, 60);
+		Element square11 = new Element("xEMU Spacesuit", 10,  300, 30, 60);
 		Square square12 = new Square("Press Conference");
 		board.addSquareToBoard(square1);
 		board.addSquareToBoard(square2);
@@ -93,12 +91,12 @@ public class Game {
 		sysOne.addElement(square3);
 
 		this.sysTwo = new ElementSystem("Space Launch System");
-		sysOne.addElement(square4);
+		sysTwo.addElement(square4);
 		sysTwo.addElement(square5);
 		sysTwo.addElement(square6);
 
 		this.sysThree = new ElementSystem("Orion Spacecraft");
-		sysTwo.addElement(square7);
+		sysThree.addElement(square7);
 		sysThree.addElement(square8);
 		sysThree.addElement(square9);
 
@@ -217,9 +215,9 @@ public class Game {
 			// postMoveOptions
 			if (!isProgress) {
 				displayStateOfPlay();
-				System.out.println("Game over");
+				System.out.println(Message.gameOver);
 				if(UserInput.isSpeak()) {
-					new Speech("Game Over");
+					new Speech(Message.gameOver);
 				}
 				break;
 			}
@@ -227,9 +225,9 @@ public class Game {
 			randomEvents.generateRandomEvent(players);
 			for (Player player : players) {
 				if (player.bankruptCheck()) {
-					System.out.println(message.randomEventBankrupt);
+					System.out.println(Message.randomEventBankrupt);
 					if(UserInput.isSpeak()) {
-						new Speech(message.randomEventBankrupt);
+						new Speech(Message.randomEventBankrupt);
 					}
 					isProgress = false;
 					break;
@@ -239,9 +237,9 @@ public class Game {
 	}
 
 	private void displayStateOfPlay() {
-		System.out.println("This is the final state of play...");
+		System.out.println(Message.finalSOP);
 		if(UserInput.isSpeak()) {
-			new Speech("This is the final state of play...");
+			new Speech(Message.finalSOP);
 		}
 		board.displayElementDetails();
 	}
@@ -268,9 +266,9 @@ public class Game {
 				System.out.printf(", ");
 			}
 		}
-		System.out.println(message.intro);
+		System.out.println(Message.intro);
 		if(UserInput.isSpeak()) {
-			new Speech(message.intro);
+			new Speech(Message.intro);
 		}
 	}
 
@@ -283,70 +281,75 @@ public class Game {
 		boolean endGame = false;
 		int userInputNum = 0;
 		do {
-			System.out.println("Would you like to...");
-			System.out.println("1. Display your Resources & Properties Owned");
-			System.out.println("2. Develop an element");
-			System.out.println("3. Trade an Element");
-			System.out.println("4. End your Turn");
-			System.out.println("5. Save Game");
-			System.out.println("6. Quit the Game");
+			System.out.println(Message.likeTo);
+			System.out.println(Message.moveMenuOpShowSystems);
+			System.out.println(Message.moveMenuOpShowRes);
+			System.out.println(Message.moveMenuOpDevelop);
+			System.out.println(Message.moveMenuOpTrade);
+			System.out.println(Message.moveMenuOpEnd);
+			System.out.println(Message.moveMenuOpSave);
+			System.out.println(Message.moveMenuOpQuit);
 			
 			if(UserInput.isSpeak()) {
-				new Speech("Would you like to."
-						+ "1 Display your Resources and Properties Owned."
-						+ "2 Develop an element."
-						+ "3 Trade an Element."
-						+ "4 End your Turn."
-						+ "5 Save Game."
-						+ "6 Quit the Game.");
+				new Speech(Message.likeTo
+						+ Message.moveMenuOpShowSystems
+						+ Message.moveMenuOpShowRes
+						+ Message.moveMenuOpDevelop
+						+ Message.moveMenuOpTrade
+						+ Message.moveMenuOpEnd
+						+ Message.moveMenuOpSave
+						+ Message.moveMenuOpQuit);
 			}
 			
-			userInputNum = UserInput.getInt("Choose option 1-6 and press [Enter]");
+			userInputNum = UserInput.getInt(Message.inputOptionRequest);
 			switch (userInputNum) {
 			case 1:
-				player.displayAll();
+				allSystems.forEach(ElementSystem:: displayAll);
 				break;
 			case 2:
-				System.out.println("Opening development menu...");
+				player.displayAll();
+				break;
+			case 3:
+				System.out.println(Message.openDevMenu);
 				if(UserInput.isSpeak()) {
-					new Speech("Opening development menu");
+					new Speech(Message.openDevMenu);
 				}
 				endGame = developmentMenu(player);
 				break;
-			case 3:
-				System.out.println("Opening trade menu...");
+			case 4:
+				System.out.println(Message.openTradeMenu);
 				if(UserInput.isSpeak()) {
-					new Speech("Opening trade menu");
+					new Speech(Message.openTradeMenu);
 				}
 				tradeElementMenu(allPlayers, player);
 				break;
-			case 4:
-				System.out.println("Ending your turn...");
+			case 5:
+				System.out.println(Message.endingTurn);
 				if(UserInput.isSpeak()) {
-					new Speech("Ending your turn");
+					new Speech(Message.endingTurn);
 				}
 				break;
-			case 5:
-				System.out.println("Saving game...");
+			case 6:
+				System.out.println(Message.saveGame);
 				if(UserInput.isSpeak()) {
-					new Speech("Saving game");
+					new Speech(Message.saveGame);
 				}
 				serializaion.SaveData(players, board);
 				break;
-			case 6:
+			case 7:
 				endGame = quitGame();
 				break;
 			default:
-				System.out.println(message.invalidOption);
+				System.out.println(Message.invalidOption);
 				if(UserInput.isSpeak()) {
-					new Speech(message.invalidOption);
+					new Speech(Message.invalidOption);
 				}
 				break;
 			}
 			if (endGame) {
 				break;
 			}
-		} while (userInputNum != 4 && userInputNum != 6);
+		} while (userInputNum != 5 && userInputNum != 7);
 		return endGame;
 	}
 
@@ -356,9 +359,9 @@ public class Game {
 	 * @return
 	 */
 	public boolean quitGame() {
-		System.out.println(message.userQuitFail);
+		System.out.println(Message.userQuitFail);
 		if(UserInput.isSpeak()) {
-			new Speech(message.userQuitFail);
+			new Speech(Message.userQuitFail);
 		}
 		boolean quit = true;
 		return quit;
@@ -400,9 +403,9 @@ public class Game {
 		boolean breakIt = false;
 		List<Element> tempList = new ArrayList<>();
 		if (developableElements.size() == 0) {
-			System.out.println("You need to own all elements in a system before you can develop!");
+			System.out.println(Message.ownAllElements);
 			if(UserInput.isSpeak()) {
-				new Speech("You need to own all elements in a system before you can develop!");
+				new Speech(Message.ownAllElements);
 			}
 			breakIt = true;
 			return breakIt;
@@ -417,9 +420,9 @@ public class Game {
 		}
 		
 		if (developableElements.size() == 0) {
-			System.out.println("You don't have any developments to make!");
+			System.out.println(Message.noDevToMake);
 			if(UserInput.isSpeak()) {
-				new Speech("You don't have any developments to make!");
+				new Speech(Message.noDevToMake);
 			}
 			breakIt = true;
 			return breakIt;
@@ -438,15 +441,15 @@ public class Game {
 		if (player.getResources() >= priceToDevelop && element.getDevLevel() != 4) {
 			player.removeResources(priceToDevelop);
 			element.increaseDevLevel();
-			System.out.println("Upgraded to level " + element.getDevLevel());
-			System.out.println("You've developed it!");
+			System.out.println(Message.upgradeLevel + element.getDevLevel());
+			System.out.println(Message.developedIt);
 			if(UserInput.isSpeak()) {
-				new Speech("Upgraded to level " + element.getDevLevel() + "You've developed it!");
+				new Speech(Message.upgradeLevel + element.getDevLevel() + Message.developedIt);
 			}
 		} else {
-			System.out.println("Not enough resources to develop or max development reached");
+			System.out.println(Message.maxDev + "or" + Message.notEnoughRes);
 			if(UserInput.isSpeak()) {
-				new Speech("Not enough resources to develop or max development reached");
+				new Speech(Message.maxDev + "or" + Message.notEnoughRes);
 			}
 		}
 	}
@@ -476,18 +479,18 @@ public class Game {
 			for (Element element : developableElements) {
 				// filters out elements that have been fully developed
 				if (element.getDevLevel() != 4) {
-					System.out.println("To develop " + element.getName() + " enter ["
-							+ (developableElements.indexOf(element) + 1) + "]");
+					System.out.println(Message.develop + element.getName() + Message.enter
+							+ (developableElements.indexOf(element) + 1));
 					if(UserInput.isSpeak()) {
-						new Speech("To develop" + element.getName() + "enter" + (developableElements.indexOf(element) + 1));
+						new Speech(Message.develop + element.getName() + Message.enter + (developableElements.indexOf(element) + 1));
 					}
 				}
 			}
-			System.out.println("Don't want to develop any more? Enter [" + (developableElements.size() + 1) + "]");
+			System.out.println(Message.dontDevMore + Message.enter + (developableElements.size() + 1));
 			if(UserInput.isSpeak()) {
-				new Speech("Don't want to develop any more? Enter" + (developableElements.size() + 1));
+				new Speech(Message.dontDevMore + Message.enter + (developableElements.size() + 1));
 			}
-			userText = UserInput.getString("Please choose an option followed by [Enter]");
+			userText = UserInput.getString(Message.inputOptionRequest);
 			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= developableElements.size() && intUserInput > 0) {
 				developElement(developableElements.get(intUserInput - 1), player);
@@ -517,14 +520,14 @@ public class Game {
 				}
 				// exits menu on appropriate user input
 			} else if (intUserInput == (developableElements.size() + 1)) {
-				System.out.println("Exiting development menu");
+				System.out.println(Message.exitMenu);
 				if(UserInput.isSpeak()) {
-					new Speech("Exiting development menu");
+					new Speech(Message.exitMenu);
 				}
 			} else {
-				System.out.println(message.invalidInput);
+				System.out.println(Message.invalidInput);
 				if(UserInput.isSpeak()) {
-					new Speech(message.invalidInput);
+					new Speech(Message.invalidInput);
 				}
 			}
 			// loop will continue until player hits the appropriate 'Exit' option
@@ -533,87 +536,87 @@ public class Game {
 	}
 
 	private void displayEpilogue() {
-		System.out.println(message.epilogue1);
-		message.delay(5000);
-		System.out.println(message.epilogue2);
-		message.delay(5000);
-		System.out.println(message.epilogue3);
-		message.delay(5000);
-		System.out.println(message.epilogue4);
-		message.delay(5000);
-		System.out.println(message.epilogue5);
-		message.delay(5000);
-		System.out.println(message.epilogue6);
-		message.delay(5000);
-		System.out.println(message.epilogue7);
-		message.delay(3000);
-		System.out.println(message.epilogue8);
-		message.delay(1000);
-		System.out.println(message.epilogueBooster);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueRetro);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueFIDO);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueGuidance);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueSurgeon);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueEECOM);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueControl);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueProcedures);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueINCO);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueNetwork);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueRecovery);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(500);
-		System.out.println(message.epilogueCAPCOM);
-		message.delay(500);
-		System.out.println(message.epilogueGO);
-		message.delay(2000);
-		System.out.println(message.epilogue9);
-		message.delay(2000);
-		message.epilogueCountdown();
-		System.out.println(message.epilogue10);
-		message.delay(5000);
+		System.out.println(Message.epilogue1);
+		Message.delay(5000);
+		System.out.println(Message.epilogue2);
+		Message.delay(5000);
+		System.out.println(Message.epilogue3);
+		Message.delay(5000);
+		System.out.println(Message.epilogue4);
+		Message.delay(5000);
+		System.out.println(Message.epilogue5);
+		Message.delay(5000);
+		System.out.println(Message.epilogue6);
+		Message.delay(5000);
+		System.out.println(Message.epilogue7);
+		Message.delay(3000);
+		System.out.println(Message.epilogue8);
+		Message.delay(1000);
+		System.out.println(Message.epilogueBooster);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueRetro);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueFIDO);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueGuidance);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueSurgeon);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueEECOM);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueControl);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueProcedures);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueINCO);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueNetwork);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueRecovery);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(500);
+		System.out.println(Message.epilogueCAPCOM);
+		Message.delay(500);
+		System.out.println(Message.epilogueGO);
+		Message.delay(2000);
+		System.out.println(Message.epilogue9);
+		Message.delay(2000);
+		Message.epilogueCountdown();
+		System.out.println(Message.epilogue10);
+		Message.delay(5000);
 		
 		if(UserInput.isSpeak()) {
-			new Speech(message.epilogue1);
-			new Speech(message.epilogue2);
-			new Speech(message.epilogue3);
-			new Speech(message.epilogue4);
-			new Speech(message.epilogue5);
-			new Speech(message.epilogue6);
-			new Speech(message.epilogue7);
-			new Speech(message.epilogue8);
-			new Speech(message.epilogue9);
-			new Speech(message.epilogue10);
+			new Speech(Message.epilogue1);
+			new Speech(Message.epilogue2);
+			new Speech(Message.epilogue3);
+			new Speech(Message.epilogue4);
+			new Speech(Message.epilogue5);
+			new Speech(Message.epilogue6);
+			new Speech(Message.epilogue7);
+			new Speech(Message.epilogue8);
+			new Speech(Message.epilogue9);
+			new Speech(Message.epilogue10);
 			
 		}
 	}
@@ -641,31 +644,31 @@ public class Game {
 			player.displayPropertyOwnedInfo();
 			// breaks the loop of the player has no elements to trade
 			if (playerElementList.size() == 0) {
-				System.out.println("You have no elements to trade");
+				System.out.println(Message.noElementsTrade);
 				if(UserInput.isSpeak()) {
-					new Speech("You have no elements to trade");
+					new Speech(Message.noElementsTrade);
 				}
 				break;
 			}
 			for (Element element : playerElementList) {
 				System.out.println(
-						"To trade " + element.getName() + " enter [" + (playerElementList.indexOf(element) + 1) + "]");
+						Message.trade + element.getName() + Message.enter + (playerElementList.indexOf(element) + 1));
 				if(UserInput.isSpeak()) {
-					new Speech("To trade " + element.getName() + " enter " + (playerElementList.indexOf(element) + 1) );
+					new Speech(Message.trade + element.getName() + Message.enter + (playerElementList.indexOf(element) + 1) );
 				}
 			}
-			System.out.println("Don't want to trade any more? Enter [" + (playerElementList.size() + 1) + "]");
+			System.out.println(Message.dontTradeMore + Message.enter + (playerElementList.size() + 1));
 			
 			if(UserInput.isSpeak()) {
-				new Speech("Don't want to trade any more? Enter " + (playerElementList.size() + 1));
+				new Speech(Message.dontTradeMore + Message.enter + (playerElementList.size() + 1));
 			}
-			userText = UserInput.getString("Please choose an option followed by [Enter]");
+			userText = UserInput.getString(Message.inputOptionRequest);
 			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= playerElementList.size() && intUserInput > 0) {
 				elementToTrade = playerElementList.get(intUserInput - 1);
-				System.out.println("Who would you like to trade with?");
+				System.out.println(Message.whoTrade);
 				if(UserInput.isSpeak()) {
-					new Speech("Who would you like to trade with?");
+					new Speech(Message.whoTrade);
 				}
 				Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
 				int counter = 1;
@@ -677,60 +680,60 @@ public class Game {
 				}
 				do {
 					for (Integer key : playerMap.keySet()) {
-						System.out.println("To trade with " + playerMap.get(key).getName() + " press [" + key + "]");
+						System.out.println(Message.trade + Message.with + playerMap.get(key).getName() + Message.enter + key);
 						if(UserInput.isSpeak()) {
-							new Speech("To trade with " + playerMap.get(key).getName() + " press [" + key + "]");
+							new Speech(Message.trade + Message.with + playerMap.get(key).getName() + Message.enter + key);
 						}
 					}
-					System.out.println("To cancel trade press [" + (playerMap.size() + 1) + "]");
+					System.out.println(Message.cancel + Message.enter + (playerMap.size() + 1));
 					if(UserInput.isSpeak()) {
-						new Speech("To cancel trade press [" + (playerMap.size() + 1) );
+						new Speech(Message.cancel + Message.enter + (playerMap.size() + 1) );
 					}
-					userText = UserInput.getString("Please choose an option followed by [Enter]");
+					userText = UserInput.getString(Message.inputOptionRequest);
 					intUserInput = UserInput.parseWithDefault(userText, 0);
 					if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
-						System.out.println("Incorrect selection");
+						System.out.println(Message.invalidInput);
 						if(UserInput.isSpeak()) {
-							new Speech(message.invalidInput);
+							new Speech(Message.invalidInput);
 						}
 						// breaks if user enters the cancel trade number
 					} else if (intUserInput == playerMap.size() + 1) {
 						break;
 					} else if (intUserInput > 0 && intUserInput <= playerMap.size()) {
 						do {
-							System.out.println(playerMap.get(intUserInput).getName() + ", would you like to buy "
-									+ elementToTrade.getName() + " from " + player.getName() + " ? [Y/N]");
+							System.out.println(playerMap.get(intUserInput).getName() + Message.likeToBuy
+									+ elementToTrade.getName() + " from " + player.getName());
 							if(UserInput.isSpeak()) {
-								new Speech(playerMap.get(intUserInput).getName() + ", would you like to buy "
+								new Speech(playerMap.get(intUserInput).getName() + Message.likeToBuy
 										+ elementToTrade.getName() + " from " + player.getName());
 							}
-							ynInput = UserInput.getString("Please enter [Y] or [N]");
+							ynInput = UserInput.getString(Message.enterYN);
 							if (ynInput.equalsIgnoreCase("Y")) {
 								tradeElement(elementToTrade, player, playerMap.get(intUserInput));
 							} else if (ynInput.equalsIgnoreCase("N")) {
 								System.out.println(
-										playerMap.get(intUserInput).getName() + " doesn't want to trade, hard luck!");
+										playerMap.get(intUserInput).getName() + Message.noToTrade);
 								if(UserInput.isSpeak()) {
-									new Speech(playerMap.get(intUserInput).getName() + " doesn't want to trade, hard luck!");
+									new Speech(playerMap.get(intUserInput).getName() + Message.noToTrade);
 								}
 							} else {
-								System.out.println(message.invalidInput);
+								System.out.println(Message.invalidInput);
 								if(UserInput.isSpeak()) {
-									new Speech(message.invalidInput);
+									new Speech(Message.invalidInput);
 								}
 							}
 						} while (!ynInput.equalsIgnoreCase("Y") && !ynInput.equalsIgnoreCase("N"));
 					}
 				} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
 			} else if (intUserInput == (playerElementList.size() + 1)) {
-				System.out.println("Exiting trade menu");
+				System.out.println(Message.exitMenu);
 				if(UserInput.isSpeak()) {
-					new Speech("Exiting trade menu");
+					new Speech(Message.exitMenu);
 				}
 			} else {
-				System.out.println(message.invalidInput);
+				System.out.println(Message.invalidInput);
 				if(UserInput.isSpeak()) {
-					new Speech(message.invalidInput);
+					new Speech(Message.invalidInput);
 				}
 			}
 			// loop will continue until player hits the appropriate 'Exit' option
@@ -759,9 +762,9 @@ public class Game {
 				new Speech(player.getName() + ", you sold " + element.getName() + " to " + buyer.getName());
 			}
 		} else {
-			System.out.println(buyer.getName() + ", you can't afford this purchase!");
+			System.out.println(buyer.getName() + Message.notEnoughRes);
 			if(UserInput.isSpeak()) {
-				new Speech(buyer.getName() + ", you can't afford this purchase!");
+				new Speech(buyer.getName() + Message.notEnoughRes);
 			}
 		}
 	}

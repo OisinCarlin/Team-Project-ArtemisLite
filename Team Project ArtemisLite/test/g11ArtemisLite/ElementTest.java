@@ -31,7 +31,7 @@ class ElementTest {
 		player2Name = "player2";
 		elementNum = 1;
 
-		startingRes = 1000;
+		startingRes = 5000;
 		purchasePrice = 100;
 		afterPurchRes = startingRes - purchasePrice;
 		rentPrice = 200;

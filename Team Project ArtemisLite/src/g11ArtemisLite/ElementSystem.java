@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author oisincarlin
+ * @author oisincarlin and Maeve
  *
  */
 public class ElementSystem implements java.io.Serializable {
@@ -64,6 +64,17 @@ public class ElementSystem implements java.io.Serializable {
 	
 	public Set<Element> getElements(){
 		return elements;
+	}
+	
+	/**
+	 * Displays system name and names of elements within the system
+	 */
+	public void displayAll() {
+		System.out.println("System Name : " + this.getName());
+		for(Element element : elements) {
+			System.out.println(element.getName());
+		}
+		System.out.println();
 	}
 	
 }
