@@ -28,7 +28,7 @@ class PlayerTest {
 		playerName = "player";
 		resources = 100;
 		resourcesToAdd = 100;
-		startingResources = 1000;
+		startingResources = 5000;
 		player = new Player(playerName);
 		player2 = new Player(playerName);
 		

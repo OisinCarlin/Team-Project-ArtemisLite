@@ -22,7 +22,7 @@ class StartSquareTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		
-		startingResources = 1000;
+		startingResources = 5000;
 		resources = 100;
 		name = "test Name";
 
