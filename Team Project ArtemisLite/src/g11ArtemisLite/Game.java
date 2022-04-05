@@ -160,17 +160,12 @@ public class Game {
 					// checks if the current player has moved
 					if (!players.get(loop).hasMoved()) {
 						int squaresToMove = diceRoller.roll();
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						Message.delay(1000);
 						System.out.println(players.get(loop).getName() + " has rolled " + squaresToMove);
 						if(UserInput.isSpeak()) {
 							new Speech(players.get(loop).getName() + " has rolled " + squaresToMove);
 						}
-
+						Message.delay(1000);
 						board.move(players, players.get(loop), squaresToMove);
 
 						if (players.get(loop).bankruptCheck()) {
@@ -210,7 +205,21 @@ public class Game {
 					
 				}
 			}
-
+			
+			if(isProgress) {
+				randomEvents.generateRandomEvent(players);
+				for (Player player : players) {
+					if (player.bankruptCheck()) {
+						System.out.println(Message.randomEventBankrupt);
+						if(UserInput.isSpeak()) {
+							new Speech(Message.randomEventBankrupt);
+						}
+						isProgress = false;
+						break;
+					}
+				}
+			}
+			
 			// breaks outer loop when isProgress set to false by returned boolean from
 			// postMoveOptions
 			if (!isProgress) {
@@ -220,18 +229,6 @@ public class Game {
 					new Speech(Message.gameOver);
 				}
 				break;
-			}
-
-			randomEvents.generateRandomEvent(players);
-			for (Player player : players) {
-				if (player.bankruptCheck()) {
-					System.out.println(Message.randomEventBankrupt);
-					if(UserInput.isSpeak()) {
-						new Speech(Message.randomEventBankrupt);
-					}
-					isProgress = false;
-					break;
-				}
 			}
 		}
 	}

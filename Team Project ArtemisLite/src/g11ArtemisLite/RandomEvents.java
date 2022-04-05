@@ -131,7 +131,7 @@ public class RandomEvents implements java.io.Serializable {
 				e.printStackTrace();
 			}
 			System.out.println(badList.get(badEventNum));
-			System.out.println(players.get(playerNum).getName()+", pay up! Fine: "+fees.get(fineNum));
+			System.out.println(players.get(playerNum).getName()+", pay up! Fine: "+fees.get(fineNum) + Message.resources);
 			
 			players.get(playerNum).removeResources(fees.get(fineNum));
 			try {
@@ -141,7 +141,7 @@ public class RandomEvents implements java.io.Serializable {
 				e.printStackTrace();
 			}
 			if(UserInput.isSpeak()) {
-				new Speech(badList.get(badEventNum) + players.get(playerNum).getName()+", pay up! Fine: "+fees.get(fineNum));
+				new Speech(badList.get(badEventNum) + players.get(playerNum).getName()+", pay up! Fine: "+fees.get(fineNum) + Message.resources);
 			}
 		} else {
 			try {
@@ -151,7 +151,7 @@ public class RandomEvents implements java.io.Serializable {
 				e.printStackTrace();
 			}
 			System.out.println(goodList.get(goodEventNum));
-			System.out.println(players.get(playerNum).getName()+", Congratulations! You receive: "+fees.get(fineNum));
+			System.out.println(players.get(playerNum).getName()+", Congratulations! You receive: "+fees.get(fineNum) + Message.resources);
 			players.get(playerNum).addResources(fees.get(fineNum));
 			try {
 				Thread.sleep(500);
@@ -160,7 +160,7 @@ public class RandomEvents implements java.io.Serializable {
 				e.printStackTrace();
 			}
 			if(UserInput.isSpeak()) {
-				new Speech(goodList.get(goodEventNum) + players.get(playerNum).getName()+", Congratulations! You receive: "+fees.get(fineNum));
+				new Speech(goodList.get(goodEventNum) + players.get(playerNum).getName()+", Congratulations! You receive: "+fees.get(fineNum) + Message.resources);
 			}
 		}
 		System.out.println("******* END OF EVENT *******");
