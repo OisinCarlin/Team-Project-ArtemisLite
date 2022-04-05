@@ -286,6 +286,7 @@ public class Game {
 			System.out.println(Message.moveMenuOpEnd);
 			System.out.println(Message.moveMenuOpSave);
 			System.out.println(Message.moveMenuOpQuit);
+			System.out.println(Message.moveMenuOpBoard);
 			
 			if(UserInput.isSpeak()) {
 				new Speech(Message.likeTo
@@ -295,7 +296,8 @@ public class Game {
 						+ Message.moveMenuOpTrade
 						+ Message.moveMenuOpEnd
 						+ Message.moveMenuOpSave
-						+ Message.moveMenuOpQuit);
+						+ Message.moveMenuOpQuit
+						+ Message.moveMenuOpBoard);
 			}
 			
 			userInputNum = UserInput.getInt(Message.inputOptionRequest);
@@ -335,6 +337,9 @@ public class Game {
 				break;
 			case 7:
 				endGame = quitGame();
+				break;
+			case 8:
+				System.out.println(Message.boardLayout);
 				break;
 			default:
 				System.out.println(Message.invalidOption);

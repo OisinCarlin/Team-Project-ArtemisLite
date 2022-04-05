@@ -53,6 +53,48 @@ public class Message implements java.io.Serializable {
 			+ "\n"
 			+ "Trading Elements: Players will also be given the option to To trade an Element the current player owns to another player.\n"
 			+ "\n" + "It is advised to wear the correct safety gear when venturing into space.";
+	
+	public static String boardLayout = "|***********************|***********************|***********************|***********************|\n"+
+			"|      Artemis HQ       |        Orion 1        |        Orion 2        |        Orion 3        |\n"+
+			"|***********************|***********************|***********************|***********************|\n"+
+			"|         PRESS         |     CREW MODULE       | LAUNCH ABORT SYSTEMS  |    SERVICE MODULE     |\n"+
+			"|       CONFERENCE      |      Dev Levels       |      Dev Levels       |      Dev Levels       |\n"+
+			"|                       |    Power Generators   |    Fairing Assembly   |   Spacecraft Adapter  |\n"+
+			"|      Nothing else     |     Crew Quarters     |    Attitude Control   |    Power & Thermal    |\n"+
+			"|      happens here     |  Guidance Nav Control |    Jettison Motor     |  Water & Air Support  |\n"+
+			"|                       |        ECLSS          |      Abort Motor      |   Orbital Transfer    |\n"+
+			"|                       |                       |                       |                       |\n"+
+			"|***********************|***********************|***********************|***********************|\n"+
+			"| Space Launch System 3 |                                               |   Lunar Base Camp 1   |\n"+
+			"|***********************|                 ------------>                 |***********************|\n"+
+			"|         ICPS          |                                               | HUMAN LANDING SYSTEM  |\n"+
+			"|      Dev Levels       |                                               |      Dev Levels       |\n"+
+			"|  Orion Stage Adapter  |                                               |  Super Heavy Booster  |\n"+
+			"|  Liquid Oxygen Tank   |                                               |   Surface Transport   |\n"+
+			"| Liquid Hydrogen Tank  |  Ʌ                                         |  |    Payload Storage    |\n"+
+			"|   Rocketdyne Engine   |  |                                         |  |   Reaction Control    |\n"+
+			"|                       |  |                                         |  |                       |\n"+
+			"|***********************|  |                                         |  |***********************|\n"+
+			"| Space Launch System 2 |  |                                         |  |   Lunar Base Camp 2   |\n"+
+			"|***********************|  |                                         |  |***********************|\n"+
+			"|   CORE & PROPULSION   |  |                                         |  |    xEMU SPACESUIT     |\n"+
+			"|      Dev Levels       |  |                                         V  |      Dev Levels       |\n"+
+			"|      Fuel Tanks       |                                               | Portable Life Support |\n"+
+			"|      Propellant       |                                               | High-Speed Data Comms |\n"+
+			"|    4 RS-25 Engines    |                                               |   Membrane Cooling    |\n"+
+			"|    Rocket Boosters    |                 <------------                 |    Mobility System    |\n"+
+			"|                       |                                               |                       |\n"+
+			"|***********************|***********************|***********************|***********************|\n"+
+			"| Space Launch System 1 |       Gateway 2       |       Gateway 1       |      Artemis HQ       |\n"+
+			"|***********************|***********************|***********************|***********************|\n"+
+			"|       AVIONICS        | HABITATION LOGISTICS  |   POWER & PROPULSION  |    MISSION CONTROL    |\n"+
+			"|      Dev Levels       |      Dev Levels       |      Dev Levels       |      All players      |\n"+
+			"|    Rocket Sensors     |    CAPSTONE Cubesat   |     Solar Arrays      |       start here      |\n"+
+			"| Controllers & Cabling |    Pressure Control   |     S-band Comms      |                       |\n"+
+			"|         VLE           |     Comms to Luna     |    Science Payload    |      PASS MISSION     |\n"+
+			"|   Flight Computers    |     Docking Ports     |     Ion Thrusters     |  CONTROL GAIN 200 IQ  |\n"+
+			"|                       |                       |                       |                       |\n"+
+			"|***********************|***********************|***********************|***********************|\n";
 
 	public static String toEnableSpeech = "To enable speech ";
 	
@@ -149,6 +191,7 @@ public class Message implements java.io.Serializable {
 	public static String moveMenuOpEnd = "5. End your Turn";
 	public static String moveMenuOpSave = "6. Save Game";
 	public static String moveMenuOpQuit = "7. Quit the Game";
+	public static String moveMenuOpBoard = "8. Display Board Layout";
 	
 	public static String gameOver = "Game Over";
 	
