@@ -32,11 +32,12 @@ public class StartSquare extends Square {
 	@Override
 	public void onPass(Player player) {
 		super.onPass(player);
+		Message.delay(500);
 		player.addResources(getResources());
 		System.out.println(player.getName() + " passed GO");
-		System.out.println(player.getName() + " " + this.getResources() + " has been added to your resources");
+		System.out.println(player.getName() + " " + this.getResources() + Message.resources + " has been added to your resources");
 		if(UserInput.isSpeak()) {
-			new Speech(player.getName() + " passed GO " + this.getResources() + "has been added to your resources");
+			new Speech(player.getName() + " passed GO " + this.getResources() + Message.resources + "has been added to your resources");
 		}
 	}
 }

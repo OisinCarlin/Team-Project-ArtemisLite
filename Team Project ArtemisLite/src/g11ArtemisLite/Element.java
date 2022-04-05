@@ -130,7 +130,7 @@ public class Element extends Square {
 	@Override
 	public void onLand(List<Player> players, Player player) {
 		super.onLand(players, player);
-
+		
 		if (this.owner == null) {
 			attemptPurchaseElement(players, player);
 		} else if (this.owner.equals(player)) {
@@ -236,9 +236,12 @@ public class Element extends Square {
 		if (enforceRent) {
 			player.removeResources(rentPrice);
 			owner.addResources(rentPrice);
-			System.out.println(player.getName() + Message.charged + this.rentPrice + " in rent");
+			System.out.println(player.getName() + Message.charged + this.rentPrice + Message.resources + " in rent");
 			if(UserInput.isSpeak()) {
-				new Speech(player.getName() + Message.charged + this.rentPrice + " in rent");
+				new Speech(player.getName() + Message.charged + this.rentPrice + Message.resources + " in rent");
+			}
+			if(rentPrice > player.getResources()) {
+				System.out.println(Message.rentBankrupt);
 			}
 		}
 	}

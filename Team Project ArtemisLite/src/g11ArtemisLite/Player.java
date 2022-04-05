@@ -180,7 +180,7 @@ public class Player implements java.io.Serializable {
 	public void displayAll() {
 		System.out.println("Player Info");
 		System.out.println("Player name :\t" + this.getName());
-		System.out.println("Resources :\t" + this.getResources());
+		System.out.println("Resources :\t" + this.getResources() + Message.resources);
 		displayPropertyOwnedInfo();
 
 	}
@@ -199,7 +199,7 @@ public class Player implements java.io.Serializable {
 			System.out.println(this.name + ": Properties Owned");
 			System.out.println("-------------------------");
 			for (Element element : elementsOwned) {
-				System.out.println("Name: " + element.getName() + " Price: " + element.getPurchasePrice());
+				System.out.println("Name: " + element.getName() + " Price: " + element.getPurchasePrice() + Message.resources);
 				System.out.println("-------------------------");
 			}
 		}

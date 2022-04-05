@@ -31,6 +31,7 @@ public class Square implements java.io.Serializable{
 	 * @param player
 	 */
 	public void onLand(List<Player> players, Player player) {
+		Message.delay(500);
 		player.setCurrentSquare(this);
 		System.out.println(player.getName() + " has landed on " + this.name);
 		if(UserInput.isSpeak()) {

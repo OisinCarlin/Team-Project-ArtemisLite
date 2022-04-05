@@ -78,6 +78,8 @@ public class Message implements java.io.Serializable {
 	
 	public static String enterYN = "Enter Y / N";
 	
+	public static String resources = " IQ points";
+	
 	public static String ownElement = "You own this element";
 	
 	public static String offerPurchase = " Do you want to purchase ";
@@ -170,7 +172,9 @@ public class Message implements java.io.Serializable {
 	
 	public static String restoringGame = "Restoring game...";
 	
-	public static String randomEventBankrupt = "Oh dear, events have conspired against you, you're bankrupt!";
+	public static String randomEventBankrupt = "Oh dear, events have conspired against you, you're bankrupt! Game Over!";
+	
+	public static String rentBankrupt = "You did not have sufficient resources! You're bankrupt! Game Over!";
 	
 	public static String userQuitFail = "You've quit the game, which means Game Over for all players!";
 	
