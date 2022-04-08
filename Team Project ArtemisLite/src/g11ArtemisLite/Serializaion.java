@@ -18,6 +18,9 @@ public class Serializaion {
 	private static StateOfPlay lastSOP, restoredSOP;
 	private static DataSaver dataSaver;
 
+	/**
+	 * Save the parameter player list and board, otherwise throws exception
+	 */
 	public void SaveData(List<Player> players, Board board) {
 		lastSOP = new StateOfPlay();
 		dataSaver = new DataSaver();
@@ -37,6 +40,11 @@ public class Serializaion {
 		}
 	}
 
+	/**
+	 * returns restored player list from file, throws exception if no file found
+	 * or if error with read
+	 * @return
+	 */
 	public List<Player> RestorePlayers() {
 		restoredSOP = null;
 
@@ -73,6 +81,11 @@ public class Serializaion {
 		return restoredSOP.getPlayers();
 	}
 
+	/**
+	 * returns restored board from file, throws exception if no file found
+	 * or if error with read
+	 * @return
+	 */
 	public Board RestoreBoard() {
 		restoredSOP = null;
 
@@ -94,6 +107,13 @@ public class Serializaion {
 		return restoredSOP.getBoard();
 	}
 
+	/**
+	 * Returns the state of play, throws exception if error found
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	private static StateOfPlay getData(String fileName) throws IOException, ClassNotFoundException {
 		StateOfPlay stateOfPlay = null;
 		FileInputStream f_in = new FileInputStream(fileName);

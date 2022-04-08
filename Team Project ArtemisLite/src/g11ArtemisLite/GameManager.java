@@ -17,12 +17,15 @@ public class GameManager implements java.io.Serializable {
 	private Game game;
 
 	/**
-	 * 
+	 * Constructor instantiates new PlayerManager
 	 */
 	public GameManager(PlayerManager pm) {
 		this.pm = new PlayerManager();
 	}
 	
+	/**
+	 * starts the game
+	 */
 	public void start() {
 		List<String> usernames = pm.getUserData();
 		

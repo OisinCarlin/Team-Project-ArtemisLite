@@ -206,7 +206,7 @@ public class Player implements java.io.Serializable {
 	}
 
 	/**
-	 * Sorts an ArrayList of elements by Name
+	 * Sorts an ArrayList of elements by element number
 	 * 
 	 * @param elements
 	 */

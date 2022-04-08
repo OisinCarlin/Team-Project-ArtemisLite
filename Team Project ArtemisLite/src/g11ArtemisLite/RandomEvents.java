@@ -14,6 +14,7 @@ import java.util.Random;
 public class RandomEvents implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 2938313309603492644L;
+	// all strings for goodList and badList
 	private static final String BADEVENT1 = "You fastened the rockets the wrong way round!";
 	private static final String BADEVENT2 = "Someone spilt Mountain Dew on the circuit boards!";
 	private static final String BADEVENT3 = "One of your astronauts got sick on the flight simulator!";
@@ -56,11 +57,15 @@ public class RandomEvents implements java.io.Serializable {
 	private static final String GOODEVENT20 = "You stayed up late watching Armageddon and got a great idea for Artemis!";
 	private List<String> goodList;
 	private List<String> badList;
+	// fee values
 	private static final int SMALLFEE = 20;
-	private static final int MEDIUMFEE = 20;
-	private static final int LARGEFEE = 20;
+	private static final int MEDIUMFEE = 50;
+	private static final int LARGEFEE = 100;
 	private List<Integer> fees;
 	
+	/**
+	 * constructor adds strings to appropriate list, and fees to feeList
+	 */
 	public RandomEvents() {
 		goodList = new ArrayList<String>();
 		badList = new ArrayList<String>();
@@ -110,6 +115,11 @@ public class RandomEvents implements java.io.Serializable {
 		fees.add(LARGEFEE);
 	}
 	
+	/**
+	 * Generates a random event (either good or bad) with associated reward or fine
+	 * applied to a random player from players list argument
+	 * @param players
+	 */
 	public void generateRandomEvent(List<Player> players) {
 		int playerNum = 0;
 		int goodOrBad = 0;

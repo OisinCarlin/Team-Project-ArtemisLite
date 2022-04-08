@@ -246,6 +246,9 @@ public class Element extends Square {
 		}
 	}
 
+	/**
+	 * displays owner and development level for an element
+	 */
 	public void displayDetails() {
 		System.out.println(this.getName());
 		if(UserInput.isSpeak()) {

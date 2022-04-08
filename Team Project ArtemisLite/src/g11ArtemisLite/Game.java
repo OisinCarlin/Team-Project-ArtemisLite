@@ -43,18 +43,19 @@ public class Game {
 		this.serializaion = new Serializaion();
 		this.isProgress = true;
 
+		// instantiates board and elements and adds elements to board
 		this.board = new Board();
 		Square square1 = new StartSquare("Mission Control", 200);
-		Element square2 = new Element("Power and Propulsion System", 1, 100, 10, 20);
-		Element square3 = new Element("Habitation and Logistics Outpost", 2, 100, 10, 20);
-		Element square4 = new Element("Avionics", 3, 200, 20, 40);
-		Element square5 = new Element("Core Stage and Propulsion", 4, 200, 20, 40);
-		Element square6 = new Element("Interim Cryogenic Propulsion Stage", 5, 200, 20, 40);
-		Element square7 = new Element("Crew Module", 6, 250, 25, 50);
-		Element square8 = new Element("Launch Abort Systems", 7, 250, 25, 50);
-		Element square9 = new Element("Service Module", 8, 250, 25, 50);
-		Element square10 = new Element("Human Landing System", 9, 300, 30, 60);
-		Element square11 = new Element("xEMU Spacesuit", 10,  300, 30, 60);
+		Element square2 = new Element("Power and Propulsion System", 1, 100, 100, 20);
+		Element square3 = new Element("Habitation and Logistics Outpost", 2, 100, 100, 20);
+		Element square4 = new Element("Avionics", 3, 200, 200, 40);
+		Element square5 = new Element("Core Stage and Propulsion", 4, 200, 200, 40);
+		Element square6 = new Element("Interim Cryogenic Propulsion Stage", 5, 200, 200, 40);
+		Element square7 = new Element("Crew Module", 6, 250, 250, 50);
+		Element square8 = new Element("Launch Abort Systems", 7, 250, 250, 50);
+		Element square9 = new Element("Service Module", 8, 250, 250, 50);
+		Element square10 = new Element("Human Landing System", 9, 300, 300, 60);
+		Element square11 = new Element("xEMU Spacesuit", 10,  300, 300, 60);
 		Square square12 = new Square("Press Conference");
 		board.addSquareToBoard(square1);
 		board.addSquareToBoard(square2);
@@ -86,6 +87,7 @@ public class Game {
 
 		this.randomEvents = new RandomEvents();
 
+		// links elements to their elementSystem
 		this.sysOne = new ElementSystem("Gateway");
 		sysOne.addElement(square2);
 		sysOne.addElement(square3);
@@ -134,6 +136,8 @@ public class Game {
 					}
 				}
 			}
+			List<Square> restoredSquares = board.getSquares();
+			
 		} else {
 			// Creating the players from the usernames and adding them to a list
 			playerManager.createPlayers(usernames);
@@ -206,6 +210,8 @@ public class Game {
 				}
 			}
 			
+			// if game has not already encountered a game-end event, random event is generated
+			// and all players checked for bankruptcy
 			if(isProgress) {
 				randomEvents.generateRandomEvent(players);
 				for (Player player : players) {
@@ -233,6 +239,10 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Displays a message indicating final state of play,
+	 *  element ownership and development level for all elements
+	 */
 	private void displayStateOfPlay() {
 		System.out.println(Message.finalSOP);
 		if(UserInput.isSpeak()) {
@@ -537,6 +547,9 @@ public class Game {
 		return gameWin;
 	}
 
+	/**
+	 * prints an epilogue indicating successful Artemis launch
+	 */
 	private void displayEpilogue() {
 		System.out.println(Message.epilogue1);
 		Message.delay(5000);
@@ -623,11 +636,12 @@ public class Game {
 		}
 	}
 
-	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Trade element
-	// and stuff like that>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	// <<<Trade element-related methods>>>
 
 	/**
-	 * 
+	 * Displays a menu of player's owned elements to offer to other game players for
+	 * trade, calls tradeElement() when an offered player accepts a trade. Checks for sufficient
+	 * resources before a trade is made
 	 * @param players
 	 * @param player
 	 */
@@ -664,6 +678,7 @@ public class Game {
 			if(UserInput.isSpeak()) {
 				new Speech(Message.dontTradeMore + Message.enter + (playerElementList.size() + 1));
 			}
+			// gets user input as string, then parses int. Defaults to zero if no int found
 			userText = UserInput.getString(Message.inputOptionRequest);
 			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= playerElementList.size() && intUserInput > 0) {
@@ -672,6 +687,7 @@ public class Game {
 				if(UserInput.isSpeak()) {
 					new Speech(Message.whoTrade);
 				}
+				// creates a map of the other players to offer trade to
 				Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
 				int counter = 1;
 				for (Player p : players) {
@@ -702,6 +718,7 @@ public class Game {
 					} else if (intUserInput == playerMap.size() + 1) {
 						break;
 					} else if (intUserInput > 0 && intUserInput <= playerMap.size()) {
+						// offers selected element for trade
 						do {
 							System.out.println(playerMap.get(intUserInput).getName() + Message.likeToBuy
 									+ elementToTrade.getName() + " from " + player.getName());
@@ -724,8 +741,10 @@ public class Game {
 									new Speech(Message.invalidInput);
 								}
 							}
+							// do... while continues until player enters Y or N
 						} while (!ynInput.equalsIgnoreCase("Y") && !ynInput.equalsIgnoreCase("N"));
 					}
+					// outer loop continues until player chooses 'exit' option
 				} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
 			} else if (intUserInput == (playerElementList.size() + 1)) {
 				System.out.println(Message.exitMenu);

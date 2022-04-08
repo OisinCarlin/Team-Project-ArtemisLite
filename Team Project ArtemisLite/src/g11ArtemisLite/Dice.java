@@ -24,6 +24,10 @@ public class Dice implements java.io.Serializable {
 		return numOfSides;
 	}
 
+	/**
+	 * Rolls a dice and returns the random rolled number
+	 * @return
+	 */
 	public int roll() {
 		return RANDOM.nextInt(numOfSides) + 1;
 	}

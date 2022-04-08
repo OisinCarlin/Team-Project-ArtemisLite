@@ -221,7 +221,7 @@ public class Message implements java.io.Serializable {
 	
 	public static String userQuitFail = "You've quit the game, which means Game Over for all players!";
 	
-	public static String epilogue1 = "\nArtemis: twin sister of Apollo, Goddess of the Moon... Humanity will once again unite to push beyond the boundaries of space exploration, \n"
+	public static String epilogue1 = "\nEPILOGUE\n\nArtemis: twin sister of Apollo, Goddess of the Moon... Humanity will once again unite to push beyond the boundaries of space exploration, \n"
 			+ "science and technology. Thanks to your hard work and dedication, NASA, along with its partners in industry, nations and academia, is ready \n"
 			+ "to begin a new era of sustainable travel to the Moon and beyond!\n\n";
 	

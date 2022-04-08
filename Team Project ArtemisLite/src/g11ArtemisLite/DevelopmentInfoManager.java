@@ -14,6 +14,7 @@ public class DevelopmentInfoManager implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 2938313309603492644L;
 
+	// all strings for all element devInfo objects
 	public static final String START_SQUARE_NAME = "Mission Control";
 	public static final String EMPTY_SQUARE_NAME = "Exploration Ground Systems";
 	
@@ -172,6 +173,7 @@ public class DevelopmentInfoManager implements java.io.Serializable {
 	private List<DevelopmentInfo> allDevelopmentInfo = new ArrayList<>();
 
 	/**
+	 * Constructor adds all developmentInfo objects to list
 	 * @param allDevelopmentInfo
 	 */
 	public DevelopmentInfoManager() {
@@ -187,15 +189,24 @@ public class DevelopmentInfoManager implements java.io.Serializable {
 		allDevelopmentInfo.add(dI10);
 	}
 	
+	/**
+	 * adds a developmentInfo object
+	 * @param developmentInfo
+	 */
 	public void addDevelopmentInfo(DevelopmentInfo developmentInfo) {
 		allDevelopmentInfo.add(developmentInfo);
 	}
 	
+	/**
+	 * removes a developmentInfo object
+	 * @param developmentInfo
+	 */
 	public void removeDevelopmentInfo(DevelopmentInfo developmentInfo) {
 		allDevelopmentInfo.remove(developmentInfo);
 	}
 
 	/**
+	 * Returns the allDevelopmentInfo list
 	 * @return the allDevelopmentInfo
 	 */
 	public List<DevelopmentInfo> getAllDevelopmentInfo() {

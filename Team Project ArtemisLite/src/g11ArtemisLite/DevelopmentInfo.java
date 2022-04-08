@@ -23,6 +23,7 @@ public class DevelopmentInfo implements java.io.Serializable {
 	private String developmentLevel4Desc;
 
 	/**
+	 * Constructor with args. Sets all strings
 	 * @param developmentLevel1Name
 	 * @param developmentLevel1Desc
 	 * @param developmentLevel2Name
@@ -102,6 +103,10 @@ public class DevelopmentInfo implements java.io.Serializable {
 		return developmentLevel4Desc;
 	}
 	
+	/**
+	 * Takes input int dev level and displays appropriate info dependant on level
+	 * @param devLevel
+	 */
 	public void displayCurrentDevInfo(int devLevel) {
 		switch (devLevel) {
 		case 1:
