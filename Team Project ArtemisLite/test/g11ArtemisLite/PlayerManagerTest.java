@@ -72,4 +72,20 @@ class PlayerManagerTest {
 			assertFalse(false);		
 			}
 	}
+
+	@Test
+	void testGetPlayer() {
+		
+		PlayerManager playerManager = new PlayerManager();
+		
+		assertNotNull(playerManager.getPlayers());
+		
+		if(players.size() == 2) {
+			assertTrue(true);
+			
+		} else {
+			assertTrue(false);
+		}	
+	}
+
 }
