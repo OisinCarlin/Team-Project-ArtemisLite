@@ -51,12 +51,13 @@ public class Game {
 		Element square4 = new Element("Avionics", 3, 200, 200, 40);
 		Element square5 = new Element("Core Stage and Propulsion", 4, 200, 200, 40);
 		Element square6 = new Element("Interim Cryogenic Propulsion Stage", 5, 200, 200, 40);
-		Element square7 = new Element("Crew Module", 6, 250, 250, 50);
-		Element square8 = new Element("Launch Abort Systems", 7, 250, 250, 50);
-		Element square9 = new Element("Service Module", 8, 250, 250, 50);
-		Element square10 = new Element("Human Landing System", 9, 300, 300, 60);
-		Element square11 = new Element("xEMU Spacesuit", 10,  300, 300, 60);
-		Square square12 = new Square("Press Conference");
+		Square square7 = new Square("Press Conference");
+		Element square8 = new Element("Crew Module", 6, 250, 250, 50);
+		Element square9 = new Element("Launch Abort Systems", 7, 250, 250, 50);
+		Element square10 = new Element("Service Module", 8, 250, 250, 50);
+		Element square11 = new Element("Human Landing System", 9, 300, 300, 60);
+		Element square12 = new Element("xEMU Spacesuit", 10, 300, 300, 60);
+
 		board.addSquareToBoard(square1);
 		board.addSquareToBoard(square2);
 		board.addSquareToBoard(square3);
@@ -79,11 +80,11 @@ public class Game {
 		myDevMap.put(square4, allDevelopmentInfo.get(2));
 		myDevMap.put(square5, allDevelopmentInfo.get(3));
 		myDevMap.put(square6, allDevelopmentInfo.get(4));
-		myDevMap.put(square7, allDevelopmentInfo.get(5));
-		myDevMap.put(square8, allDevelopmentInfo.get(6));
-		myDevMap.put(square9, allDevelopmentInfo.get(7));
-		myDevMap.put(square10, allDevelopmentInfo.get(8));
-		myDevMap.put(square11, allDevelopmentInfo.get(9));
+		myDevMap.put(square8, allDevelopmentInfo.get(5));
+		myDevMap.put(square9, allDevelopmentInfo.get(6));
+		myDevMap.put(square10, allDevelopmentInfo.get(7));
+		myDevMap.put(square11, allDevelopmentInfo.get(8));
+		myDevMap.put(square12, allDevelopmentInfo.get(9));
 
 		this.randomEvents = new RandomEvents();
 
@@ -98,13 +99,13 @@ public class Game {
 		sysTwo.addElement(square6);
 
 		this.sysThree = new ElementSystem("Orion Spacecraft");
-		sysThree.addElement(square7);
 		sysThree.addElement(square8);
 		sysThree.addElement(square9);
+		sysThree.addElement(square10);
 
 		this.sysFour = new ElementSystem("Lunar Base Camp");
-		sysFour.addElement(square10);
 		sysFour.addElement(square11);
+		sysFour.addElement(square12);
 
 		allSystems = new HashSet<>();
 		allSystems.add(sysOne);
@@ -122,22 +123,9 @@ public class Game {
 
 		// userNames passed as an empty list if player selects restore
 		if (usernames.isEmpty()) {
-			// board restored
-			this.board = serializaion.RestoreBoard();
-			// players restored
-			players = serializaion.RestorePlayers();
-			// matches players current square to the equivalent square of the newly
-			// instantiated board (fixes non-matching IDs)
-			for (Player player : players) {
-				String squareName = player.getCurrentSquare().getName();
-				for (Square square : board.getSquares()) {
-					if (squareName.equals(square.getName())) {
-						player.setCurrentSquare(square);
-					}
-				}
-			}
-			List<Square> restoredSquares = board.getSquares();
 			
+			restoreGame();
+
 		} else {
 			// Creating the players from the usernames and adding them to a list
 			playerManager.createPlayers(usernames);
@@ -149,16 +137,16 @@ public class Game {
 			});
 
 			displayIntroMessage(players);
-			//sets the first player's currentTurn status as true
+			// sets the first player's currentTurn status as true
 			players.get(0).setCurrentTurn(true);
-			//sets the first player's hasMoved status to false
+			// sets the first player's hasMoved status to false
 			players.get(0).setHasMoved(false);
 		}
 
 		while (isProgress) {
 			// Each player takes a turn
 			// <<<<<<<<<<< I changed this loop so as to have access to player.get(loop+1)
-			for (int loop=0;loop<players.size();loop++) {
+			for (int loop = 0; loop < players.size(); loop++) {
 				// finds the player whos currentTurn status is true
 				if (players.get(loop).isCurrentTurn()) {
 					// checks if the current player has moved
@@ -166,7 +154,7 @@ public class Game {
 						int squaresToMove = diceRoller.roll();
 						Message.delay(1000);
 						System.out.println(players.get(loop).getName() + " has rolled " + squaresToMove);
-						if(UserInput.isSpeak()) {
+						if (UserInput.isSpeak()) {
 							new Speech(players.get(loop).getName() + " has rolled " + squaresToMove);
 						}
 						Message.delay(1000);
@@ -186,38 +174,40 @@ public class Game {
 					// calls method to display options post-move
 					if (postMoveOptions(players, players.get(loop))) {
 						// postMoveOptions returns a boolean to signify endGame
-						
+
 						// breaks the loop if endGame conditions have been met
 						isProgress = false;
 						break;
 					}
-					// resets current players turn and moved status to false at the end of their turn
+					// resets current players turn and moved status to false at the end of their
+					// turn
 					players.get(loop).setCurrentTurn(false);
 					players.get(loop).setHasMoved(false);
-					
+
 					// sets the next players currentTurn status to true
 					int nextPlayerIndex = 0;
-					if (loop==players.size()-1) {
-						nextPlayerIndex=0;
+					if (loop == players.size() - 1) {
+						nextPlayerIndex = 0;
 					} else {
-						nextPlayerIndex=loop+1;
+						nextPlayerIndex = loop + 1;
 					}
 					players.get(nextPlayerIndex).setCurrentTurn(true);
-					
+
 					// saves the game state
 					serializaion.SaveData(players, board);
-					
+
 				}
 			}
-			
-			// if game has not already encountered a game-end event, random event is generated
+
+			// if game has not already encountered a game-end event, random event is
+			// generated
 			// and all players checked for bankruptcy
-			if(isProgress) {
+			if (isProgress) {
 				randomEvents.generateRandomEvent(players);
 				for (Player player : players) {
 					if (player.bankruptCheck()) {
 						System.out.println(Message.randomEventBankrupt);
-						if(UserInput.isSpeak()) {
+						if (UserInput.isSpeak()) {
 							new Speech(Message.randomEventBankrupt);
 						}
 						isProgress = false;
@@ -225,13 +215,13 @@ public class Game {
 					}
 				}
 			}
-			
+
 			// breaks outer loop when isProgress set to false by returned boolean from
 			// postMoveOptions
 			if (!isProgress) {
 				displayStateOfPlay();
 				System.out.println(Message.gameOver);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.gameOver);
 				}
 				break;
@@ -240,12 +230,12 @@ public class Game {
 	}
 
 	/**
-	 * Displays a message indicating final state of play,
-	 *  element ownership and development level for all elements
+	 * Displays a message indicating final state of play, element ownership and
+	 * development level for all elements
 	 */
 	private void displayStateOfPlay() {
 		System.out.println(Message.finalSOP);
-		if(UserInput.isSpeak()) {
+		if (UserInput.isSpeak()) {
 			new Speech(Message.finalSOP);
 		}
 		board.displayElementDetails();
@@ -259,12 +249,12 @@ public class Game {
 	public void displayIntroMessage(List<Player> players) {
 		for (int loop = 0; loop < players.size(); loop++) {
 			System.out.printf(players.get(loop).getName());
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(players.get(loop).getName());
 			}
 			if (loop == players.size() - 2) {
 				System.out.printf(" & ");
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech("and");
 				}
 			} else if (loop == players.size() - 1) {
@@ -274,7 +264,7 @@ public class Game {
 			}
 		}
 		System.out.println(Message.intro);
-		if(UserInput.isSpeak()) {
+		if (UserInput.isSpeak()) {
 			new Speech(Message.intro);
 		}
 	}
@@ -297,50 +287,44 @@ public class Game {
 			System.out.println(Message.moveMenuOpSave);
 			System.out.println(Message.moveMenuOpQuit);
 			System.out.println(Message.moveMenuOpBoard);
-			
-			if(UserInput.isSpeak()) {
-				new Speech(Message.likeTo
-						+ Message.moveMenuOpShowSystems
-						+ Message.moveMenuOpShowRes
-						+ Message.moveMenuOpDevelop
-						+ Message.moveMenuOpTrade
-						+ Message.moveMenuOpEnd
-						+ Message.moveMenuOpSave
-						+ Message.moveMenuOpQuit
-						+ Message.moveMenuOpBoard);
+
+			if (UserInput.isSpeak()) {
+				new Speech(Message.likeTo + Message.moveMenuOpShowSystems + Message.moveMenuOpShowRes
+						+ Message.moveMenuOpDevelop + Message.moveMenuOpTrade + Message.moveMenuOpEnd
+						+ Message.moveMenuOpSave + Message.moveMenuOpQuit + Message.moveMenuOpBoard);
 			}
-			
+
 			userInputNum = UserInput.getInt(Message.inputOptionRequest);
 			switch (userInputNum) {
 			case 1:
-				allSystems.forEach(ElementSystem:: displayAll);
+				allSystems.forEach(ElementSystem::displayAll);
 				break;
 			case 2:
 				player.displayAll();
 				break;
 			case 3:
 				System.out.println(Message.openDevMenu);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.openDevMenu);
 				}
 				endGame = developmentMenu(player);
 				break;
 			case 4:
 				System.out.println(Message.openTradeMenu);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.openTradeMenu);
 				}
 				tradeElementMenu(allPlayers, player);
 				break;
 			case 5:
 				System.out.println(Message.endingTurn);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.endingTurn);
 				}
 				break;
 			case 6:
 				System.out.println(Message.saveGame);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.saveGame);
 				}
 				serializaion.SaveData(players, board);
@@ -353,7 +337,7 @@ public class Game {
 				break;
 			default:
 				System.out.println(Message.invalidOption);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.invalidOption);
 				}
 				break;
@@ -372,7 +356,7 @@ public class Game {
 	 */
 	public boolean quitGame() {
 		System.out.println(Message.userQuitFail);
-		if(UserInput.isSpeak()) {
+		if (UserInput.isSpeak()) {
 			new Speech(Message.userQuitFail);
 		}
 		boolean quit = true;
@@ -416,7 +400,7 @@ public class Game {
 		List<Element> tempList = new ArrayList<>();
 		if (developableElements.size() == 0) {
 			System.out.println(Message.ownAllElements);
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(Message.ownAllElements);
 			}
 			breakIt = true;
@@ -430,10 +414,10 @@ public class Game {
 		for (Element element : tempList) {
 			developableElements.remove(element);
 		}
-		
+
 		if (developableElements.size() == 0) {
 			System.out.println(Message.noDevToMake);
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(Message.noDevToMake);
 			}
 			breakIt = true;
@@ -455,12 +439,12 @@ public class Game {
 			element.increaseDevLevel();
 			System.out.println(Message.upgradeLevel + element.getDevLevel());
 			System.out.println(Message.developedIt);
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(Message.upgradeLevel + element.getDevLevel() + Message.developedIt);
 			}
 		} else {
 			System.out.println(Message.maxDev + "or" + Message.notEnoughRes);
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(Message.maxDev + "or" + Message.notEnoughRes);
 			}
 		}
@@ -493,20 +477,22 @@ public class Game {
 				if (element.getDevLevel() != 4) {
 					System.out.println(Message.develop + element.getName() + Message.enter
 							+ (developableElements.indexOf(element) + 1));
-					if(UserInput.isSpeak()) {
-						new Speech(Message.develop + element.getName() + Message.enter + (developableElements.indexOf(element) + 1));
+					if (UserInput.isSpeak()) {
+						new Speech(Message.develop + element.getName() + Message.enter
+								+ (developableElements.indexOf(element) + 1));
 					}
 				}
 			}
 			System.out.println(Message.dontDevMore + Message.enter + (developableElements.size() + 1));
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(Message.dontDevMore + Message.enter + (developableElements.size() + 1));
 			}
 			userText = UserInput.getString(Message.inputOptionRequest);
 			intUserInput = UserInput.parseWithDefault(userText, 0);
 			if (intUserInput <= developableElements.size() && intUserInput > 0) {
 				developElement(developableElements.get(intUserInput - 1), player);
-				myDevMap.get(developableElements.get(intUserInput - 1)).displayCurrentDevInfo(developableElements.get(intUserInput - 1).getDevLevel());
+				myDevMap.get(developableElements.get(intUserInput - 1))
+						.displayCurrentDevInfo(developableElements.get(intUserInput - 1).getDevLevel());
 				// checks after each development if all elements are fully developed
 				int fullyDevelopedCount = 0;
 				int elementCount = 0;
@@ -533,12 +519,12 @@ public class Game {
 				// exits menu on appropriate user input
 			} else if (intUserInput == (developableElements.size() + 1)) {
 				System.out.println(Message.exitMenu);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.exitMenu);
 				}
 			} else {
 				System.out.println(Message.invalidInput);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.invalidInput);
 				}
 			}
@@ -620,8 +606,8 @@ public class Game {
 		Message.epilogueCountdown();
 		System.out.println(Message.epilogue10);
 		Message.delay(5000);
-		
-		if(UserInput.isSpeak()) {
+
+		if (UserInput.isSpeak()) {
 			new Speech(Message.epilogue1);
 			new Speech(Message.epilogue2);
 			new Speech(Message.epilogue3);
@@ -632,7 +618,7 @@ public class Game {
 			new Speech(Message.epilogue8);
 			new Speech(Message.epilogue9);
 			new Speech(Message.epilogue10);
-			
+
 		}
 	}
 
@@ -640,8 +626,9 @@ public class Game {
 
 	/**
 	 * Displays a menu of player's owned elements to offer to other game players for
-	 * trade, calls tradeElement() when an offered player accepts a trade. Checks for sufficient
-	 * resources before a trade is made
+	 * trade, calls tradeElement() when an offered player accepts a trade. Checks
+	 * for sufficient resources before a trade is made
+	 * 
 	 * @param players
 	 * @param player
 	 */
@@ -661,7 +648,7 @@ public class Game {
 			// breaks the loop of the player has no elements to trade
 			if (playerElementList.size() == 0) {
 				System.out.println(Message.noElementsTrade);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.noElementsTrade);
 				}
 				break;
@@ -669,13 +656,14 @@ public class Game {
 			for (Element element : playerElementList) {
 				System.out.println(
 						Message.trade + element.getName() + Message.enter + (playerElementList.indexOf(element) + 1));
-				if(UserInput.isSpeak()) {
-					new Speech(Message.trade + element.getName() + Message.enter + (playerElementList.indexOf(element) + 1) );
+				if (UserInput.isSpeak()) {
+					new Speech(Message.trade + element.getName() + Message.enter
+							+ (playerElementList.indexOf(element) + 1));
 				}
 			}
 			System.out.println(Message.dontTradeMore + Message.enter + (playerElementList.size() + 1));
-			
-			if(UserInput.isSpeak()) {
+
+			if (UserInput.isSpeak()) {
 				new Speech(Message.dontTradeMore + Message.enter + (playerElementList.size() + 1));
 			}
 			// gets user input as string, then parses int. Defaults to zero if no int found
@@ -684,7 +672,7 @@ public class Game {
 			if (intUserInput <= playerElementList.size() && intUserInput > 0) {
 				elementToTrade = playerElementList.get(intUserInput - 1);
 				System.out.println(Message.whoTrade);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.whoTrade);
 				}
 				// creates a map of the other players to offer trade to
@@ -698,20 +686,22 @@ public class Game {
 				}
 				do {
 					for (Integer key : playerMap.keySet()) {
-						System.out.println(Message.trade + Message.with + playerMap.get(key).getName() + Message.enter + key);
-						if(UserInput.isSpeak()) {
-							new Speech(Message.trade + Message.with + playerMap.get(key).getName() + Message.enter + key);
+						System.out.println(
+								Message.trade + Message.with + playerMap.get(key).getName() + Message.enter + key);
+						if (UserInput.isSpeak()) {
+							new Speech(
+									Message.trade + Message.with + playerMap.get(key).getName() + Message.enter + key);
 						}
 					}
 					System.out.println(Message.cancel + Message.enter + (playerMap.size() + 1));
-					if(UserInput.isSpeak()) {
-						new Speech(Message.cancel + Message.enter + (playerMap.size() + 1) );
+					if (UserInput.isSpeak()) {
+						new Speech(Message.cancel + Message.enter + (playerMap.size() + 1));
 					}
 					userText = UserInput.getString(Message.inputOptionRequest);
 					intUserInput = UserInput.parseWithDefault(userText, 0);
 					if (intUserInput == 0 || intUserInput > playerMap.size() + 1) {
 						System.out.println(Message.invalidInput);
-						if(UserInput.isSpeak()) {
+						if (UserInput.isSpeak()) {
 							new Speech(Message.invalidInput);
 						}
 						// breaks if user enters the cancel trade number
@@ -722,7 +712,7 @@ public class Game {
 						do {
 							System.out.println(playerMap.get(intUserInput).getName() + Message.likeToBuy
 									+ elementToTrade.getName() + " from " + player.getName());
-							if(UserInput.isSpeak()) {
+							if (UserInput.isSpeak()) {
 								new Speech(playerMap.get(intUserInput).getName() + Message.likeToBuy
 										+ elementToTrade.getName() + " from " + player.getName());
 							}
@@ -730,14 +720,13 @@ public class Game {
 							if (ynInput.equalsIgnoreCase("Y")) {
 								tradeElement(elementToTrade, player, playerMap.get(intUserInput));
 							} else if (ynInput.equalsIgnoreCase("N")) {
-								System.out.println(
-										playerMap.get(intUserInput).getName() + Message.noToTrade);
-								if(UserInput.isSpeak()) {
+								System.out.println(playerMap.get(intUserInput).getName() + Message.noToTrade);
+								if (UserInput.isSpeak()) {
 									new Speech(playerMap.get(intUserInput).getName() + Message.noToTrade);
 								}
 							} else {
 								System.out.println(Message.invalidInput);
-								if(UserInput.isSpeak()) {
+								if (UserInput.isSpeak()) {
 									new Speech(Message.invalidInput);
 								}
 							}
@@ -748,12 +737,12 @@ public class Game {
 				} while (intUserInput == 0 || intUserInput > playerMap.size() + 1);
 			} else if (intUserInput == (playerElementList.size() + 1)) {
 				System.out.println(Message.exitMenu);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.exitMenu);
 				}
 			} else {
 				System.out.println(Message.invalidInput);
-				if(UserInput.isSpeak()) {
+				if (UserInput.isSpeak()) {
 					new Speech(Message.invalidInput);
 				}
 			}
@@ -779,15 +768,89 @@ public class Game {
 			player.addResources(element.getPurchasePrice());
 			buyer.removeResources(element.getPurchasePrice());
 			System.out.println(player.getName() + ", you sold " + element.getName() + " to " + buyer.getName());
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(player.getName() + ", you sold " + element.getName() + " to " + buyer.getName());
 			}
 		} else {
 			System.out.println(buyer.getName() + Message.notEnoughRes);
-			if(UserInput.isSpeak()) {
+			if (UserInput.isSpeak()) {
 				new Speech(buyer.getName() + Message.notEnoughRes);
 			}
 		}
+	}
+
+	public void restoreGame() {
+		// board restored
+		this.board = serializaion.RestoreBoard();
+		// players restored
+		players = serializaion.RestorePlayers();
+		// matches players current square to the equivalent square of the newly
+		// instantiated board (fixes non-matching IDs)
+		for (Player player : players) {
+			String playerName = player.getName();
+			String squareName = player.getCurrentSquare().getName();
+			Set<Element> ownedSet = player.getSquaresOwned();
+			List<Element> owned = new ArrayList<>(ownedSet);
+			for (Square square : board.getSquares()) {
+				if (square instanceof Element) {
+					Element element = (Element) square;
+					if (element.getOwner() != null && element.getOwner().getName().equals(playerName)) {
+						// sets element owner to correct player ID
+						element.setOwner(player);
+					}
+					for (Element e : owned) {
+						if (e.getName().equals(element.getName())) {
+							// sets player squaresOwned to correct element IDs
+							player.removeSquare(e);
+							player.addSquare(element);
+						}
+					}
+				}
+				if (squareName.equals(square.getName())) {
+					// sets current square to correct ID
+					player.setCurrentSquare(square);
+				}
+			}
+		}
+		// sets systems to correct element IDs
+		List<Square> restoredSquares = board.getSquares();
+		this.sysOne = new ElementSystem("Gateway");
+		sysOne.addElement((Element) restoredSquares.get(1));
+		sysOne.addElement((Element) restoredSquares.get(2));
+
+		this.sysTwo = new ElementSystem("Space Launch System");
+		sysTwo.addElement((Element) restoredSquares.get(3));
+		sysTwo.addElement((Element) restoredSquares.get(4));
+		sysTwo.addElement((Element) restoredSquares.get(5));
+
+		this.sysThree = new ElementSystem("Orion Spacecraft");
+		sysThree.addElement((Element) restoredSquares.get(7));
+		sysThree.addElement((Element) restoredSquares.get(8));
+		sysThree.addElement((Element) restoredSquares.get(9));
+
+		this.sysFour = new ElementSystem("Lunar Base Camp");
+		sysFour.addElement((Element) restoredSquares.get(10));
+		sysFour.addElement((Element) restoredSquares.get(11));
+
+		allSystems.clear();
+		allSystems.add(sysOne);
+		allSystems.add(sysTwo);
+		allSystems.add(sysThree);
+		allSystems.add(sysFour);
+
+		// sets mydevmep to correct element IDs
+		List<DevelopmentInfo> allDevelopmentInfo = developmentInfoManager.getAllDevelopmentInfo();
+		myDevMap.clear();
+		myDevMap.put((Element) restoredSquares.get(1), allDevelopmentInfo.get(0));
+		myDevMap.put((Element) restoredSquares.get(2), allDevelopmentInfo.get(1));
+		myDevMap.put((Element) restoredSquares.get(3), allDevelopmentInfo.get(2));
+		myDevMap.put((Element) restoredSquares.get(4), allDevelopmentInfo.get(3));
+		myDevMap.put((Element) restoredSquares.get(5), allDevelopmentInfo.get(4));
+		myDevMap.put((Element) restoredSquares.get(7), allDevelopmentInfo.get(5));
+		myDevMap.put((Element) restoredSquares.get(8), allDevelopmentInfo.get(6));
+		myDevMap.put((Element) restoredSquares.get(9), allDevelopmentInfo.get(7));
+		myDevMap.put((Element) restoredSquares.get(10), allDevelopmentInfo.get(8));
+		myDevMap.put((Element) restoredSquares.get(11), allDevelopmentInfo.get(9));
 	}
 
 }
