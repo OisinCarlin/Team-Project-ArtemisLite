@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="C:/Users/maeve/Documents/MSc Software Development/Software Engineering/git_repo/CSC7053-2122-G11/Team Project ArtemisLite/lib/freetts-1.2/lib/cmu_time_awb.jar"/>
 	<classpathentry kind="lib" path="C:/Users/maeve/Documents/MSc Software Development/Software Engineering/git_repo/CSC7053-2122-G11/Team Project ArtemisLite/lib/freetts-1.2/lib/cmu_us_kal.jar"/>
 	<classpathentry kind="lib" path="C:/Users/maeve/Documents/MSc Software Development/Software Engineering/git_repo/CSC7053-2122-G11/Team Project ArtemisLite/lib/freetts-1.2/lib/cmudict04.jar"/>

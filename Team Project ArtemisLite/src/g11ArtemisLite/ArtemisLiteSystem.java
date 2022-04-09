@@ -16,7 +16,6 @@ public class ArtemisLiteSystem implements java.io.Serializable {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		@SuppressWarnings("unused")
 		ArtemisLiteSystem artemisLiteSystem = new ArtemisLiteSystem();
 
 	}
